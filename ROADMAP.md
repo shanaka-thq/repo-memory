@@ -1,0 +1,37 @@
+# Roadmap
+
+This roadmap is directional. It describes the intended shape of the project,
+not a guarantee of dates or release scope.
+
+## Current Focus
+
+- Keep the core skill platform-neutral.
+- Treat Repo Memory as the portable standard and `SKILL.md` as one implementation.
+- Make the standard easier to evaluate through examples.
+- Add lightweight validation that works in any repository.
+- Keep platform-specific agent guides thin and linked to the same canonical
+  documentation workflow.
+
+## Near Term
+
+- Keep `STANDARD.md`, `SKILL.md`, templates, examples, and validator behavior aligned.
+- Expand `examples/` with before-and-after documentation sets.
+- Improve `scripts/validate-docs.py` coverage for metadata, orphaned docs,
+  feature statuses, and stale links.
+- Add platform adapters for common agent tools.
+- Add clearer migration guidance for repos that already have substantial docs.
+
+## Later
+
+- Add a scaffold command for creating the default `docs/` tree.
+- Add an audit command that reports missing baseline docs and likely stale
+  areas without rewriting files.
+- Explore optional packaging as a CLI, plugin, or MCP integration.
+- Add richer examples for multi-agent handoff and concurrent work.
+
+## Non-Goals
+
+- Replacing `AGENTS.md`, `CLAUDE.md`, Copilot instructions, or editor-specific
+  memory files.
+- Becoming a full agent orchestration framework.
+- Forcing every project into identical documentation depth.

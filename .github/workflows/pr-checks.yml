@@ -1,0 +1,166 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  lint-markdown:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v17
+        with:
+          globs: "**/*.md"
+
+  check-links:
+    name: Check Relative Links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify relative links
+        run: |
+          python3 - <<'PY'
+          import pathlib, re, sys
+
+          FENCE_LINE = re.compile(r'^( {0,3})([`~]{3,})(.*)$')
+          LINK  = re.compile(r'\[[^\]]*\]\(([^)]+)\)')
+
+          def strip_fenced_code(text):
+              lines = text.splitlines(keepends=True)
+              stripped = []
+              in_fence = False
+              fence_char = None
+              fence_len = 0
+
+              for line in lines:
+                  match = FENCE_LINE.match(line)
+                  if not in_fence:
+                      if match:
+                          fence = match.group(2)
+                          fence_char = fence[0]
+                          fence_len = len(fence)
+                          in_fence = True
+                          continue
+                      stripped.append(line)
+                      continue
+
+                  if match:
+                      fence = match.group(2)
+                      if fence[0] == fence_char and len(fence) >= fence_len:
+                          in_fence = False
+                          fence_char = None
+                          fence_len = 0
+                  continue
+
+              return ''.join(stripped)
+
+          errors = []
+          for md in pathlib.Path('.').rglob('*.md'):
+              if '.git' in md.parts:
+                  continue
+              text = md.read_text()
+              # Remove fenced code blocks before scanning for links
+              stripped = strip_fenced_code(text)
+              for target in LINK.findall(stripped):
+                  if target.startswith(('http://', 'https://', '#', 'mailto:')):
+                      continue
+                  rel = target.split('#', 1)[0]
+                  if not rel:
+                      continue
+                  resolved = (md.parent / rel).resolve()
+                  if not resolved.exists():
+                      errors.append(f'{md}: broken link -> {target}')
+          if errors:
+              for e in errors:
+                  print(e)
+              sys.exit(1)
+          print('All relative links OK')
+          PY
+
+  validate-docs:
+    name: Validate Docs Standard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run local docs validator
+        run: python3 scripts/validate-docs.py --skill-repo .
+
+  validate-version:
+    name: Validate SKILL.md Version and Changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check version format and bump
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, sys
+
+          def extract_version(ref):
+              try:
+                  text = subprocess.check_output(
+                      ['git', 'show', f'{ref}:SKILL.md'], text=True
+                  )
+              except subprocess.CalledProcessError:
+                  return None
+              m = re.search(r'^Version:\s*(\d+\.\d+)', text, re.MULTILINE)
+              return m.group(1) if m else None
+
+          current = extract_version('HEAD')
+          if not current:
+              print('ERROR: SKILL.md does not contain a valid "Version: X.Y" line.')
+              sys.exit(1)
+
+          print(f'Current SKILL.md version: {current}')
+
+          changelog = subprocess.check_output(
+              ['git', 'show', 'HEAD:CHANGELOG.md'], text=True
+          )
+          if not re.search(rf'^## \[{re.escape(current)}\]', changelog, re.MULTILINE):
+              print(
+                  f'ERROR: CHANGELOG.md does not contain an entry for SKILL.md '
+                  f'version {current}. Add a "## [{current}]" section.'
+              )
+              sys.exit(1)
+
+          # Warn if SKILL.md changed but version did not increment
+          try:
+              changed = subprocess.check_output(
+                  ['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'], text=True
+              ).split()
+          except subprocess.CalledProcessError:
+              changed = []
+
+          if 'SKILL.md' in changed:
+              prev = extract_version('HEAD~1')
+              if prev == current:
+                  print(
+                      'ERROR: SKILL.md was modified but the version number was '
+                      f'not changed (still {current}). '
+                      'Increment the minor version for additions or the major version '
+                      'for structural changes.'
+                  )
+                  sys.exit(1)
+              # Enforce that the version strictly increased
+              def version_tuple(v):
+                  return tuple(int(x) for x in v.split('.'))
+              if prev and version_tuple(current) <= version_tuple(prev):
+                  print(
+                      f'ERROR: SKILL.md version must strictly increase. '
+                      f'Previous: {prev}, Current: {current}.'
+                  )
+                  sys.exit(1)
+              print(f'Version bumped from {prev} to {current} — OK')
+          PY

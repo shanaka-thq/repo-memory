@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo Memory Maintainer"
+  short_description: "Audit, standardize, and maintain repo memory docs"
+  default_prompt: "Use $repo-memory to audit this repo, backfill or maintain the full Repo Memory baseline documentation structure, treat the docs tree as the canonical source of truth across agent instruction files, keep project goal/problem/users/success criteria current, cover local tooling, data model, and observability details, preserve existing diagram assets, prefer Mermaid docs for new text-centric diagrams, add thorough user stories and use cases, design, UI/UX, diagram, and project-specific or feature/component deep-dive docs when warranted, and keep feature tracking, doc-health freshness records, conflict/rename/supersession notes, resumable handoff notes, and exact next-step context current."

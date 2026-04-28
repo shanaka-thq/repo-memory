@@ -6,7 +6,7 @@ not a guarantee of dates or release scope.
 ## Current Focus
 
 - Keep the core skill platform-neutral.
-- Treat Repo Memory as the portable standard and `SKILL.md` as one implementation.
+- Treat Repo Memory as the portable standard and `skills/repo-memory/SKILL.md` as one implementation.
 - Make the standard easier to evaluate through examples.
 - Add lightweight validation that works in any repository.
 - Keep platform-specific agent guides thin and linked to the same canonical
@@ -14,9 +14,9 @@ not a guarantee of dates or release scope.
 
 ## Near Term
 
-- Keep `STANDARD.md`, `SKILL.md`, templates, examples, and validator behavior aligned.
-- Expand `examples/` with before-and-after documentation sets.
-- Improve `scripts/validate-docs.py` coverage for metadata, orphaned docs,
+- Keep `skills/repo-memory/STANDARD.md`, `skills/repo-memory/SKILL.md`, templates, examples, and validator behavior aligned.
+- Expand `skills/repo-memory/examples/` with before-and-after documentation sets.
+- Improve `skills/repo-memory/scripts/validate-docs.py` coverage for metadata, orphaned docs,
   feature statuses, and stale links.
 - Add platform adapters for common agent tools.
 - Add clearer migration guidance for repos that already have substantial docs.

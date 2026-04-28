@@ -28,12 +28,12 @@ built a certain way.
 
 This project provides a portable standard plus one skill implementation:
 
-- [`STANDARD.md`](./STANDARD.md) defines the portable Repo Memory standard.
-- [`SKILL.md`](./SKILL.md) implements the standard as a Codex-compatible skill.
-- [`references/`](./references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, and continuity governance, including interrupted-work recovery.
-- [`agents/`](./agents/) contains thin platform adapters for agent tools.
-- [`examples/`](./examples/) shows what adoption and handoff state look like.
-- [`scripts/validate-docs.py`](./scripts/validate-docs.py) provides lightweight local validation.
+- [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) defines the portable Repo Memory standard.
+- [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) implements the standard as a Codex-compatible skill.
+- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, and continuity governance, including interrupted-work recovery.
+- [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
+- [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
+- [`skills/repo-memory/scripts/validate-docs.py`](./skills/repo-memory/scripts/validate-docs.py) provides lightweight local validation.
 
 Use Repo Memory when you want to:
 
@@ -67,16 +67,15 @@ Use Repo Memory when you want to:
 ```text
 repo-memory/
 ├── README.md                          # this file
-├── STANDARD.md                        # portable Repo Memory standard
 ├── AGENTS.md                          # instructions for AI coding agents
 ├── CHANGELOG.md                       # version history
-├── SKILL.md                           # full skill definition and workflow
 ├── LICENSE                            # MIT license
 ├── CONTRIBUTING.md                    # contribution guidelines
 ├── CODE_OF_CONDUCT.md                 # community behavior expectations
 ├── SUPPORT.md                         # support and issue guidance
 ├── ROADMAP.md                         # directional project roadmap
 ├── .gitignore                         # local generated-file ignores
+├── .gitattributes                     # source archive export rules
 ├── .markdownlint.json                 # Markdown lint config
 ├── .github/
 │   ├── ISSUE_TEMPLATE/                # issue templates
@@ -84,62 +83,73 @@ repo-memory/
 │   └── workflows/
 │       ├── pr-checks.yml              # lint, link check, version validate on PRs
 │       └── release.yml                # auto-tag and GitHub Release on main
-├── agents/
-│   ├── openai-codex.md                # OpenAI Codex session guide
-│   ├── claude-code.md                 # Claude Code integration guide
-│   ├── openai.yaml                    # OpenAI Agents SDK configuration
-│   └── github-copilot.md              # GitHub Copilot integration guide
-├── examples/
-│   ├── existing-project-after/        # adopted docs tree example
-│   └── multi-agent-handoff/           # feature handoff example
-├── scripts/
-│   └── validate-docs.py               # local docs validation helper
-└── references/
-    ├── templates.md                   # default docs structure and file templates
-    ├── existing-project-audit.md      # audit workflow for existing projects
-    ├── decision-log-reconstruction.md # comprehensive durable decision capture
-    ├── continuity-governance.md       # conflict, freshness, recovery, rename, and closure protocols
-    ├── documentation-metadata-schema.md # standard metadata fields by doc type
-    └── docs-structure-rules.md        # strict naming conventions and placement rules
+└── skills/
+    └── repo-memory/                   # installable skill payload
+        ├── SKILL.md                   # full skill definition and workflow
+        ├── STANDARD.md                # portable Repo Memory standard
+        ├── LICENSE.txt                # skill package license
+        ├── agents/                    # platform adapter guides
+        ├── examples/                  # adopted docs and handoff examples
+        ├── scripts/
+        │   └── validate-docs.py       # local docs validation helper
+        └── references/                # rules, templates, audit, governance
 ```
 
 ## Quick Start
 
+### Install the Skill
+
+Install from the skill folder, not the repository root:
+
+```bash
+npx skills add https://github.com/akanahs-dev/repo-memory/tree/main/skills/repo-memory -g -a codex
+```
+
+For Codex's built-in installer, use the same GitHub directory URL:
+
+```text
+$skill-installer install https://github.com/akanahs-dev/repo-memory/tree/main/skills/repo-memory
+```
+
+The `skills/repo-memory/` folder contains the installable payload. The repository
+root keeps project governance, CI, issue templates, release notes, and branding
+assets that do not need to be installed as part of the skill.
+
 ### For AI Agents
 
 Read [`AGENTS.md`](./AGENTS.md) first for a concise entry point. Then read
-[`STANDARD.md`](./STANDARD.md) for the portable standard and [`SKILL.md`](./SKILL.md)
+[`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) for the portable standard and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md)
 for the skill workflow.
 
 ### For Humans
 
-1. Read [`STANDARD.md`](./STANDARD.md) to understand what adoption means.
-2. Read [`SKILL.md`](./SKILL.md) for the complete workflow.
-3. Use [`references/templates.md`](./references/templates.md) as a copy-paste starting point for any new doc.
-4. Use [`references/existing-project-audit.md`](./references/existing-project-audit.md) to audit an existing codebase.
-5. Use [`references/docs-structure-rules.md`](./references/docs-structure-rules.md) to check naming and placement before committing.
-6. Use [`references/continuity-governance.md`](./references/continuity-governance.md) when docs conflict, drift, work is interrupted, files need recovery, docs are renamed, or features need terminal-state handling.
-7. Use [`references/documentation-metadata-schema.md`](./references/documentation-metadata-schema.md) to keep doc metadata consistent across agents.
+1. Read [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) to understand what adoption means.
+2. Read [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) for the complete workflow.
+3. Use [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) as a copy-paste starting point for any new doc.
+4. Use [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md) to audit an existing codebase.
+5. Use [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) to check naming and placement before committing.
+6. Use [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) when docs conflict, drift, work is interrupted, files need recovery, docs are renamed, or features need terminal-state handling.
+7. Use [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) to keep doc metadata consistent across agents.
 
 ### Validate Locally
 
 Run the validator against this skill repo:
 
 ```bash
-python3 scripts/validate-docs.py --skill-repo .
+python3 skills/repo-memory/scripts/validate-docs.py --skill-repo .
 ```
 
 Run the validator against a target repo that adopted the standard:
 
 ```bash
-python3 scripts/validate-docs.py --project-docs /path/to/repo
+python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo
 ```
 
 ### Examples
 
-- [`examples/existing-project-after/`](./examples/existing-project-after/) shows
+- [`skills/repo-memory/examples/existing-project-after/`](./skills/repo-memory/examples/existing-project-after/) shows
   a compact target repo after adoption.
-- [`examples/multi-agent-handoff/`](./examples/multi-agent-handoff/) shows how
+- [`skills/repo-memory/examples/multi-agent-handoff/`](./skills/repo-memory/examples/multi-agent-handoff/) shows how
   active feature state should let another agent resume without chat history.
 
 ## Philosophy
@@ -205,16 +215,16 @@ docs/
     └── <feature-slug>.md
 ```
 
-See [`references/templates.md`](./references/templates.md) for the full layout, templates, and placement rules.
+See [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) for the full layout, templates, and placement rules.
 
 ## Naming and Structure Rules
 
-All file and folder names in `docs/` must follow strict kebab-case conventions. See [`references/docs-structure-rules.md`](./references/docs-structure-rules.md) for the complete ruleset.
+All file and folder names in `docs/` must follow strict kebab-case conventions. See [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) for the complete ruleset.
 
 ## Versioning
 
 The standard and skill use the same two-number version (`MAJOR.MINOR`) recorded
-as `Version:` in [`STANDARD.md`](./STANDARD.md) and [`SKILL.md`](./SKILL.md).
+as `Version:` in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
 | Change type | Action |
 | --- | --- |
@@ -225,18 +235,18 @@ Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The rel
 
 ## Related Docs
 
-- Portable standard: [`STANDARD.md`](./STANDARD.md)
-- Full skill definition: [`SKILL.md`](./SKILL.md)
+- Portable standard: [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
+- Full skill definition: [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md)
 - Version history: [`CHANGELOG.md`](./CHANGELOG.md)
 - AI agent instructions: [`AGENTS.md`](./AGENTS.md)
-- OpenAI Codex guide: [`agents/openai-codex.md`](./agents/openai-codex.md)
-- Claude Code guide: [`agents/claude-code.md`](./agents/claude-code.md)
-- File templates: [`references/templates.md`](./references/templates.md)
-- Audit workflow: [`references/existing-project-audit.md`](./references/existing-project-audit.md)
-- Structure rules: [`references/docs-structure-rules.md`](./references/docs-structure-rules.md)
-- Documentation metadata schema: [`references/documentation-metadata-schema.md`](./references/documentation-metadata-schema.md)
-- Decision reconstruction: [`references/decision-log-reconstruction.md`](./references/decision-log-reconstruction.md)
-- Continuity governance: [`references/continuity-governance.md`](./references/continuity-governance.md)
-- Examples: [`examples/README.md`](./examples/README.md)
+- OpenAI Codex guide: [`skills/repo-memory/agents/openai-codex.md`](./skills/repo-memory/agents/openai-codex.md)
+- Claude Code guide: [`skills/repo-memory/agents/claude-code.md`](./skills/repo-memory/agents/claude-code.md)
+- File templates: [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md)
+- Audit workflow: [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md)
+- Structure rules: [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md)
+- Documentation metadata schema: [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md)
+- Decision reconstruction: [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md)
+- Continuity governance: [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md)
+- Examples: [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md)
 - Roadmap: [`ROADMAP.md`](./ROADMAP.md)
 - Contributing: [`CONTRIBUTING.md`](./CONTRIBUTING.md)

@@ -15,10 +15,10 @@ Use GitHub issues for:
 Before opening an issue, check:
 
 - [`README.md`](./README.md)
-- [`SKILL.md`](./SKILL.md)
-- [`references/templates.md`](./references/templates.md)
-- [`references/docs-structure-rules.md`](./references/docs-structure-rules.md)
-- [`examples/`](./examples/)
+- [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md)
+- [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md)
+- [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md)
+- [`skills/repo-memory/examples/`](./skills/repo-memory/examples/)
 
 ## Security Reports
 

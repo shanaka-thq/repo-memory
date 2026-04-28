@@ -6,6 +6,13 @@
 
 A simple documentation pattern for keeping project context in the repo.
 
+Repo Memory keeps the parts of a project that code alone does not explain:
+why it exists, who it serves, what it is meant to do, where important context
+lives, and how decisions, features, and handoffs have evolved. The code remains
+the source of truth for implementation; Repo Memory keeps the surrounding
+context close enough that humans and agents can understand and change it
+safely.
+
 Repo Memory is for projects where important context should not live only in chat
 history, agent memory, or one tool-specific instruction file.
 

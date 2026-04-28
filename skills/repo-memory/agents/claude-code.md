@@ -62,7 +62,6 @@ When changing behavior:
 ## Related Docs
 
 - Skill definition: [`SKILL.md`](../SKILL.md)
-- Agent instructions for this repo: [`AGENTS.md`](../AGENTS.md)
 - OpenAI Codex guide: [`agents/openai-codex.md`](./openai-codex.md)
 - GitHub Copilot guide: [`agents/github-copilot.md`](./github-copilot.md)
 - File templates: [`references/templates.md`](../references/templates.md)

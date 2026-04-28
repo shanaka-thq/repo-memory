@@ -9,12 +9,12 @@ import sys
 from pathlib import Path
 
 
-REQUIRED_SKILL_FILES = [
+SKILL_PACKAGE = Path("skills/repo-memory")
+
+REQUIRED_REPO_FILES = [
     "README.md",
-    "STANDARD.md",
     "AGENTS.md",
     "CHANGELOG.md",
-    "SKILL.md",
     "SECURITY.md",
     "LICENSE",
     "CONTRIBUTING.md",
@@ -22,16 +22,28 @@ REQUIRED_SKILL_FILES = [
     "SUPPORT.md",
     "ROADMAP.md",
     ".gitignore",
-    "references/templates.md",
-    "references/docs-structure-rules.md",
-    "references/existing-project-audit.md",
-    "references/decision-log-reconstruction.md",
-    "references/continuity-governance.md",
-    "references/documentation-metadata-schema.md",
-    "agents/openai-codex.md",
-    "agents/github-copilot.md",
-    "agents/claude-code.md",
-    "agents/openai.yaml",
+    ".gitattributes",
+    ".markdownlint.json",
+    ".github/workflows/pr-checks.yml",
+    ".github/workflows/release.yml",
+]
+
+REQUIRED_SKILL_PACKAGE_FILES = [
+    "skills/repo-memory/SKILL.md",
+    "skills/repo-memory/STANDARD.md",
+    "skills/repo-memory/LICENSE.txt",
+    "skills/repo-memory/references/templates.md",
+    "skills/repo-memory/references/docs-structure-rules.md",
+    "skills/repo-memory/references/existing-project-audit.md",
+    "skills/repo-memory/references/decision-log-reconstruction.md",
+    "skills/repo-memory/references/continuity-governance.md",
+    "skills/repo-memory/references/documentation-metadata-schema.md",
+    "skills/repo-memory/agents/openai-codex.md",
+    "skills/repo-memory/agents/github-copilot.md",
+    "skills/repo-memory/agents/claude-code.md",
+    "skills/repo-memory/agents/openai.yaml",
+    "skills/repo-memory/examples/README.md",
+    "skills/repo-memory/scripts/validate-docs.py",
 ]
 
 REQUIRED_PROJECT_DOCS = [
@@ -191,8 +203,9 @@ def check_required_headings(root: Path) -> list[str]:
 
 
 def check_skill_version(root: Path) -> list[str]:
-    skill = root / "SKILL.md"
-    standard = root / "STANDARD.md"
+    package_root = root / SKILL_PACKAGE if (root / SKILL_PACKAGE).exists() else root
+    skill = package_root / "SKILL.md"
+    standard = package_root / "STANDARD.md"
     changelog = root / "CHANGELOG.md"
     if not skill.exists() or not changelog.exists():
         return []
@@ -200,19 +213,20 @@ def check_skill_version(root: Path) -> list[str]:
     skill_text = skill.read_text(encoding="utf-8")
     skill_match = VERSION.search(skill_text)
     if not skill_match:
-        return ["SKILL.md missing Version: X.Y line"]
+        return [f"{skill.relative_to(root)} missing Version: X.Y line"]
 
     version = skill_match.group(1)
     if standard.exists():
         standard_text = standard.read_text(encoding="utf-8")
         standard_match = VERSION.search(standard_text)
         if not standard_match:
-            return ["STANDARD.md missing Version: X.Y line"]
+            return [f"{standard.relative_to(root)} missing Version: X.Y line"]
         standard_version = standard_match.group(1)
         if standard_version != version:
             return [
-                "STANDARD.md version "
-                f"{standard_version} does not match SKILL.md version {version}"
+                f"{standard.relative_to(root)} version "
+                f"{standard_version} does not match "
+                f"{skill.relative_to(root)} version {version}"
             ]
 
     changelog_text = changelog.read_text(encoding="utf-8")
@@ -224,7 +238,8 @@ def check_skill_version(root: Path) -> list[str]:
 
 def check_skill_repo(root: Path) -> list[str]:
     errors: list[str] = []
-    errors.extend(check_required(root, REQUIRED_SKILL_FILES))
+    errors.extend(check_required(root, REQUIRED_REPO_FILES))
+    errors.extend(check_required(root, REQUIRED_SKILL_PACKAGE_FILES))
     errors.extend(check_skill_version(root))
     return errors
 
@@ -263,8 +278,10 @@ def main() -> int:
     if args.project_docs:
         errors.extend(check_project_docs(root))
     if not args.skill_repo and not args.project_docs:
-        if (root / "SKILL.md").exists() and (root / "references").exists():
+        if (root / SKILL_PACKAGE / "SKILL.md").exists():
             errors.extend(check_skill_repo(root))
+        elif (root / "SKILL.md").exists() and (root / "references").exists():
+            errors.extend(check_skill_version(root))
         else:
             errors.extend(check_project_docs(root))
 

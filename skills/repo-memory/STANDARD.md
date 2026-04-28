@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.0
+Version: 1.1
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence

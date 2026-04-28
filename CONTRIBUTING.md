@@ -8,17 +8,17 @@ or easier to validate.
 
 ## Good Contributions
 
-- clearer workflow guidance in `SKILL.md`
-- stronger templates in `references/templates.md`
-- practical examples in `examples/`
-- platform adapter guides in `agents/`
-- validation checks in `scripts/`
+- clearer workflow guidance in `skills/repo-memory/SKILL.md`
+- stronger templates in `skills/repo-memory/references/templates.md`
+- practical examples in `skills/repo-memory/examples/`
+- platform adapter guides in `skills/repo-memory/agents/`
+- validation checks in `skills/repo-memory/scripts/`
 - issue reports showing where the standard is confusing or unsafe
 
 ## Before Opening a Pull Request
 
 1. Read [`AGENTS.md`](./AGENTS.md).
-2. If you changed `SKILL.md`, bump its `Version:` value.
+2. If you changed `skills/repo-memory/SKILL.md`, bump its `Version:` value.
 3. Add a matching entry to [`CHANGELOG.md`](./CHANGELOG.md).
 4. If you added a reference document, link it from [`README.md`](./README.md)
    and [`AGENTS.md`](./AGENTS.md).
@@ -26,7 +26,7 @@ or easier to validate.
 6. Run the local checks:
 
 ```bash
-python3 scripts/validate-docs.py --skill-repo .
+python3 skills/repo-memory/scripts/validate-docs.py --skill-repo .
 ```
 
 ## Pull Request Scope

@@ -20,7 +20,7 @@ jobs:
       - name: Extract version from SKILL.md
         id: version
         run: |
-          VERSION=$(grep -m1 '^Version:' SKILL.md | sed 's/Version:[[:space:]]*//')
+          VERSION=$(grep -m1 '^Version:' skills/repo-memory/SKILL.md | sed 's/Version:[[:space:]]*//')
           if [ -z "$VERSION" ]; then
             echo "Could not find Version line in SKILL.md" >&2
             exit 1

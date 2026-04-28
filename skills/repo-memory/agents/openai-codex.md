@@ -62,7 +62,6 @@ If a target repo uses Codex together with other agents:
 ## Related Docs
 
 - Skill definition: [`SKILL.md`](../SKILL.md)
-- Agent instructions for this repo: [`AGENTS.md`](../AGENTS.md)
 - GitHub Copilot guide: [`agents/github-copilot.md`](./github-copilot.md)
 - OpenAI Agents SDK config: [`agents/openai.yaml`](./openai.yaml)
 - File templates: [`references/templates.md`](../references/templates.md)

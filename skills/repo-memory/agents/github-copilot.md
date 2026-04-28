@@ -101,7 +101,6 @@ See [`references/docs-structure-rules.md`](../references/docs-structure-rules.md
 ## Related Docs
 
 - Skill definition: [`SKILL.md`](../SKILL.md)
-- Agent instructions for this repo: [`AGENTS.md`](../AGENTS.md)
 - File templates: [`references/templates.md`](../references/templates.md)
 - Naming and placement rules: [`references/docs-structure-rules.md`](../references/docs-structure-rules.md)
 - Continuity governance: [`references/continuity-governance.md`](../references/continuity-governance.md)

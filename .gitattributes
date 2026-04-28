@@ -1,0 +1,8 @@
+# Keep GitHub source archives lean for installers that fetch repository ZIPs.
+/.github/** export-ignore
+/assets/** export-ignore
+/CODE_OF_CONDUCT.md export-ignore
+/CONTRIBUTING.md export-ignore
+/ROADMAP.md export-ignore
+/SECURITY.md export-ignore
+/SUPPORT.md export-ignore

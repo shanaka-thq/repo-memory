@@ -16,8 +16,8 @@ Explain the agent or maintainer problem this solves.
 
 ## Suggested Shape
 
-Describe where this should live, such as `SKILL.md`, `references/`,
-`agents/`, `examples/`, or `scripts/`.
+Describe where this should live, such as `skills/repo-memory/SKILL.md`, `skills/repo-memory/references/`,
+`skills/repo-memory/agents/`, `skills/repo-memory/examples/`, or `skills/repo-memory/scripts/`.
 
 ## Compatibility
 

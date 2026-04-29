@@ -16,6 +16,8 @@ not a guarantee of dates or release scope.
 
 - Keep `skills/repo-memory/STANDARD.md`, `skills/repo-memory/SKILL.md`, templates, examples, and validator behavior aligned.
 - Expand `skills/repo-memory/examples/` with before-and-after documentation sets.
+- Improve the empty-repo scaffold helper with richer metadata and optional
+  baseline variants.
 - Improve `skills/repo-memory/scripts/validate-docs.py` coverage for metadata, orphaned docs,
   feature statuses, and stale links.
 - Add platform adapters for common agent tools.
@@ -23,7 +25,6 @@ not a guarantee of dates or release scope.
 
 ## Later
 
-- Add a scaffold command for creating the default `docs/` tree.
 - Add an audit command that reports missing baseline docs and likely stale
   areas without rewriting files.
 - Explore optional packaging as a CLI, plugin, or MCP integration.

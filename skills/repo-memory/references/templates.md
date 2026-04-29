@@ -55,6 +55,26 @@ For existing projects, use the baseline files as the comprehensive minimum and p
 
 The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer.
 
+## Empty Repository Scaffold
+
+Use the scaffold helper when a target repository has no useful implementation
+or documentation evidence yet:
+
+```bash
+python3 scripts/scaffold-docs.py /path/to/repo --with-agents
+```
+
+The scaffold creates the required baseline docs, `docs/requirements/`,
+`docs/features/_template.md`, initial decision and implementation log entries,
+and a doc-health note that marks the placeholders as unverified. Add
+`--include-user-stories` when users, actors, journeys, or acceptance paths are
+already known. Use `--project-name "<name>"` when the target directory name is
+not the right project name.
+
+After scaffolding, replace TODOs only with confirmed facts, user statements, or
+clearly marked inference. Keep unknowns explicit until implementation evidence
+exists.
+
 ## Common Metadata Block
 
 Use this block near the top of maintained docs. See [documentation-metadata-schema.md](./documentation-metadata-schema.md) for allowed values and doc-type-specific fields.

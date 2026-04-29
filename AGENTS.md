@@ -30,10 +30,11 @@ When a user asks you to apply this skill to a target repo:
 3. **Follow the workflow** in `skills/repo-memory/SKILL.md`, section by section.
 4. **Use the templates** in `skills/repo-memory/references/templates.md` as the default format for any doc you create.
 5. **Enforce the rules** in `skills/repo-memory/references/docs-structure-rules.md` for all file names, folder names, and placement decisions.
-6. **Keep one canonical docs layer** — agent-specific instruction files should point into the maintained docs set instead of duplicating mutable project facts.
-7. **Track doc health** — use `docs/doc-health.md` in target repos to record verification state, stale docs, conflicts, renames, and superseded work.
-8. **Use metadata consistently** — apply `skills/repo-memory/references/documentation-metadata-schema.md` so doc type, status, owner, verification, evidence, and related docs are recorded predictably.
-9. **Leave the repo resumable** — always close with current handoff notes in the active feature doc before ending a session.
+6. **Bootstrap empty repos** with `python3 skills/repo-memory/scripts/scaffold-docs.py <repo> --with-agents` when there is no implementation evidence yet.
+7. **Keep one canonical docs layer** — agent-specific instruction files should point into the maintained docs set instead of duplicating mutable project facts.
+8. **Track doc health** — use `docs/doc-health.md` in target repos to record verification state, stale docs, conflicts, renames, and superseded work.
+9. **Use metadata consistently** — apply `skills/repo-memory/references/documentation-metadata-schema.md` so doc type, status, owner, verification, evidence, and related docs are recorded predictably.
+10. **Leave the repo resumable** — always close with current handoff notes in the active feature doc before ending a session.
 
 ## Maintaining This Skill Repo
 
@@ -44,6 +45,7 @@ When making changes to this repository itself:
 - All changes to `skills/repo-memory/SKILL.md` must preserve the version number at the top; increment the minor version for non-breaking additions and the major version for required baseline or structural changes.
 - **Update [`CHANGELOG.md`](./CHANGELOG.md)** in the same PR that bumps `skills/repo-memory/SKILL.md`. Add an entry under the new version number.
 - New templates added to `skills/repo-memory/references/templates.md` must include a brief usage note at the top of the template block.
+- New scripts added to `skills/repo-memory/scripts/` must be documented in `README.md`, `SKILL.md`, or the relevant reference doc.
 - New agent configuration files belong in `skills/repo-memory/agents/` and must include a comment describing the target platform and usage.
 - New reference documents belong in `skills/repo-memory/references/` and must be linked from both `README.md` and this file.
 - New examples belong in `skills/repo-memory/examples/` and must be linked from [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md).

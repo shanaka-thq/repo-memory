@@ -10,6 +10,15 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.2] - 2026-04-29
+
+### Added
+
+- Added `skills/repo-memory/scripts/scaffold-docs.py` to create the standard
+  Repo Memory docs skeleton in an empty or nearly empty repository.
+- Added empty-repository bootstrap guidance to the skill workflow and portable
+  standard, including validation and optional root `AGENTS.md` generation.
+
 ## [1.1] - 2026-04-28
 
 ### Changed

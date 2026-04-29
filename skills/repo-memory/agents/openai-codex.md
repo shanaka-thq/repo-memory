@@ -17,7 +17,8 @@ Agent-specific prompts, CLI instructions, or wrapper files should point into the
 1. Check for `AGENTS.md` and any repo-level agent instruction files.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
 3. Read `docs/project-overview.md`, `docs/architecture.md`, and `docs/feature-registry.md`.
-4. If the docs are missing, stale, or inconsistent, apply the Repo Memory workflow from [`SKILL.md`](../SKILL.md).
+4. If the repo is empty or nearly empty, run `python3 scripts/scaffold-docs.py <repo> --with-agents`.
+5. If the docs are missing, stale, or inconsistent, apply the Repo Memory workflow from [`SKILL.md`](../SKILL.md).
 
 ### When resuming interrupted work
 

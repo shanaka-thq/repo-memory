@@ -14,7 +14,8 @@ Treat the maintained `docs/` tree as the canonical cross-agent source of truth. 
 
 1. Check for an existing `AGENTS.md` or `.github/copilot-instructions.md`.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
-3. If docs are missing or stale, invoke the Repo Memory workflow via the default prompt in [`agents/openai.yaml`](./openai.yaml) or by reading [`SKILL.md`](../SKILL.md) directly.
+3. If the repo is empty or nearly empty, use `python3 scripts/scaffold-docs.py <repo> --with-agents` to create the baseline skeleton.
+4. If docs are missing or stale, invoke the Repo Memory workflow via the default prompt in [`agents/openai.yaml`](./openai.yaml) or by reading [`SKILL.md`](../SKILL.md) directly.
 
 ### When resuming work
 

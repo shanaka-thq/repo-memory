@@ -43,6 +43,7 @@ REQUIRED_SKILL_PACKAGE_FILES = [
     "skills/repo-memory/agents/claude-code.md",
     "skills/repo-memory/agents/openai.yaml",
     "skills/repo-memory/examples/README.md",
+    "skills/repo-memory/scripts/scaffold-docs.py",
     "skills/repo-memory/scripts/validate-docs.py",
 ]
 

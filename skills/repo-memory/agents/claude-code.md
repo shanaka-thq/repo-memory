@@ -40,7 +40,8 @@ When changing behavior:
 1. Read `CLAUDE.md` or other repo-level instructions.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
 3. Check `docs/doc-health.md` for stale or conflicting docs.
-4. If the docs are missing, stale, or inconsistent, apply the workflow from
+4. If the repo is empty or nearly empty, run `python3 scripts/scaffold-docs.py <repo> --with-agents`.
+5. If the docs are missing, stale, or inconsistent, apply the workflow from
    [`SKILL.md`](../SKILL.md).
 
 ## When Resuming Work

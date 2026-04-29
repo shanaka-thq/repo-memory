@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.1
+Version: 1.2
 
 ## Overview
 
@@ -19,6 +19,7 @@ Read [references/documentation-metadata-schema.md](./references/documentation-me
 Read [references/decision-log-reconstruction.md](./references/decision-log-reconstruction.md) when creating or updating a decision log, especially for existing projects where durable choices must be reconstructed from code, requirements, project history, user statements, and inferred architecture.
 Read [references/continuity-governance.md](./references/continuity-governance.md) when docs change materially, conflict with code or each other, become stale, features end unexpectedly, docs are renamed, or multiple agents may be working concurrently.
 Read [examples/README.md](./examples/README.md) when you need a concrete reference output for an adopted docs tree or multi-agent handoff.
+Run `python3 scripts/scaffold-docs.py <repo> --with-agents` when the target repo is empty or nearly empty and needs the default docs skeleton before there is code to audit.
 Run `python3 scripts/validate-docs.py --project-docs <repo>` when you need a lightweight local check for a target repo that adopted the standard.
 
 ## Core Principle
@@ -166,7 +167,8 @@ Use [references/continuity-governance.md](./references/continuity-governance.md)
 Classify the repo into one of three modes:
 
 1. `new_project`
-   The repo has little or no documentation structure.
+   The repo has little or no documentation structure. If it is empty or nearly
+   empty, initialize the standard skeleton before trying to reconstruct facts.
 2. `existing_project_needs_standardization`
    The repo has docs, but they are incomplete, inconsistent, or not useful for agent handoff.
 3. `existing_project_with_structure`
@@ -177,6 +179,37 @@ Start by checking:
 - `AGENTS.md` or similar repo instructions
 - `docs/`
 - top-level docs like `README.md`, `FEATURE_REQUIREMENTS.md`, architecture notes, ADRs, or changelog-style files
+
+For a truly empty repository, do not wait for implementation evidence before
+creating docs. Bootstrap the skeleton, mark unknowns explicitly, and leave the
+repo ready for future facts to be filled in.
+
+### 1a. Bootstrap an empty repository
+
+When the target repo has no useful source files or docs, create the baseline
+documentation skeleton:
+
+```bash
+python3 scripts/scaffold-docs.py /path/to/repo --with-agents
+```
+
+Use `--project-name "<name>"` when the directory name is not the right project
+name. Use `--include-user-stories` when the project already has known users,
+actors, journeys, or workflow expectations. Use `--dry-run` to inspect the
+files before writing them.
+
+The scaffold creates the required `docs/` baseline, `docs/requirements/`,
+`docs/features/_template.md`, initial decision and implementation log entries,
+and a doc-health record that marks the skeleton placeholders as unverified.
+With `--with-agents`, it also creates a thin root `AGENTS.md` that points agents
+to the docs tree.
+
+After scaffolding:
+
+1. Replace placeholders only with confirmed user statements or evidence.
+2. Keep unknowns and assumptions explicit.
+3. Run `python3 scripts/validate-docs.py --project-docs /path/to/repo`.
+4. Leave the repo with a usable docs map even if implementation has not started.
 
 ### 2. Run a documentation audit
 
@@ -488,7 +521,7 @@ For an existing messy repo, the skill succeeds only if it produces a usable base
 Use this strategy when no better repo-specific process exists:
 
 1. audit the repo and inventory evidence
-2. bootstrap `docs/` with the standard file set
+2. bootstrap `docs/` with the standard file set, using `scripts/scaffold-docs.py` for empty or nearly empty repos
 3. populate each standard doc with current known state from evidence
 4. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
 5. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots

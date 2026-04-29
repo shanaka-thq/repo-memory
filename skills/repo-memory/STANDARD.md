@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.1
+Version: 1.2
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -97,6 +97,23 @@ Optional docs are added only when the project needs the depth:
 
 All placement and naming details are defined in
 [`references/docs-structure-rules.md`](./references/docs-structure-rules.md).
+
+## Empty Repository Bootstrap
+
+An empty or nearly empty repository can adopt Repo Memory before implementation
+exists. In that case, create the required baseline docs as a skeleton, mark
+project-specific facts as `TODO` or `unknown`, and record in `docs/doc-health.md`
+that the initial docs are placeholders that still need evidence.
+
+The Codex skill implementation includes a scaffold helper:
+
+```bash
+python3 scripts/scaffold-docs.py /path/to/repo --with-agents
+```
+
+The skeleton is a starting state, not verified project truth. Replace
+placeholders only with confirmed user statements, source evidence, tests,
+configuration, or explicitly marked inference.
 
 ## Required Behaviors
 

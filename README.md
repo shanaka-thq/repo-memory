@@ -33,7 +33,7 @@ This project provides a portable standard plus one skill implementation:
 - [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, and continuity governance, including interrupted-work recovery.
 - [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
 - [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
-- [`skills/repo-memory/scripts/validate-docs.py`](./skills/repo-memory/scripts/validate-docs.py) provides lightweight local validation.
+- [`skills/repo-memory/scripts/`](./skills/repo-memory/scripts/) provides empty-repo scaffolding and lightweight local validation.
 
 Use Repo Memory when you want to:
 
@@ -91,6 +91,7 @@ repo-memory/
         ├── agents/                    # platform adapter guides
         ├── examples/                  # adopted docs and handoff examples
         ├── scripts/
+        │   ├── scaffold-docs.py       # empty repo docs skeleton helper
         │   └── validate-docs.py       # local docs validation helper
         └── references/                # rules, templates, audit, governance
 ```
@@ -130,6 +131,19 @@ for the skill workflow.
 5. Use [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) to check naming and placement before committing.
 6. Use [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) when docs conflict, drift, work is interrupted, files need recovery, docs are renamed, or features need terminal-state handling.
 7. Use [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) to keep doc metadata consistent across agents.
+
+### Empty Repository Scaffold
+
+Create the standard skeleton in a new or empty repo:
+
+```bash
+python3 skills/repo-memory/scripts/scaffold-docs.py /path/to/repo --with-agents
+```
+
+Use `--project-name "<name>"` when the directory name is not the right project
+name. Add `--include-user-stories` when users, actors, or journeys are already
+known. The scaffold refuses to overwrite existing files unless `--force` is
+passed.
 
 ### Validate Locally
 

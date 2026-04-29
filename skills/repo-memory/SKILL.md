@@ -1,11 +1,11 @@
 ---
 name: repo-memory
-description: Apply the Repo Memory standard to create and maintain repo-native project context docs. Use when Codex is starting a project, adopting an existing codebase, reconstructing architecture or feature decisions from code and history, adding or researching features, resuming interrupted work, or standardizing documentation so humans and agents can understand goals, users, architecture, requirements, decisions, implementation status, evidence, and exact handoff state.
+description: Apply the Repo Memory standard to create and maintain repo-native project context docs. Use when an AI coding agent or maintainer is starting a project, adopting an existing codebase, reconstructing architecture or feature decisions from code and history, adding or researching features, resuming interrupted work, or standardizing documentation so humans and agents can understand goals, users, architecture, requirements, decisions, implementation status, evidence, and exact handoff state.
 ---
 
 # Repo Memory Skill
 
-Version: 1.2
+Version: 1.3
 
 ## Overview
 
@@ -19,8 +19,10 @@ Read [references/documentation-metadata-schema.md](./references/documentation-me
 Read [references/decision-log-reconstruction.md](./references/decision-log-reconstruction.md) when creating or updating a decision log, especially for existing projects where durable choices must be reconstructed from code, requirements, project history, user statements, and inferred architecture.
 Read [references/continuity-governance.md](./references/continuity-governance.md) when docs change materially, conflict with code or each other, become stale, features end unexpectedly, docs are renamed, or multiple agents may be working concurrently.
 Read [examples/README.md](./examples/README.md) when you need a concrete reference output for an adopted docs tree or multi-agent handoff.
-Run `python3 scripts/scaffold-docs.py <repo> --with-agents` when the target repo is empty or nearly empty and needs the default docs skeleton before there is code to audit.
-Run `python3 scripts/validate-docs.py --project-docs <repo>` when you need a lightweight local check for a target repo that adopted the standard.
+Run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents` when the target repo is empty or nearly empty and needs the default docs skeleton before there is code to audit.
+Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs <repo>` when you need a lightweight local check for a target repo that adopted the standard.
+
+Resolve `<skill-dir>` to the directory containing this `SKILL.md`. When working from this repository root, use `skills/repo-memory/scripts/...`.
 
 ## Core Principle
 
@@ -190,7 +192,7 @@ When the target repo has no useful source files or docs, create the baseline
 documentation skeleton:
 
 ```bash
-python3 scripts/scaffold-docs.py /path/to/repo --with-agents
+python3 <skill-dir>/scripts/scaffold-docs.py /path/to/repo --with-agents
 ```
 
 Use `--project-name "<name>"` when the directory name is not the right project
@@ -208,7 +210,7 @@ After scaffolding:
 
 1. Replace placeholders only with confirmed user statements or evidence.
 2. Keep unknowns and assumptions explicit.
-3. Run `python3 scripts/validate-docs.py --project-docs /path/to/repo`.
+3. Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo`.
 4. Leave the repo with a usable docs map even if implementation has not started.
 
 ### 2. Run a documentation audit
@@ -521,7 +523,7 @@ For an existing messy repo, the skill succeeds only if it produces a usable base
 Use this strategy when no better repo-specific process exists:
 
 1. audit the repo and inventory evidence
-2. bootstrap `docs/` with the standard file set, using `scripts/scaffold-docs.py` for empty or nearly empty repos
+2. bootstrap `docs/` with the standard file set, using the bundled `scripts/scaffold-docs.py` helper for empty or nearly empty repos
 3. populate each standard doc with current known state from evidence
 4. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
 5. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots

@@ -24,12 +24,42 @@ The point is not to create heavy documentation. The point is to make the project
 easier to leave, resume, review, and change without losing why things are being
 built a certain way.
 
+## Install and Use
+
+Install Repo Memory from the repository root and select the skill by name:
+
+```bash
+npx skills add akanahs-dev/repo-memory --skill repo-memory -g -a codex -y
+```
+
+Install for another supported agent by changing the `-a` value, or omit `-a`
+to choose interactively. Omit `-g` to install into the current project instead
+of your global agent skills directory.
+
+You can also install directly from the skill folder:
+
+```bash
+npx skills add https://github.com/akanahs-dev/repo-memory/tree/main/skills/repo-memory -g -a codex -y
+```
+
+After installing, ask your agent to use `repo-memory` on a target repository:
+
+```text
+Use $repo-memory to audit this repo, create or update the Repo Memory docs,
+and leave current handoff notes for future agents.
+```
+
+This repository follows the common multi-skill repository layout:
+`skills/<skill-name>/SKILL.md`. The installable payload is
+[`skills/repo-memory/`](./skills/repo-memory/); the repository root contains
+governance files, CI, release notes, and public project documentation.
+
 ## What This Project Provides
 
-This project provides a portable standard plus one skill implementation:
+This project provides a portable standard plus one installable skill package:
 
 - [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) defines the portable Repo Memory standard.
-- [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) implements the standard as a Codex-compatible skill.
+- [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) implements the standard as an agent-facing skill workflow.
 - [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, and continuity governance, including interrupted-work recovery.
 - [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
 - [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
@@ -100,10 +130,17 @@ repo-memory/
 
 ### Install the Skill
 
-Install from the skill folder, not the repository root:
+Preferred install command:
 
 ```bash
-npx skills add https://github.com/akanahs-dev/repo-memory/tree/main/skills/repo-memory -g -a codex
+npx skills add akanahs-dev/repo-memory --skill repo-memory -g -a codex -y
+```
+
+Install from the skill folder when you want to bypass repository skill
+selection:
+
+```bash
+npx skills add https://github.com/akanahs-dev/repo-memory/tree/main/skills/repo-memory -g -a codex -y
 ```
 
 For Codex's built-in installer, use the same GitHub directory URL:
@@ -140,6 +177,9 @@ Create the standard skeleton in a new or empty repo:
 python3 skills/repo-memory/scripts/scaffold-docs.py /path/to/repo --with-agents
 ```
 
+This command is shown from the repository root. If using an installed skill,
+run the script from that installed `repo-memory` skill directory.
+
 Use `--project-name "<name>"` when the directory name is not the right project
 name. Add `--include-user-stories` when users, actors, or journeys are already
 known. The scaffold refuses to overwrite existing files unless `--force` is
@@ -158,6 +198,9 @@ Run the validator against a target repo that adopted the standard:
 ```bash
 python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo
 ```
+
+This command is shown from the repository root. If using an installed skill,
+run the script from that installed `repo-memory` skill directory.
 
 ### Examples
 

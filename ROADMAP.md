@@ -20,6 +20,11 @@ not a guarantee of dates or release scope.
   baseline variants.
 - Improve `skills/repo-memory/scripts/validate-docs.py` coverage for metadata, orphaned docs,
   feature statuses, and stale links.
+- Add a blind, scenario-based forward-test harness that runs agents on
+  disposable fixture repos and scores the resulting docs without leaking the
+  expected answers.
+- Trim `skills/repo-memory/SKILL.md` below the preferred skill-body size by
+  moving lower-frequency detail into directly linked reference files.
 - Add platform adapters for common agent tools.
 - Add clearer migration guidance for repos that already have substantial docs.
 

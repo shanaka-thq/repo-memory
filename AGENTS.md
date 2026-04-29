@@ -4,7 +4,7 @@ Instructions for AI coding agents (GitHub Copilot, OpenAI Codex, Claude, and oth
 
 ## What This Repo Is
 
-This repository defines **Repo Memory**: a portable, repo-native project memory and handoff standard for AI-assisted software projects. It also includes the **Repo Memory** Codex skill implementation of that standard. It is not a product codebase; it is a standard, skill definition, and reference library.
+This repository defines **Repo Memory**: a portable, repo-native project memory and handoff standard for AI-assisted software projects. It also includes the **Repo Memory** agent-facing skill implementation of that standard. It is not a product codebase; it is a standard, skill definition, and reference library.
 
 ## Entry Points
 

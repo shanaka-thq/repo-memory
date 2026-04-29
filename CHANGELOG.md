@@ -10,6 +10,18 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.3] - 2026-04-29
+
+### Changed
+
+- Made the `repo-memory` skill trigger description agent-neutral instead of
+  Codex-specific.
+- Clarified that bundled script commands should resolve paths from the
+  installed skill directory, while repository-root examples use
+  `skills/repo-memory/scripts/...`.
+- Updated standard and repository wording to describe the skill package as an
+  agent-facing implementation of the portable standard.
+
 ## [1.2] - 2026-04-29
 
 ### Added
@@ -37,7 +49,7 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 - Initial Repo Memory public release as a portable, repo-native project context and memory standard.
 - `skills/repo-memory/STANDARD.md` as the normative standard entrypoint, including conformance levels, required docs, metadata expectations, validation guidance, and non-goals.
-- `skills/repo-memory/SKILL.md` as the Codex-compatible Repo Memory implementation.
+- `skills/repo-memory/SKILL.md` as the agent-facing Repo Memory skill implementation.
 - Reference templates, naming rules, metadata schema, existing-project audit workflow, decision reconstruction guidance, and continuity governance.
 - Interrupted-work recovery protocol for crashed, resumed, or unknown prior-agent sessions.
 - Agent integration guides for OpenAI Agents SDK, OpenAI Codex, GitHub Copilot, and Claude Code.

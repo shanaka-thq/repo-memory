@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.2
+Version: 1.3
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -8,7 +8,7 @@ rules, and handoff expectations that help humans and coding agents understand,
 resume, and change a project from shared repo docs.
 
 This file is the normative entrypoint for the standard. `SKILL.md` describes
-one Codex-compatible skill implementation of the same standard.
+one installable skill implementation of the same standard.
 
 ## Purpose
 
@@ -105,11 +105,14 @@ exists. In that case, create the required baseline docs as a skeleton, mark
 project-specific facts as `TODO` or `unknown`, and record in `docs/doc-health.md`
 that the initial docs are placeholders that still need evidence.
 
-The Codex skill implementation includes a scaffold helper:
+The skill package includes a scaffold helper:
 
 ```bash
-python3 scripts/scaffold-docs.py /path/to/repo --with-agents
+python3 <skill-dir>/scripts/scaffold-docs.py /path/to/repo --with-agents
 ```
+
+Resolve `<skill-dir>` to the directory that contains `SKILL.md`. When working
+from this repository root, use `skills/repo-memory/scripts/...`.
 
 The skeleton is a starting state, not verified project truth. Replace
 placeholders only with confirmed user statements, source evidence, tests,
@@ -205,7 +208,7 @@ The standard is designed to be easy to validate without a service.
 This repository includes a lightweight validator:
 
 ```bash
-python3 scripts/validate-docs.py --project-docs /path/to/repo
+python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo
 ```
 
 Validation should catch missing required docs, broken relative links, invalid

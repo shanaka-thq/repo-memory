@@ -61,8 +61,11 @@ Use the scaffold helper when a target repository has no useful implementation
 or documentation evidence yet:
 
 ```bash
-python3 scripts/scaffold-docs.py /path/to/repo --with-agents
+python3 <skill-dir>/scripts/scaffold-docs.py /path/to/repo --with-agents
 ```
+
+Resolve `<skill-dir>` to the installed `repo-memory` skill directory. When
+working from this repository root, use `skills/repo-memory/scripts/...`.
 
 The scaffold creates the required baseline docs, `docs/requirements/`,
 `docs/features/_template.md`, initial decision and implementation log entries,

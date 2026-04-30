@@ -65,6 +65,7 @@ Use a simple coverage matrix:
 | `docs/diagrams/system-context.mmd` | architecture docs, service map, deploy config | High | async edges unclear |
 | `docs/decision-log.md` | ADRs, commit history, comments | Medium | weak rationale for storage choice |
 | `docs/designs/notifications-delivery.md` | RFC notes, issue history, architecture comments | Medium | rollout plan incomplete |
+| `docs/reviews/notifications-product-review.md` | review notes, PR comments, feature doc | Medium | accepted outcomes not fully mapped |
 | `docs/project-details/order-lifecycle.md` | workflow services, tests, release notes | Medium | refund edge cases only partially confirmed |
 | `docs/components/session-manager.md` | auth code, UI state container, tests | High | no explicit cleanup rationale |
 | `docs/diagrams/checkout-flow.drawio` | workshop artifact, browser checks, support notes | Medium | Markdown-linked export missing |
@@ -167,6 +168,7 @@ When the feature logic is complex, also create or update:
 - `docs/diagrams/...` when architecture, sequence, state, or flow diagrams materially help
 - `docs/ui-ux/<topic-or-flow-slug>.md` when the user-facing behavior is important and detailed
 - `docs/designs/<design-slug>.md` when the feature introduced a significant design or rollout plan
+- `docs/reviews/<review-slug>.md` when a plan, specialist review, or second-agent critique materially shaped implementation and needs provenance
 - `docs/doc-health.md` when feature state, linked docs, or verification evidence changed materially
 
 When feature work stopped or changed direction, use terminal statuses instead of deleting history:

@@ -98,6 +98,19 @@ When more than one agent may work in the repo:
 - if two handoff notes conflict, prefer the one with newer verification evidence and update the stale note
 - do not overwrite another agent's feature state without reconciling the docs and recording the correction
 
+## Plan and Review Provenance Protocol
+
+Use this protocol when one agent creates a plan for another agent to implement,
+or when a specialist, second-agent, human, or tool review materially shapes work.
+
+- keep the implementable summary, assumptions, confidence, disposition, and next safe implementation step in the owning feature or design doc
+- record who or what produced the plan or review, the tool or agent surface, role or lens, date, and inputs reviewed
+- put short reviews in the owning doc `Review Log`
+- create `docs/reviews/<review-slug>.md` only when the record is substantive, cross-cutting, or likely to be audited later
+- treat plan and review records as advisory evidence until checked against current code, docs, and user intent
+- promote accepted outcomes into the canonical owning docs, such as requirements, UI/UX, architecture, feature, decision-log, or implementation-log docs
+- record rejected, adjusted, deferred, or superseded advice so future agents do not rediscover the same review context
+
 ## Interrupted Work Recovery Protocol
 
 Use this protocol when an agent crashes, a session is interrupted, work starts from a different tool, or the current working tree contains changes the new agent did not make.

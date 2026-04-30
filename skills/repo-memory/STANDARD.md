@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.4
+Version: 1.5
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -25,6 +25,7 @@ where durable project truth lives:
 - observability, instrumentation, telemetry, and production signals
 - durable decisions and implementation history
 - active feature state and next-agent handoff context
+- provenance for substantial plans, specialist reviews, and tool-generated guidance that influence implementation
 - documentation freshness, conflicts, renames, and verification evidence
 
 The standard is intentionally plain Markdown plus optional validation. A repo
@@ -90,6 +91,7 @@ Optional docs are added only when the project needs the depth:
 - `docs/requirements/user-stories-and-use-cases.md`
 - `docs/diagrams/`
 - `docs/designs/`
+- `docs/reviews/`
 - `docs/project-details/`
 - `docs/components/`
 - `docs/ui-ux/`
@@ -131,6 +133,8 @@ A Repo Memory-compliant repository must:
 - mark inferred, stale, superseded, deprecated, or unknown facts explicitly
 - track feature work in `docs/feature-registry.md` and feature docs
 - keep active feature docs resumable without prior chat history
+- keep implementable plans in the owning feature or design doc, with provenance for the planner, tool, role or lens, inputs reviewed, assumptions, confidence, and next safe implementation step
+- record specialist or second-agent reviews in a short owning-doc `Review Log`, or in `docs/reviews/<review-slug>.md` when the review is substantive, cross-cutting, or audit-worthy
 - recover interrupted or crashed agent work by inspecting the working tree before editing, preserving uncommitted and untracked files until understood, and recording recovery evidence in the affected feature doc or doc-health record
 - update decision and implementation logs when durable choices or landed work change
 - update `docs/doc-health.md` when docs are created, verified, found stale, renamed, superseded, or materially changed
@@ -180,6 +184,7 @@ Maintained docs should include metadata that records:
 - canonical source
 - related docs
 - evidence
+- plan or review provenance when applicable
 - supersession or replacement state when relevant
 
 The field names, allowed values, and required fields by doc type are defined in
@@ -199,6 +204,7 @@ They should tell the agent:
 6. Do not duplicate mutable project facts in the agent instruction file.
 7. Do not create optional deep-dive folders unless there is real content to own.
 8. Preserve useful custom docs and link them from the canonical docs layer.
+9. Treat plan and review records as advisory evidence until verified against current code, docs, and user intent.
 
 Platform guides in [`agents/`](./agents/) show how to adapt this flow for
 Codex, Claude Code, GitHub Copilot, and OpenAI Agents SDK.

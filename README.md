@@ -260,6 +260,9 @@ stories, and whether tests cover the behavior people actually care about.
   inferred claims clearly.
 - **Easy to resume.** A paused or interrupted session should leave enough notes
   for a future human or agent to continue safely.
+- **Plans and reviews need provenance.** When a plan or specialist review shapes
+  implementation, record who or what produced it, what evidence it used, and
+  which outcomes were accepted.
 - **Product context matters.** Goals, users, stories, use cases, and acceptance
   expectations are part of the engineering context, not separate from it.
 - **History should not disappear.** Doc changes, conflicts, stale areas, renames,
@@ -293,6 +296,7 @@ docs/
 ├── designs/                            # optional
 ├── project-details/                    # optional
 ├── components/                         # optional
+├── reviews/                            # optional
 ├── ui-ux/                              # optional
 └── features/
     ├── _template.md

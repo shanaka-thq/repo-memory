@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.4
+Version: 1.5
 
 ## Overview
 
@@ -40,6 +40,7 @@ Prefer one stable documentation system per repository:
 - one metadata schema that describes what each doc type must record
 - one evidence-based adoption path for existing repos that are missing trustworthy docs
 - one canonical project-docs layer that agent-specific instruction files point to instead of duplicating
+- one provenance trail for substantial plans, specialist reviews, and tool-generated guidance that another agent may need to trust, verify, or implement
 
 Do not create overlapping documentation systems unless the repository already forces it.
 
@@ -58,13 +59,14 @@ Default deep-dive locations:
 - `docs/project-details/<topic-slug>.md` for project-specific domain rules, workflows, or integration details
 - `docs/components/<component-slug>.md` for reusable subsystem or component behavior
 - `docs/designs/<design-slug>.md` for substantial proposed or recently adopted designs
+- `docs/reviews/<review-slug>.md` for substantive specialist or second-agent reviews that are too large to keep inside the owning feature, design, UI/UX, or component doc
 - `docs/ui-ux/<topic-or-flow-slug>.md` for user journeys, surfaces, interaction states, and accessibility notes
 - `docs/features/<feature-slug>/logic.md` for feature-specific logic, state transitions, or algorithms
 - `docs/features/<feature-slug>/components/<component-slug>.md` when a feature has component logic that should live beside the feature instead of in the shared component registry
 
 Do not let deep-dive docs become orphaned. Link them from the owning baseline doc, feature doc, or index file.
 
-Do not create optional deep-dive folders or empty index-only folders just to make the docs tree look complete. Create `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/ui-ux/`, or feature deep-dive folders only when there is real owned content that would make the baseline or feature doc too long or too hard to maintain.
+Do not create optional deep-dive folders or empty index-only folders just to make the docs tree look complete. Create `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/reviews/`, `docs/ui-ux/`, or feature deep-dive folders only when there is real owned content that would make the baseline or feature doc too long or too hard to maintain.
 
 Additional focused docs when relevant:
 
@@ -146,6 +148,7 @@ Treat the maintained project docs as the canonical handoff surface across coding
 - if multiple agent entrypoint files exist, align them to the same documentation workflow instead of letting each file define a competing source of truth
 - make every active feature doc resumable without prior chat context: another agent should be able to read the feature doc and continue safely
 - record the last verified state, the next safe step, blockers, risks, and the first files or docs to inspect before stopping
+- record provenance for substantial plans and reviews: who or what produced it, tool or agent surface, requested role or lens, date, inputs reviewed, assumptions, confidence, disposition, and where accepted outcomes were applied
 - when resuming after a crash, interruption, or unknown previous agent state, inspect the working tree before editing and preserve uncommitted or untracked work until it is understood
 - prefer agent-neutral wording in reusable docs and templates so Copilot, Codex, Claude, and similar coding agents can follow the same workflow
 - use the standard metadata fields from [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) when creating or refreshing docs so different agents record ownership, status, verification, evidence, and relationships consistently
@@ -164,6 +167,9 @@ Treat documentation as maintained system state. When project reality changes, up
 - when a feature is abandoned, superseded, deprecated, or rolled back, keep the feature doc and registry entry; mark the terminal status and explain what replaced it or why it stopped
 - when a feature becomes `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the registry entry, and replace interrupted-work handoff wording with completed-state handoff: latest verified state, remaining validation gaps, and the next safe maintenance step
 - when multiple agents may work concurrently, feature docs must state active ownership, files or docs to avoid, safe parallel work, and the latest verified state
+- when one agent creates a plan for another agent to implement, keep the implementable summary and pickup instructions in the owning feature or design doc; link any larger plan artifact from there and treat it as advisory until verified against current code and user intent
+- when a different role or specialist agent reviews work, record short reviews in the owning doc `Review Log`; create `docs/reviews/<review-slug>.md` only when the review is substantive, cross-cutting, or likely to be audited later
+- when a plan or review changes requirements, UX, architecture, contracts, or implementation state, update the canonical owning docs and record the accepted disposition instead of leaving the result only in a review artifact
 - when interrupted work is discovered, record what was found, what was verified, what remains uncertain, and the next safe step in the affected feature doc or `docs/doc-health.md`
 - after running tests or validation, remove disposable generated artifacts you created, such as `__pycache__`, `.pytest_cache`, `.DS_Store`, or `agent-final.txt`, unless the repo intentionally tracks or ignores them; for Python one-off checks, prefer `python3 -B` or `PYTHONDONTWRITEBYTECODE=1` to avoid creating `__pycache__` in the first place
 
@@ -251,6 +257,7 @@ The purpose of the audit is to answer:
 - which features or subsystems need retrospective documentation
 - which project-specific details or component logic need deep-dive documentation
 - whether user stories, UI or UX docs, design docs, or local tooling docs need first-class coverage
+- whether substantial plans or specialist reviews need provenance records, and whether their accepted outcomes have been promoted into the owning canonical docs
 - whether target users, personas, actors, success criteria, acceptance paths, and non-goals are explicit enough for another agent to preserve product intent
 - whether observability and instrumentation are documented well enough to understand runtime health, product signals, alerts, audit trails, and privacy boundaries
 - whether existing diagrams should be preserved, linked, reorganized, or supplemented with Mermaid docs
@@ -340,12 +347,13 @@ Add these deep-dive docs when the project genuinely needs them:
 - `docs/project-details/README.md` and `docs/project-details/<topic-slug>.md`
 - `docs/components/README.md` and `docs/components/<component-slug>.md`
 - `docs/designs/README.md` and `docs/designs/<design-slug>.md`
+- `docs/reviews/README.md` and `docs/reviews/<review-slug>.md`
 - `docs/ui-ux/README.md` and `docs/ui-ux/<topic-or-flow-slug>.md`
 - `docs/features/<feature-slug>/logic.md`
 - `docs/features/<feature-slug>/components/<component-slug>.md`
 
 Only add deep-dive documents when the behavior is important, detailed, and not already captured well enough in the baseline or primary feature doc.
-Do not add empty optional indexes such as `docs/diagrams/README.md`, `docs/designs/README.md`, `docs/project-details/README.md`, `docs/components/README.md`, or `docs/ui-ux/README.md` unless the folder also has real topic docs or existing assets to index.
+Do not add empty optional indexes such as `docs/diagrams/README.md`, `docs/designs/README.md`, `docs/project-details/README.md`, `docs/components/README.md`, `docs/reviews/README.md`, or `docs/ui-ux/README.md` unless the folder also has real topic docs or existing assets to index.
 
 For existing repositories, treat these as the minimum comprehensive baseline, not as optional nice-to-haves.
 
@@ -360,9 +368,11 @@ For any non-trivial feature, bug fix, integration, refactor, or research thread 
 3. If the feature changes user journeys, acceptance behavior, or UI states, update `docs/requirements/user-stories-and-use-cases.md` or `docs/ui-ux/...` when those docs exist or should exist.
 4. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
 5. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
-6. Keep the feature document current during the work.
-7. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
-8. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
+6. If the feature depends on a plan produced by another agent or tool, record the plan provenance and implementation pickup in the feature or design doc before editing.
+7. If a specialist, second-agent, human, or tool review materially informs the work, add a short `Review Log` entry or link a substantive `docs/reviews/<review-slug>.md` record.
+8. Keep the feature document current during the work.
+9. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
+10. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
 
 Use one explicit status model:
 
@@ -397,6 +407,7 @@ Use this mapping:
 - risk posture or external data handling changes: update security and privacy
 - project-specific domain rules, workflows, or integration quirks change: update `docs/project-details/...`
 - reusable component or subsystem behavior changes: update `docs/components/...`
+- specialist review findings, second-agent critiques, or advisory plan outputs materially affect implementation: update the owning feature/design doc and optionally `docs/reviews/...`
 - major proposed or adopted solution shape changes: update `docs/designs/...`
 - screen flows, interaction rules, accessibility, or responsive behavior change: update `docs/ui-ux/...`
 - feature-only flows, state machines, edge cases, or algorithms change: update `docs/features/<feature-slug>/...`
@@ -445,6 +456,7 @@ Use deep-dive docs deliberately:
 - `docs/project-details/` is for project-specific knowledge that is too detailed, too domain-specific, or too operationally quirky for the baseline set
 - `docs/components/` is for shared components or subsystems that cut across features, especially when they have invariants, lifecycle rules, or tricky failure modes
 - `docs/designs/` is for non-trivial designs, proposed approaches, and major changes where goals, tradeoffs, rollout, and future evolution should be preserved
+- `docs/reviews/` is for substantive specialist, second-agent, tool-generated, or human review records that need provenance and disposition tracking
 - `docs/ui-ux/` is for user journeys, screen or state definitions, interaction behavior, accessibility notes, and responsive rules that should not be buried in engineering-only docs
 - `docs/features/<feature-slug>/` is for feature-only logic, state transitions, algorithms, interaction flows, and feature-local component behavior
 
@@ -473,6 +485,7 @@ For a mature documentation system, cover these areas when relevant:
 - doc metadata in every maintained doc, including doc type, owner, status, last updated, last verified, confidence, canonical source, related docs, and supersession state where relevant
 - future-proofing in architecture, design docs, and decision log entries, including extension points, compatibility assumptions, migration paths, and deprecation intent
 - design docs in `docs/designs/` for major changes, proposals, or durable solution shapes
+- review records in `docs/reviews/` when a plan or specialist review materially affects implementation and needs provenance beyond a short feature-doc note
 - UI or UX docs in `docs/ui-ux/` when flows, states, accessibility, copy, or responsive behavior matter to safe implementation
 - diagrams in `docs/diagrams/` or embedded Mermaid blocks when visuals materially improve understanding of architecture, workflows, sequences, or state
 
@@ -536,7 +549,7 @@ Use this strategy when no better repo-specific process exists:
 4. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
 5. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots
 6. create `docs/feature-registry.md`
-7. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, or `docs/ui-ux/` only for topics that need deeper treatment
+7. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, `docs/reviews/`, or `docs/ui-ux/` only for topics that need deeper treatment
 8. create per-feature docs for active, recent, or important work
 9. add feature-level deep-dive docs only when the feature has meaningful internal logic to preserve
 10. note unknowns, inferred statements, and missing rationale explicitly

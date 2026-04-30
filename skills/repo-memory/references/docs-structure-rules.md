@@ -133,6 +133,7 @@ Create these only when baseline docs cannot hold the detail without becoming unr
 | `docs/designs/` | When significant designs or proposals need their own docs | `docs/designs/README.md` |
 | `docs/project-details/` | When domain workflows or integration quirks need deep treatment | `docs/project-details/README.md` |
 | `docs/components/` | When shared subsystems or components need behavior docs | `docs/components/README.md` |
+| `docs/reviews/` | When substantive plan, specialist, or second-agent reviews need their own records | `docs/reviews/README.md` |
 | `docs/ui-ux/` | When user journeys, interaction states, or accessibility need dedicated docs | `docs/ui-ux/README.md` |
 
 Rules:
@@ -172,6 +173,9 @@ Use this table to decide where any piece of content belongs:
 | Proposed or adopted designs and tradeoffs | `docs/designs/<design-slug>.md` |
 | Domain rules, integration quirks too long for baseline | `docs/project-details/<topic-slug>.md` |
 | Shared subsystem or component behavior | `docs/components/<component-slug>.md` |
+| Substantive specialist or second-agent review records | `docs/reviews/<review-slug>.md` |
+| Short plan or review provenance for one feature | `docs/features/<feature-slug>.md` |
+| Major plan, proposal, or rollout shape | `docs/designs/<design-slug>.md` |
 | User journeys, screen states, accessibility | `docs/ui-ux/<topic-or-flow-slug>.md` |
 
 ## Metadata Rules
@@ -236,6 +240,7 @@ Do not invent new status values. If a feature has a state not covered here, docu
 | Empty optional deep-dive folders | Delete them until there is real topic content to own |
 | Slugs with uppercase letters, spaces, or underscores | Breaks consistency across registry, file names, and folder names |
 | Optional subfolders without a `README.md` index | Leaves the folder undiscoverable |
+| Plan or review findings left only in chat history | Future agents cannot verify who produced the advice, what evidence it used, or which outcomes were accepted |
 | Baseline docs placed in subfolders | Baseline docs must live directly in `docs/` |
 | Mutable project facts duplicated across agent-specific instruction files | Creates competing sources of truth and stale handoff state |
 | Deleted feature/design history without a replacement pointer | Breaks continuity for future agents |
@@ -251,6 +256,7 @@ Before committing documentation changes, confirm:
 - [ ] Every optional subfolder has a `README.md` index.
 - [ ] No optional subfolder exists only as an empty index.
 - [ ] Every deep-dive doc is linked from an owner doc, feature doc, or index.
+- [ ] Substantive plan and review records include provenance and are linked from the owning feature, design, UI/UX, component, or baseline doc.
 - [ ] No prohibited folder or file names are present.
 - [ ] Status values in feature docs match the allowed set.
 - [ ] Maintained docs include required metadata fields for their doc type.

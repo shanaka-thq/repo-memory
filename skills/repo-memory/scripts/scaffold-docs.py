@@ -195,6 +195,18 @@ def feature_template(today: str) -> str:
         - TODO: In scope.
         - TODO: Out of scope.
 
+        ## Plan Provenance
+
+        - Planned by: TODO
+        - Tool or agent surface: TODO
+        - Role or lens: TODO
+        - Date: TODO
+        - Inputs reviewed: TODO
+        - Assumptions: TODO
+        - Confidence: low
+        - Plan disposition: proposed
+        - Implementer pickup: TODO
+
         ## Implementation Status
 
         - [ ] TODO: Add implementation task.
@@ -206,6 +218,12 @@ def feature_template(today: str) -> str:
         ## Validation
 
         - TODO: Add commands, tests, or manual checks.
+
+        ## Review Log
+
+        | Date | Reviewer | Tool or agent surface | Role or lens | Subject | Disposition | Record |
+        | --- | --- | --- | --- | --- | --- | --- |
+        | TODO | TODO | TODO | TODO | TODO | TODO | TODO |
 
         ## Open Questions
 

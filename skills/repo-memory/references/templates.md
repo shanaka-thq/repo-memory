@@ -53,7 +53,7 @@ docs/
 
 For existing projects, use the baseline files as the comprehensive minimum and populate every file with concise current-state content before polishing any single document too much.
 
-The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer. Do not create empty optional folders or index-only optional folders as placeholders.
+The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/reviews/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, substantive reviews, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer. Do not create empty optional folders or index-only optional folders as placeholders.
 
 ## Empty Repository Scaffold
 
@@ -128,9 +128,11 @@ Before stopping:
 - Use `docs/designs/` for substantial designs, proposals, rollout plans, tradeoffs, and future-evolution notes.
 - Use `docs/project-details/` for domain workflows, business rules, integration quirks, deployment-specific behavior, or repo-specific conventions.
 - Use `docs/components/` for shared subsystems, reusable UI components, state containers, orchestration layers, or services that span multiple features.
+- Use `docs/reviews/` for substantive plan, specialist, or second-agent review records that need provenance beyond a short owning-doc note.
 - Use `docs/ui-ux/` for user journeys, screens or surfaces, interaction states, accessibility requirements, content notes, or responsive rules.
 - Use `docs/features/<feature-slug>/logic.md` for feature-local flows, state transitions, algorithms, edge cases, or event sequencing.
 - Use `docs/features/<feature-slug>/components/` when the component logic only matters inside that feature and would be noise in the shared component registry.
+- Keep small plan and review provenance inside the owning feature or design doc; create `docs/reviews/<review-slug>.md` only when the record is substantive, cross-cutting, or audit-worthy.
 - Always link deep-dive docs from the parent feature doc, index, or relevant baseline doc.
 - Do not create optional deep-dive folders until there is real content or an existing asset to index.
 
@@ -297,6 +299,18 @@ State the user problem and intended outcome.
 
 - Record the chosen approach and why.
 
+## Plan Provenance
+
+- Planned by:
+- Tool or agent surface:
+- Role or lens:
+- Date:
+- Inputs reviewed:
+- Assumptions:
+- Confidence:
+- Plan disposition: proposed | accepted | adjusted | rejected | superseded
+- Implementer pickup: summarize the exact starting point for the next agent.
+
 ## Scope
 
 In:
@@ -347,6 +361,12 @@ Out:
 - Tests run
 - Manual checks
 - Remaining verification gaps
+
+## Review Log
+
+| Date | Reviewer | Tool or agent surface | Role or lens | Subject | Disposition | Record |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2026-04-22 | game-design-specialist | Codex sub-agent | game designer | Search result interaction loop | accepted with follow-up changes | `../reviews/answer-search-game-design-pass.md` |
 
 ## Change Governance
 
@@ -678,6 +698,66 @@ Use this folder for substantial designs, proposals, or adopted solution shapes t
 | --- | --- | --- |
 | `answer-search-architecture.md` | Documents the ranking pipeline redesign | `adopted` |
 | `notifications-delivery.md` | Proposes a new delivery flow | `proposed` |
+```
+
+## Reviews Index Template
+
+Use this index when a target repo creates `docs/reviews/` for substantive review records.
+
+```md
+# Review Records
+
+Use this folder for substantive plan, specialist, second-agent, or human reviews that need provenance beyond a short entry in the owning doc.
+
+| Review | Subject | Reviewer | Role or lens | Disposition |
+| --- | --- | --- | --- | --- |
+| `answer-search-game-design-pass.md` | `../features/answer-search-improvements.md` | game-design-specialist | game designer | accepted with follow-up changes |
+```
+
+## Review Record Template
+
+Use this template for `docs/reviews/<review-slug>.md` when a plan, specialist review, second-agent critique, or human review needs provenance and disposition tracking outside the owning doc.
+
+```md
+# Review: answer-search-game-design-pass
+
+Doc type: review-record
+Owner: current-agent-or-team
+Status: active
+Review subject: `../features/answer-search-improvements.md`
+Reviewer: game-design-specialist
+Tool or agent surface: Codex sub-agent
+Role or lens: game designer
+Last updated: 2026-04-30
+Last verified: unknown
+Verified against: unknown
+Confidence: medium
+Canonical source: `docs/reviews/answer-search-game-design-pass.md`
+Related docs: `../features/answer-search-improvements.md`
+Inputs reviewed: feature doc, implementation diff, tests
+Disposition: proposed
+
+## Purpose
+
+State why this review was requested and what decision or implementation risk it informs.
+
+## Findings
+
+- Finding 1.
+
+## Recommendations
+
+- Recommendation 1.
+
+## Accepted Outcomes
+
+- Record what was accepted, adjusted, rejected, or deferred, and where canonical docs were updated.
+
+## Follow-Up
+
+- Owner:
+- Next safe step:
+- Related implementation or decision-log entry:
 ```
 
 ## Design Doc Template

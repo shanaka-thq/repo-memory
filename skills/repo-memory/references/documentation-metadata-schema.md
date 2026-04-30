@@ -62,6 +62,7 @@ Related docs:
 - `feature-component`
 - `diagram-index`
 - `design`
+- `review-record`
 - `project-detail`
 - `component`
 - `ui-ux`
@@ -95,6 +96,7 @@ Feature docs and feature registry entries must use the feature statuses from `do
 | `implementation-log` | `Entry date`, `Change summary`, `Evidence` |
 | `doc-health` | `Last full audit`, `Known stale areas`, `Open doc conflicts` |
 | `design` | `Design status`, `Problem`, `Goals`, `Tradeoffs`, `Rollout` |
+| `review-record` | `Review subject`, `Reviewer`, `Tool or agent surface`, `Role or lens`, `Inputs reviewed`, `Disposition` |
 | `diagram-index` | `Diagram inventory`, `Source format`, `Owner doc` |
 | `component` | `Responsibilities`, `Inputs and outputs`, `State and lifecycle` |
 | `ui-ux` | `User goal`, `Surfaces`, `States`, `Accessibility`, `Responsive behavior` |
@@ -135,6 +137,28 @@ Verified against: architecture doc, search service code, decision log
 Confidence: high
 Canonical source: `docs/designs/answer-search-architecture.md`
 Related docs: `../architecture.md`, `../decision-log.md`
+```
+
+## Review Record Metadata Example
+
+```md
+# Review: answer-search-game-design-pass
+
+Doc type: review-record
+Owner: current-agent-or-team
+Status: active
+Review subject: `../features/answer-search-improvements.md`
+Reviewer: game-design-specialist
+Tool or agent surface: Codex sub-agent
+Role or lens: game designer
+Last updated: 2026-04-30
+Last verified: 2026-04-30
+Verified against: feature doc, UI flow notes, implementation diff
+Confidence: medium
+Canonical source: `docs/reviews/answer-search-game-design-pass.md`
+Related docs: `../features/answer-search-improvements.md`, `../ui-ux/search-results-experience.md`
+Inputs reviewed: feature doc, current UI files, acceptance notes
+Disposition: accepted with follow-up changes in owning feature doc
 ```
 
 ## Doc Health Metadata Example

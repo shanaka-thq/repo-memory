@@ -10,6 +10,23 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.5] - 2026-04-30
+
+### Added
+
+- Added plan and review provenance guidance so one agent can generate a plan,
+  another can implement it, and future agents can verify planner, tool, role,
+  reviewed inputs, assumptions, confidence, disposition, and accepted outcomes.
+- Added optional `docs/reviews/` placement, `review-record` metadata, review
+  index and record templates, and feature-template `Plan Provenance` and
+  `Review Log` sections.
+
+### Changed
+
+- Extended the skill, standard, structure rules, scaffold output, and validators
+  so substantive specialist or second-agent reviews are linked from owning docs
+  instead of living only in chat history.
+
 ## [1.4] - 2026-04-30
 
 ### Added

@@ -31,6 +31,7 @@ OPTIONAL_DEEP_DIVE_DIRS = [
     "docs/designs",
     "docs/project-details",
     "docs/components",
+    "docs/reviews",
     "docs/ui-ux",
 ]
 GENERATED_ARTIFACT_NAMES = {

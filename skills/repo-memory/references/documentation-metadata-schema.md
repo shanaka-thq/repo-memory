@@ -36,6 +36,11 @@ Related docs:
 | `Canonical source` | Recommended | Where authoritative facts live | `source code`, `decision-log.md`, `API schema` |
 | `Related docs` | Recommended | Important linked docs | `architecture.md`, `feature-registry.md` |
 
+For plan or review provenance, include `Inputs reviewed` and `Source artifacts`
+when a companion workflow such as Obra Superpowers created separate specs or
+plans. Source artifacts are evidence links; accepted outcomes still belong in
+the canonical owning docs.
+
 ## Allowed Values
 
 ### Doc Type
@@ -158,6 +163,7 @@ Confidence: medium
 Canonical source: `docs/reviews/answer-search-game-design-pass.md`
 Related docs: `../features/answer-search-improvements.md`, `../ui-ux/search-results-experience.md`
 Inputs reviewed: feature doc, current UI files, acceptance notes
+Source artifacts: `../superpowers/specs/2026-04-30-answer-search.md`
 Disposition: accepted with follow-up changes in owning feature doc
 ```
 

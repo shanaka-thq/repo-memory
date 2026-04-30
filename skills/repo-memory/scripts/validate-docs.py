@@ -37,6 +37,7 @@ REQUIRED_SKILL_PACKAGE_FILES = [
     "skills/repo-memory/references/existing-project-audit.md",
     "skills/repo-memory/references/decision-log-reconstruction.md",
     "skills/repo-memory/references/continuity-governance.md",
+    "skills/repo-memory/references/superpowers-compatibility.md",
     "skills/repo-memory/references/documentation-metadata-schema.md",
     "skills/repo-memory/agents/openai-codex.md",
     "skills/repo-memory/agents/github-copilot.md",

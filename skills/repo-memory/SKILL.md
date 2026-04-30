@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.5
+Version: 1.6
 
 ## Overview
 
@@ -18,6 +18,7 @@ Read [references/docs-structure-rules.md](./references/docs-structure-rules.md) 
 Read [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) for the standard metadata fields, required doc-type fields, allowed values, and examples that make docs machine-checkable and agent-consistent.
 Read [references/decision-log-reconstruction.md](./references/decision-log-reconstruction.md) when creating or updating a decision log, especially for existing projects where durable choices must be reconstructed from code, requirements, project history, user statements, and inferred architecture.
 Read [references/continuity-governance.md](./references/continuity-governance.md) when docs change materially, conflict with code or each other, become stale, features end unexpectedly, docs are renamed, or multiple agents may be working concurrently.
+Read [references/superpowers-compatibility.md](./references/superpowers-compatibility.md) when a repository also uses Obra Superpowers specs or plans, or another companion spec/plan workflow that stores artifacts outside the canonical Repo Memory docs.
 Read [examples/README.md](./examples/README.md) when you need a concrete reference output for an adopted docs tree or multi-agent handoff.
 Run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents` when the target repo is empty or nearly empty and needs the default docs skeleton before there is code to audit.
 Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs <repo>` when you need a lightweight local check for a target repo that adopted the standard.
@@ -43,6 +44,7 @@ Prefer one stable documentation system per repository:
 - one provenance trail for substantial plans, specialist reviews, and tool-generated guidance that another agent may need to trust, verify, or implement
 
 Do not create overlapping documentation systems unless the repository already forces it.
+When another workflow already creates spec or plan artifacts, such as Obra Superpowers files under `docs/superpowers/specs/` or `docs/superpowers/plans/`, treat those artifacts as linked evidence and provenance. Keep accepted durable facts, current implementation state, decisions, validation, and handoff notes in the owning Repo Memory docs.
 
 Every deep-dive document should have an obvious owner and entrypoint. Baseline docs summarize; deep-dive docs hold the details that would otherwise make the baseline unreadable.
 
@@ -149,6 +151,7 @@ Treat the maintained project docs as the canonical handoff surface across coding
 - make every active feature doc resumable without prior chat context: another agent should be able to read the feature doc and continue safely
 - record the last verified state, the next safe step, blockers, risks, and the first files or docs to inspect before stopping
 - record provenance for substantial plans and reviews: who or what produced it, tool or agent surface, requested role or lens, date, inputs reviewed, assumptions, confidence, disposition, and where accepted outcomes were applied
+- link companion spec or plan artifacts, such as `docs/superpowers/specs/...` and `docs/superpowers/plans/...`, from the owning feature or design doc when they materially inform implementation
 - when resuming after a crash, interruption, or unknown previous agent state, inspect the working tree before editing and preserve uncommitted or untracked work until it is understood
 - prefer agent-neutral wording in reusable docs and templates so Copilot, Codex, Claude, and similar coding agents can follow the same workflow
 - use the standard metadata fields from [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) when creating or refreshing docs so different agents record ownership, status, verification, evidence, and relationships consistently
@@ -168,6 +171,7 @@ Treat documentation as maintained system state. When project reality changes, up
 - when a feature becomes `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the registry entry, and replace interrupted-work handoff wording with completed-state handoff: latest verified state, remaining validation gaps, and the next safe maintenance step
 - when multiple agents may work concurrently, feature docs must state active ownership, files or docs to avoid, safe parallel work, and the latest verified state
 - when one agent creates a plan for another agent to implement, keep the implementable summary and pickup instructions in the owning feature or design doc; link any larger plan artifact from there and treat it as advisory until verified against current code and user intent
+- when a companion workflow creates separate spec or plan files, read the relevant artifacts before continuing related work, then promote accepted outcomes into the canonical Repo Memory docs instead of leaving state only in that companion folder
 - when a different role or specialist agent reviews work, record short reviews in the owning doc `Review Log`; create `docs/reviews/<review-slug>.md` only when the review is substantive, cross-cutting, or likely to be audited later
 - when a plan or review changes requirements, UX, architecture, contracts, or implementation state, update the canonical owning docs and record the accepted disposition instead of leaving the result only in a review artifact
 - when interrupted work is discovered, record what was found, what was verified, what remains uncertain, and the next safe step in the affected feature doc or `docs/doc-health.md`

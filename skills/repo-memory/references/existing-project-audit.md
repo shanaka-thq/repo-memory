@@ -41,6 +41,7 @@ Capture:
 - test suites and what they imply about intended behavior
 - operational artifacts such as Docker, CI, deploy config, and setup scripts
 - existing docs and whether they are current, stale, or partial
+- companion workflow artifacts such as Obra Superpowers specs and plans under `docs/superpowers/`
 - whether agent-specific instruction files duplicate mutable project knowledge that should instead live in the canonical docs set
 - stale docs, conflicting docs, renamed docs, superseded work, and verification gaps that should be captured in `docs/doc-health.md`
 
@@ -170,6 +171,10 @@ When the feature logic is complex, also create or update:
 - `docs/designs/<design-slug>.md` when the feature introduced a significant design or rollout plan
 - `docs/reviews/<review-slug>.md` when a plan, specialist review, or second-agent critique materially shaped implementation and needs provenance
 - `docs/doc-health.md` when feature state, linked docs, or verification evidence changed materially
+
+If companion specs or plans exist under `docs/superpowers/`, link them from the
+owning feature or design doc and promote accepted outcomes into canonical Repo
+Memory docs instead of duplicating whole artifacts.
 
 When feature work stopped or changed direction, use terminal statuses instead of deleting history:
 

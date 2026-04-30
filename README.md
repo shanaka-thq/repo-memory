@@ -60,7 +60,7 @@ This project provides a portable standard plus one installable skill package:
 
 - [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) defines the portable Repo Memory standard.
 - [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) implements the standard as an agent-facing skill workflow.
-- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, and continuity governance, including interrupted-work recovery.
+- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, continuity governance, and companion workflow guidance, including interrupted-work recovery.
 - [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
 - [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
 - [`skills/repo-memory/scripts/`](./skills/repo-memory/scripts/) provides empty-repo scaffolding, lightweight local validation, and manual blind forward-testing.
@@ -78,6 +78,8 @@ Use Repo Memory when you want to:
 - keep documentation current as features are researched, implemented, paused,
   recovered, or handed off
 - keep one docs layer that humans and different coding agents can share
+- bridge companion spec and plan workflows such as Obra Superpowers without
+  losing canonical feature, decision, validation, or handoff state
 - track doc freshness, conflicts, renamed docs, superseded work, and
   verification evidence
 - validate expected docs structure locally or in CI
@@ -263,6 +265,10 @@ stories, and whether tests cover the behavior people actually care about.
 - **Plans and reviews need provenance.** When a plan or specialist review shapes
   implementation, record who or what produced it, what evidence it used, and
   which outcomes were accepted.
+- **Companion specs and plans stay linked.** When a workflow such as Obra
+  Superpowers creates `docs/superpowers/specs/` or `docs/superpowers/plans/`,
+  link those artifacts as evidence and promote accepted outcomes into Repo
+  Memory docs.
 - **Product context matters.** Goals, users, stories, use cases, and acceptance
   expectations are part of the engineering context, not separate from it.
 - **History should not disappear.** Doc changes, conflicts, stale areas, renames,
@@ -297,6 +303,9 @@ docs/
 ├── project-details/                    # optional
 ├── components/                         # optional
 ├── reviews/                            # optional
+├── superpowers/                         # optional companion workflow artifacts
+│   ├── specs/
+│   └── plans/
 ├── ui-ux/                              # optional
 └── features/
     ├── _template.md
@@ -335,6 +344,7 @@ Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The rel
 - Documentation metadata schema: [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md)
 - Decision reconstruction: [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md)
 - Continuity governance: [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md)
+- Superpowers compatibility: [`skills/repo-memory/references/superpowers-compatibility.md`](./skills/repo-memory/references/superpowers-compatibility.md)
 - Examples: [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md)
 - Roadmap: [`ROADMAP.md`](./ROADMAP.md)
 - Contributing: [`CONTRIBUTING.md`](./CONTRIBUTING.md)

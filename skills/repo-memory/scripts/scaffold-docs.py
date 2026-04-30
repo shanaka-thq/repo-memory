@@ -202,6 +202,7 @@ def feature_template(today: str) -> str:
         - Role or lens: TODO
         - Date: TODO
         - Inputs reviewed: TODO
+        - Source artifacts: TODO
         - Assumptions: TODO
         - Confidence: low
         - Plan disposition: proposed

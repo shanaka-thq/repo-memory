@@ -104,12 +104,15 @@ Use this protocol when one agent creates a plan for another agent to implement,
 or when a specialist, second-agent, human, or tool review materially shapes work.
 
 - keep the implementable summary, assumptions, confidence, disposition, and next safe implementation step in the owning feature or design doc
-- record who or what produced the plan or review, the tool or agent surface, role or lens, date, and inputs reviewed
+- record who or what produced the plan or review, the tool or agent surface, role or lens, date, inputs reviewed, and any source artifacts
+- link companion spec or plan files such as `docs/superpowers/specs/...` and `docs/superpowers/plans/...` when they materially shaped the work
 - put short reviews in the owning doc `Review Log`
 - create `docs/reviews/<review-slug>.md` only when the record is substantive, cross-cutting, or likely to be audited later
 - treat plan and review records as advisory evidence until checked against current code, docs, and user intent
 - promote accepted outcomes into the canonical owning docs, such as requirements, UI/UX, architecture, feature, decision-log, or implementation-log docs
 - record rejected, adjusted, deferred, or superseded advice so future agents do not rediscover the same review context
+
+When a repository also uses Obra Superpowers, keep `docs/superpowers/` as the companion artifact folder and use Repo Memory docs for current state, accepted decisions, validation, and next-agent handoff. See [superpowers-compatibility.md](./superpowers-compatibility.md).
 
 ## Interrupted Work Recovery Protocol
 

@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.5
+Version: 1.6
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -26,6 +26,7 @@ where durable project truth lives:
 - durable decisions and implementation history
 - active feature state and next-agent handoff context
 - provenance for substantial plans, specialist reviews, and tool-generated guidance that influence implementation
+- compatibility with companion spec/plan workflows, when accepted outcomes are promoted into canonical docs
 - documentation freshness, conflicts, renames, and verification evidence
 
 The standard is intentionally plain Markdown plus optional validation. A repo
@@ -100,6 +101,12 @@ Optional docs are added only when the project needs the depth:
 All placement and naming details are defined in
 [`references/docs-structure-rules.md`](./references/docs-structure-rules.md).
 
+Repos may also contain companion workflow artifacts such as Obra Superpowers
+specs and plans in `docs/superpowers/specs/` and `docs/superpowers/plans/`.
+These are allowed as linked evidence and provenance, but they are not Repo
+Memory baseline docs and do not replace the owning feature, design,
+requirements, decision, implementation, or doc-health records.
+
 ## Empty Repository Bootstrap
 
 An empty or nearly empty repository can adopt Repo Memory before implementation
@@ -134,6 +141,7 @@ A Repo Memory-compliant repository must:
 - track feature work in `docs/feature-registry.md` and feature docs
 - keep active feature docs resumable without prior chat history
 - keep implementable plans in the owning feature or design doc, with provenance for the planner, tool, role or lens, inputs reviewed, assumptions, confidence, and next safe implementation step
+- link companion spec or plan artifacts from the owning Repo Memory doc when another workflow materially shaped the work, then promote accepted outcomes into canonical docs
 - record specialist or second-agent reviews in a short owning-doc `Review Log`, or in `docs/reviews/<review-slug>.md` when the review is substantive, cross-cutting, or audit-worthy
 - recover interrupted or crashed agent work by inspecting the working tree before editing, preserving uncommitted and untracked files until understood, and recording recovery evidence in the affected feature doc or doc-health record
 - update decision and implementation logs when durable choices or landed work change

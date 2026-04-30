@@ -35,9 +35,17 @@ docs/
 ├── components/                     # optional shared subsystem or component docs
 │   ├── README.md
 │   └── <component-slug>.md
+├── reviews/                        # optional review records
+│   ├── README.md
+│   └── <review-slug>.md
 ├── ui-ux/                          # optional user journeys, states, accessibility notes
 │   ├── README.md
 │   └── <topic-or-flow-slug>.md
+├── superpowers/                     # optional companion workflow artifacts
+│   ├── specs/
+│   │   └── <date>-<topic>.md
+│   └── plans/
+│       └── <date>-<topic>.md
 ├── requirements/
 │   ├── functional-requirements.md
 │   ├── non-functional-requirements.md
@@ -54,6 +62,8 @@ docs/
 For existing projects, use the baseline files as the comprehensive minimum and populate every file with concise current-state content before polishing any single document too much.
 
 The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/reviews/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, substantive reviews, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer. Do not create empty optional folders or index-only optional folders as placeholders.
+
+`docs/superpowers/` is different: it is an optional companion workflow folder for Obra Superpowers specs and plans, not a Repo Memory deep-dive folder. Link those artifacts from owning feature or design docs and promote accepted outcomes into canonical Repo Memory docs.
 
 ## Empty Repository Scaffold
 
@@ -129,6 +139,7 @@ Before stopping:
 - Use `docs/project-details/` for domain workflows, business rules, integration quirks, deployment-specific behavior, or repo-specific conventions.
 - Use `docs/components/` for shared subsystems, reusable UI components, state containers, orchestration layers, or services that span multiple features.
 - Use `docs/reviews/` for substantive plan, specialist, or second-agent review records that need provenance beyond a short owning-doc note.
+- Keep companion specs and plans such as `docs/superpowers/specs/...` and `docs/superpowers/plans/...` in their established workflow folder, then link them from the owning feature or design doc.
 - Use `docs/ui-ux/` for user journeys, screens or surfaces, interaction states, accessibility requirements, content notes, or responsive rules.
 - Use `docs/features/<feature-slug>/logic.md` for feature-local flows, state transitions, algorithms, edge cases, or event sequencing.
 - Use `docs/features/<feature-slug>/components/` when the component logic only matters inside that feature and would be noise in the shared component registry.
@@ -306,6 +317,7 @@ State the user problem and intended outcome.
 - Role or lens:
 - Date:
 - Inputs reviewed:
+- Source artifacts:
 - Assumptions:
 - Confidence:
 - Plan disposition: proposed | accepted | adjusted | rejected | superseded

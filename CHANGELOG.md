@@ -10,6 +10,22 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.6] - 2026-04-30
+
+### Added
+
+- Added Obra Superpowers compatibility guidance so specs and plans in
+  `docs/superpowers/` can complement Repo Memory without replacing canonical
+  feature, design, decision, implementation, and handoff docs.
+- Added a compatibility reference, example, scaffold provenance field, and
+  validator awareness for companion spec/plan workflow artifacts.
+
+### Changed
+
+- Clarified that accepted outcomes from companion plans and specs must be
+  promoted into the owning Repo Memory docs, while source artifacts remain
+  linked evidence and provenance.
+
 ## [1.5] - 2026-04-30
 
 ### Added

@@ -10,6 +10,8 @@ docs tree, agent entrypoints, and handoff state.
   a target repo after adopting the standard.
 - [`multi-agent-handoff/`](./multi-agent-handoff/) — a feature handoff example
   showing how one agent leaves enough context for another agent to continue.
+- [`superpowers-bridge/`](./superpowers-bridge/) — an example of linking Obra
+  Superpowers specs and plans without making them the canonical handoff state.
 
 ## How to Use These Examples
 

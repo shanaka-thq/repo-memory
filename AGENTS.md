@@ -19,7 +19,8 @@ Read these files in order when starting a session:
 7. [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) — standard metadata fields by doc type
 8. [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md) — comprehensive decision log reconstruction
 9. [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) — freshness, conflict, rename, feature closure, and multi-agent protocols
-10. [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md) — concrete reference outputs for adopted docs and handoff state
+10. [`skills/repo-memory/references/superpowers-compatibility.md`](./skills/repo-memory/references/superpowers-compatibility.md) — bridge guidance for Obra Superpowers specs/plans and similar companion workflows
+11. [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md) — concrete reference outputs for adopted docs and handoff state
 
 ## How to Apply This Skill
 

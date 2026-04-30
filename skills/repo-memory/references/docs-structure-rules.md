@@ -142,6 +142,7 @@ Rules:
 - Files in optional subfolders must be linked from the owning baseline doc, feature doc, or index.
 - Do not create partial optional subfolders (e.g., `docs/designs/` without `docs/designs/README.md`).
 - Do not create an optional subfolder that contains only `README.md`; index-only optional folders are noise unless they point to existing assets or topic docs.
+- `docs/superpowers/` is an allowed companion workflow folder for Obra Superpowers specs and plans. It is not a Repo Memory optional deep-dive folder and does not need a Repo Memory index unless the target project wants one.
 
 ## Content Placement Rules
 
@@ -176,6 +177,7 @@ Use this table to decide where any piece of content belongs:
 | Substantive specialist or second-agent review records | `docs/reviews/<review-slug>.md` |
 | Short plan or review provenance for one feature | `docs/features/<feature-slug>.md` |
 | Major plan, proposal, or rollout shape | `docs/designs/<design-slug>.md` |
+| Companion workflow specs and plans | `docs/superpowers/specs/<date>-<topic>.md` and `docs/superpowers/plans/<date>-<topic>.md`, linked from the owning Repo Memory doc |
 | User journeys, screen states, accessibility | `docs/ui-ux/<topic-or-flow-slug>.md` |
 
 ## Metadata Rules
@@ -241,6 +243,7 @@ Do not invent new status values. If a feature has a state not covered here, docu
 | Slugs with uppercase letters, spaces, or underscores | Breaks consistency across registry, file names, and folder names |
 | Optional subfolders without a `README.md` index | Leaves the folder undiscoverable |
 | Plan or review findings left only in chat history | Future agents cannot verify who produced the advice, what evidence it used, or which outcomes were accepted |
+| Accepted companion spec or plan outcomes left only under `docs/superpowers/` | Future agents may miss changed requirements, decisions, validation, or handoff state in the canonical docs |
 | Baseline docs placed in subfolders | Baseline docs must live directly in `docs/` |
 | Mutable project facts duplicated across agent-specific instruction files | Creates competing sources of truth and stale handoff state |
 | Deleted feature/design history without a replacement pointer | Breaks continuity for future agents |
@@ -257,6 +260,7 @@ Before committing documentation changes, confirm:
 - [ ] No optional subfolder exists only as an empty index.
 - [ ] Every deep-dive doc is linked from an owner doc, feature doc, or index.
 - [ ] Substantive plan and review records include provenance and are linked from the owning feature, design, UI/UX, component, or baseline doc.
+- [ ] Companion spec or plan artifacts that shaped work are linked from owning docs, with accepted outcomes promoted into canonical Repo Memory docs.
 - [ ] No prohibited folder or file names are present.
 - [ ] Status values in feature docs match the allowed set.
 - [ ] Maintained docs include required metadata fields for their doc type.

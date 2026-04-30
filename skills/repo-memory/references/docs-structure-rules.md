@@ -140,6 +140,7 @@ Rules:
 - Every optional subfolder must contain a `README.md` index listing all files in the folder.
 - Files in optional subfolders must be linked from the owning baseline doc, feature doc, or index.
 - Do not create partial optional subfolders (e.g., `docs/designs/` without `docs/designs/README.md`).
+- Do not create an optional subfolder that contains only `README.md`; index-only optional folders are noise unless they point to existing assets or topic docs.
 
 ## Content Placement Rules
 
@@ -232,6 +233,7 @@ Do not invent new status values. If a feature has a state not covered here, docu
 | Folders named `misc/`, `old/`, `archive/` | Use `decision-log.md` or `implementation-log.md` to record history instead |
 | Deep-dive docs with no link from an owner doc | Creates orphaned docs that agents cannot discover |
 | Duplicate content across baseline and deep-dive docs | Baseline summarizes; deep-dive docs hold the detail |
+| Empty optional deep-dive folders | Delete them until there is real topic content to own |
 | Slugs with uppercase letters, spaces, or underscores | Breaks consistency across registry, file names, and folder names |
 | Optional subfolders without a `README.md` index | Leaves the folder undiscoverable |
 | Baseline docs placed in subfolders | Baseline docs must live directly in `docs/` |
@@ -247,6 +249,7 @@ Before committing documentation changes, confirm:
 - [ ] All file names are kebab-case with `.md` extension (except `README.md` and `_template.md`).
 - [ ] Slugs are consistent across `docs/feature-registry.md`, the feature file name, and any feature subfolder.
 - [ ] Every optional subfolder has a `README.md` index.
+- [ ] No optional subfolder exists only as an empty index.
 - [ ] Every deep-dive doc is linked from an owner doc, feature doc, or index.
 - [ ] No prohibited folder or file names are present.
 - [ ] Status values in feature docs match the allowed set.

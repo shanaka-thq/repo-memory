@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.3
+Version: 1.4
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -197,6 +197,8 @@ They should tell the agent:
 4. Inspect `git status`, unstaged diffs, staged diffs, and untracked files before editing when resuming after an interruption or unknown prior agent state.
 5. Update feature handoff notes, doc health, decision log, and implementation log when warranted.
 6. Do not duplicate mutable project facts in the agent instruction file.
+7. Do not create optional deep-dive folders unless there is real content to own.
+8. Preserve useful custom docs and link them from the canonical docs layer.
 
 Platform guides in [`agents/`](./agents/) show how to adapt this flow for
 Codex, Claude Code, GitHub Copilot, and OpenAI Agents SDK.
@@ -212,9 +214,11 @@ python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo
 ```
 
 Validation should catch missing required docs, broken relative links, invalid
-docs path names, and version drift in this standard repository. Richer metadata
-and orphan detection can be layered on top without changing the Markdown
-standard.
+docs path names, and version drift in this standard repository. It also emits
+warnings for likely hygiene issues such as generated artifacts, empty optional
+deep-dive folders, invalid or stale feature status metadata, and stale
+interrupted-work handoff text in terminal feature docs. Use `--strict` to treat
+warnings as failures.
 
 ## Non-Goals
 

@@ -53,7 +53,7 @@ docs/
 
 For existing projects, use the baseline files as the comprehensive minimum and populate every file with concise current-state content before polishing any single document too much.
 
-The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer.
+The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer. Do not create empty optional folders or index-only optional folders as placeholders.
 
 ## Empty Repository Scaffold
 
@@ -132,6 +132,7 @@ Before stopping:
 - Use `docs/features/<feature-slug>/logic.md` for feature-local flows, state transitions, algorithms, edge cases, or event sequencing.
 - Use `docs/features/<feature-slug>/components/` when the component logic only matters inside that feature and would be noise in the shared component registry.
 - Always link deep-dive docs from the parent feature doc, index, or relevant baseline doc.
+- Do not create optional deep-dive folders until there is real content or an existing asset to index.
 
 ## Diagram Guidance
 
@@ -381,6 +382,8 @@ Out:
 - Safe to parallelize:
 - Avoid changing:
 - If recovering from interruption: run `git status --short`, inspect diffs and untracked files, then record what was found before editing.
+
+When a feature reaches `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the feature registry row, and replace interrupted-work language with completed-state handoff. Do not leave `interrupted`, `resume carefully`, or `do not discard uncommitted work` wording unless unresolved workspace state still exists and is documented as a current risk.
 
 ## Exact Next Prompt
 

@@ -43,6 +43,7 @@ REQUIRED_SKILL_PACKAGE_FILES = [
     "skills/repo-memory/agents/claude-code.md",
     "skills/repo-memory/agents/openai.yaml",
     "skills/repo-memory/examples/README.md",
+    "skills/repo-memory/scripts/forward-test.py",
     "skills/repo-memory/scripts/scaffold-docs.py",
     "skills/repo-memory/scripts/validate-docs.py",
 ]
@@ -101,11 +102,77 @@ OPTIONAL_REQUIRED_HEADINGS = {
     ],
 }
 
+OPTIONAL_DEEP_DIVE_DIRS = [
+    "docs/diagrams",
+    "docs/designs",
+    "docs/project-details",
+    "docs/components",
+    "docs/ui-ux",
+]
+
+GENERATED_ARTIFACT_NAMES = {
+    "__pycache__",
+    ".pytest_cache",
+    ".DS_Store",
+    "agent-final.txt",
+}
+
+ALLOWED_FEATURE_STATUSES = {
+    "research",
+    "planned",
+    "in_progress",
+    "blocked",
+    "implemented",
+    "verified",
+    "shipped",
+    "abandoned",
+    "superseded",
+    "deprecated",
+    "rolled_back",
+}
+
+TERMINAL_FEATURE_STATUSES = {
+    "implemented",
+    "verified",
+    "shipped",
+}
+
+ACTIVE_FEATURE_STATUSES = {
+    "research",
+    "planned",
+    "in_progress",
+    "blocked",
+}
+
+COMPLETED_FEATURE_EVIDENCE_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE | re.MULTILINE)
+    for pattern in [
+        r"^\s*Validation status:\s*(implemented|verified|shipped|complete|completed|passed|validated)\b",
+        r"^\s*-\s*\[x\]\s+Finish scoped behavior\b",
+        r"^\s*-\s*\[x\]\s+Update docs and validation notes\b",
+        r"^\s{0,3}## Verified Behavior\s*$",
+    ]
+]
+
+STALE_TERMINAL_HANDOFF_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE)
+    for pattern in [
+        r"\binterrupted\b",
+        r"\bresume carefully\b",
+        r"\bdo not discard uncommitted\b",
+        r"\bpartial (rounding )?changes\b",
+        r"\bpartial work\b",
+        r"next safe step:\s*inspect the working tree",
+        r"validation status:\s*interrupted",
+    ]
+]
+
 KEBAB_PATH = re.compile(r"^[a-z0-9][a-z0-9-]*(\.[a-z0-9]+)?$")
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 FENCE_LINE = re.compile(r"^( {0,3})([`~]{3,})(.*)$")
 VERSION = re.compile(r"^Version:\s*(\d+\.\d+)", re.MULTILINE)
-HEADING = re.compile(r"^#{2,6}\s+(.+?)\s*$", re.MULTILINE)
+HEADING = re.compile(r"^\s{0,3}#{2,6}\s+(.+?)\s*$", re.MULTILINE)
+STATUS = re.compile(r"^\s*Status:\s*([a-z_]+)\b", re.MULTILINE | re.IGNORECASE)
 
 
 def strip_fenced_code(text: str) -> str:
@@ -203,6 +270,107 @@ def check_required_headings(root: Path) -> list[str]:
     return errors
 
 
+def check_empty_optional_deep_dive_dirs(root: Path) -> list[str]:
+    warnings: list[str] = []
+    for rel_dir in OPTIONAL_DEEP_DIVE_DIRS:
+        directory = root / rel_dir
+        if not directory.is_dir():
+            continue
+
+        files = [
+            path
+            for path in directory.rglob("*")
+            if path.is_file() and ".git" not in path.parts
+        ]
+        meaningful = [
+            path
+            for path in files
+            if path.name != "README.md" and not path.name.startswith(".")
+        ]
+        if files and not meaningful:
+            warnings.append(
+                f"{rel_dir}: optional deep-dive folder has only an index "
+                "and no owned topic docs"
+            )
+    return warnings
+
+
+def check_generated_artifacts(root: Path) -> list[str]:
+    warnings: list[str] = []
+    for path in root.rglob("*"):
+        if ".git" in path.parts:
+            continue
+        if path.name in GENERATED_ARTIFACT_NAMES:
+            warnings.append(
+                f"{path.relative_to(root)}: generated or harness artifact "
+                "should not be left in the repo"
+            )
+    return warnings
+
+
+def check_feature_statuses(root: Path) -> list[str]:
+    features = root / "docs" / "features"
+    if not features.exists():
+        return []
+
+    warnings: list[str] = []
+    for doc in features.glob("*.md"):
+        if doc.name == "_template.md":
+            continue
+
+        text = doc.read_text(encoding="utf-8")
+        status_match = STATUS.search(text)
+        rel = doc.relative_to(root)
+        if not status_match:
+            warnings.append(f"{rel}: feature doc is missing a Status metadata field")
+            continue
+
+        status = status_match.group(1).lower()
+        if status not in ALLOWED_FEATURE_STATUSES:
+            allowed = ", ".join(sorted(ALLOWED_FEATURE_STATUSES))
+            warnings.append(
+                f"{rel}: unknown feature status '{status}' "
+                f"(allowed: {allowed})"
+            )
+            continue
+
+        completed_signals = sum(
+            1 for pattern in COMPLETED_FEATURE_EVIDENCE_PATTERNS if pattern.search(text)
+        )
+        if status in ACTIVE_FEATURE_STATUSES and completed_signals >= 2:
+            warnings.append(
+                f"{rel}: feature appears completed or verified but status is "
+                f"'{status}' instead of implemented, verified, or shipped"
+            )
+    return warnings
+
+
+def check_terminal_feature_handoff(root: Path) -> list[str]:
+    features = root / "docs" / "features"
+    if not features.exists():
+        return []
+
+    warnings: list[str] = []
+    for doc in features.glob("*.md"):
+        if doc.name == "_template.md":
+            continue
+        text = doc.read_text(encoding="utf-8")
+        status_match = STATUS.search(text)
+        if not status_match:
+            continue
+        status = status_match.group(1).lower()
+        if status not in TERMINAL_FEATURE_STATUSES:
+            continue
+        for pattern in STALE_TERMINAL_HANDOFF_PATTERNS:
+            if pattern.search(text):
+                warnings.append(
+                    f"{doc.relative_to(root)}: terminal feature status "
+                    f"'{status}' still contains interrupted-work handoff wording"
+                )
+                break
+    return warnings
+
+
 def check_skill_version(root: Path) -> list[str]:
     package_root = root / SKILL_PACKAGE if (root / SKILL_PACKAGE).exists() else root
     skill = package_root / "SKILL.md"
@@ -256,6 +424,15 @@ def check_project_docs(root: Path) -> list[str]:
     return errors
 
 
+def check_project_warnings(root: Path) -> list[str]:
+    warnings: list[str] = []
+    warnings.extend(check_empty_optional_deep_dive_dirs(root))
+    warnings.extend(check_generated_artifacts(root))
+    warnings.extend(check_feature_statuses(root))
+    warnings.extend(check_terminal_feature_handoff(root))
+    return warnings
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("path", nargs="?", default=".")
@@ -269,15 +446,22 @@ def main() -> int:
         action="store_true",
         help="validate a target repository that adopted the docs standard",
     )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="treat warnings as validation failures",
+    )
     args = parser.parse_args()
 
     root = Path(args.path).resolve()
     errors: list[str] = []
+    warnings: list[str] = []
 
     if args.skill_repo:
         errors.extend(check_skill_repo(root))
     if args.project_docs:
         errors.extend(check_project_docs(root))
+        warnings.extend(check_project_warnings(root))
     if not args.skill_repo and not args.project_docs:
         if (root / SKILL_PACKAGE / "SKILL.md").exists():
             errors.extend(check_skill_repo(root))
@@ -285,13 +469,22 @@ def main() -> int:
             errors.extend(check_skill_version(root))
         else:
             errors.extend(check_project_docs(root))
+            warnings.extend(check_project_warnings(root))
 
     errors.extend(check_relative_links(root))
 
-    if errors:
+    if errors or (args.strict and warnings):
         for error in errors:
             print(f"ERROR: {error}")
+        for warning in warnings:
+            print(f"WARNING: {warning}")
         return 1
+
+    for warning in warnings:
+        print(f"WARNING: {warning}")
+    if warnings:
+        print("Documentation validation passed with warnings")
+        return 0
 
     print("Documentation validation passed")
     return 0

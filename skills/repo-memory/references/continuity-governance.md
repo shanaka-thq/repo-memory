@@ -76,6 +76,8 @@ For terminal feature states, update:
 - decision log if a durable project choice changed
 - doc health if stale docs or superseded docs remain
 
+When a feature moves to `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the feature registry row, and remove stale interrupted-work phrasing from the handoff. The final handoff should describe the latest verified state, validation gaps, residual risks, and next safe maintenance step. Keep dirty-worktree warnings only when unresolved uncommitted work still exists.
+
 ## Rename and Move Protocol
 
 Avoid renames unless the current slug is actively misleading.
@@ -123,6 +125,8 @@ Do not delete, revert, or overwrite uncommitted work from another user or agent 
 
 When the interrupted state belongs to an active feature, put the recovery note in that feature doc under `Resume Context` or `Next Agent Handoff`. When the interrupted state affects documentation trust, generated docs, or multiple features, also update `docs/doc-health.md`.
 
+After tests or validation, remove disposable generated artifacts you created, such as `__pycache__`, `.pytest_cache`, `.DS_Store`, or `agent-final.txt`, unless the repo intentionally tracks or ignores them. Prefer validation commands that avoid artifacts up front; for Python one-off checks, use `python3 -B` or `PYTHONDONTWRITEBYTECODE=1 python3` when practical. If an artifact cannot be removed, record it as an unresolved workspace hygiene issue.
+
 ## Self-Consistency Checks
 
 Before stopping after documentation work:
@@ -130,5 +134,8 @@ Before stopping after documentation work:
 - `SKILL.md` version matches a `CHANGELOG.md` entry
 - newly referenced files are linked from `README.md`, `AGENTS.md`, or another discoverable entrypoint
 - all optional docs folders have indexes
+- no optional docs folder is only an empty index
 - changed docs are represented in `docs/doc-health.md` when applying the standard to a target repo
+- completed features use `implemented`, `verified`, or `shipped` in the feature doc and registry
+- generated artifacts from validation or forward testing are not left in the target repo
 - agent-specific instruction files still point to the canonical docs instead of duplicating mutable state

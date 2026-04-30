@@ -10,6 +10,25 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.4] - 2026-04-30
+
+### Added
+
+- Added `skills/repo-memory/scripts/forward-test.py` for manual blind
+  forward-testing against disposable fixture repositories.
+- Added validator warnings for generated artifacts, empty optional deep-dive
+  folders, inconsistent feature status metadata, and terminal feature docs with
+  stale interrupted-work handoff text.
+- Added `--strict` validation mode to treat warnings as failures.
+
+### Changed
+
+- Strengthened guidance to avoid index-only optional deep-dive folders, preserve
+  useful custom docs, and replace interrupted-work wording when features reach a
+  terminal implemented, verified, or shipped state.
+- Added Python validation hygiene guidance to avoid creating `__pycache__`
+  during ad hoc checks.
+
 ## [1.3] - 2026-04-29
 
 ### Changed

@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.3
+Version: 1.4
 
 ## Overview
 
@@ -21,6 +21,8 @@ Read [references/continuity-governance.md](./references/continuity-governance.md
 Read [examples/README.md](./examples/README.md) when you need a concrete reference output for an adopted docs tree or multi-agent handoff.
 Run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents` when the target repo is empty or nearly empty and needs the default docs skeleton before there is code to audit.
 Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs <repo>` when you need a lightweight local check for a target repo that adopted the standard.
+Run `python3 <skill-dir>/scripts/forward-test.py --fixture-only` when you need disposable blind-test fixtures for skill behavior, and run live forward tests manually when token cost and local Codex auth are acceptable.
+When running ad hoc Python validation inside a target repo, prefer `python3 -B ...` or `PYTHONDONTWRITEBYTECODE=1 python3 ...` so validation does not leave `__pycache__` artifacts behind.
 
 Resolve `<skill-dir>` to the directory containing this `SKILL.md`. When working from this repository root, use `skills/repo-memory/scripts/...`.
 
@@ -61,6 +63,8 @@ Default deep-dive locations:
 - `docs/features/<feature-slug>/components/<component-slug>.md` when a feature has component logic that should live beside the feature instead of in the shared component registry
 
 Do not let deep-dive docs become orphaned. Link them from the owning baseline doc, feature doc, or index file.
+
+Do not create optional deep-dive folders or empty index-only folders just to make the docs tree look complete. Create `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/ui-ux/`, or feature deep-dive folders only when there is real owned content that would make the baseline or feature doc too long or too hard to maintain.
 
 Additional focused docs when relevant:
 
@@ -153,12 +157,15 @@ Treat documentation as maintained system state. When project reality changes, up
 - update `docs/doc-health.md` whenever a baseline doc, feature doc, deep-dive doc, diagram, or agent instruction file is created, materially changed, known stale, or re-verified
 - if code and docs disagree, treat source code, tests, schemas, runtime config, and deployment artifacts as the strongest current-behavior evidence, then update docs and record the correction
 - if docs disagree with each other, preserve the more specific doc as the detailed source, update the baseline summary, and link both places clearly
+- preserve useful custom docs such as ADRs, product notes, RFCs, support docs, and design notes; link them from the canonical docs instead of replacing them with duplicate summaries
 - if user statements or chat context override existing docs, record the statement as evidence and mark any older doc statement as superseded or corrected
 - when architecture, contracts, data model, security posture, local tooling, or operations change materially, update the affected baseline doc, decision log, implementation log, doc-health record, and any owning design or feature docs in the same work
 - when renaming a feature, component, design, topic, or diagram slug, update every reference and record the old slug in the affected registry or index until the transition is obvious
 - when a feature is abandoned, superseded, deprecated, or rolled back, keep the feature doc and registry entry; mark the terminal status and explain what replaced it or why it stopped
+- when a feature becomes `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the registry entry, and replace interrupted-work handoff wording with completed-state handoff: latest verified state, remaining validation gaps, and the next safe maintenance step
 - when multiple agents may work concurrently, feature docs must state active ownership, files or docs to avoid, safe parallel work, and the latest verified state
 - when interrupted work is discovered, record what was found, what was verified, what remains uncertain, and the next safe step in the affected feature doc or `docs/doc-health.md`
+- after running tests or validation, remove disposable generated artifacts you created, such as `__pycache__`, `.pytest_cache`, `.DS_Store`, or `agent-final.txt`, unless the repo intentionally tracks or ignores them; for Python one-off checks, prefer `python3 -B` or `PYTHONDONTWRITEBYTECODE=1` to avoid creating `__pycache__` in the first place
 
 Use [references/continuity-governance.md](./references/continuity-governance.md) for the detailed protocols.
 
@@ -338,6 +345,7 @@ Add these deep-dive docs when the project genuinely needs them:
 - `docs/features/<feature-slug>/components/<component-slug>.md`
 
 Only add deep-dive documents when the behavior is important, detailed, and not already captured well enough in the baseline or primary feature doc.
+Do not add empty optional indexes such as `docs/diagrams/README.md`, `docs/designs/README.md`, `docs/project-details/README.md`, `docs/components/README.md`, or `docs/ui-ux/README.md` unless the folder also has real topic docs or existing assets to index.
 
 For existing repositories, treat these as the minimum comprehensive baseline, not as optional nice-to-haves.
 
@@ -353,7 +361,7 @@ For any non-trivial feature, bug fix, integration, refactor, or research thread 
 4. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
 5. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
 6. Keep the feature document current during the work.
-7. Leave a clean `Next Agent Handoff` section before ending the session.
+7. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
 8. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
 
 Use one explicit status model:
@@ -535,10 +543,13 @@ Use this strategy when no better repo-specific process exists:
 11. populate `docs/doc-health.md` with verification state, stale areas, and known conflicts
 12. align any repo-level agent instruction files to the same docs entrypoints and source-of-truth rules
 13. update the docs in the same change as the code
-14. leave exact handoff notes before stopping
+14. remove disposable generated artifacts created by validation or testing
+15. leave exact handoff notes before stopping
 
 Use [references/templates.md](./references/templates.md) for the default structure and templates.
 Use [references/existing-project-audit.md](./references/existing-project-audit.md) when extracting documentation from an existing codebase.
 Use [references/docs-structure-rules.md](./references/docs-structure-rules.md) to verify all naming conventions and placement decisions before committing.
 Use [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) to apply consistent metadata fields across doc types.
 Use [references/continuity-governance.md](./references/continuity-governance.md) to resolve conflicts, rename docs, close abandoned work, and keep doc freshness visible.
+
+For blind forward testing, use `scripts/forward-test.py`. Keep child-agent prompts task-like, pass the skill path explicitly, and write stdout/final-message logs outside the fixture repository so generated harness artifacts do not contaminate scoring.

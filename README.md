@@ -63,7 +63,7 @@ This project provides a portable standard plus one installable skill package:
 - [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, and continuity governance, including interrupted-work recovery.
 - [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
 - [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
-- [`skills/repo-memory/scripts/`](./skills/repo-memory/scripts/) provides empty-repo scaffolding and lightweight local validation.
+- [`skills/repo-memory/scripts/`](./skills/repo-memory/scripts/) provides empty-repo scaffolding, lightweight local validation, and manual blind forward-testing.
 
 Use Repo Memory when you want to:
 
@@ -121,6 +121,7 @@ repo-memory/
         ├── agents/                    # platform adapter guides
         ├── examples/                  # adopted docs and handoff examples
         ├── scripts/
+        │   ├── forward-test.py        # manual blind agent scenario harness
         │   ├── scaffold-docs.py       # empty repo docs skeleton helper
         │   └── validate-docs.py       # local docs validation helper
         └── references/                # rules, templates, audit, governance
@@ -199,8 +200,34 @@ Run the validator against a target repo that adopted the standard:
 python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo
 ```
 
+Use `--strict` when warnings such as generated artifacts, empty optional
+deep-dive folders, inconsistent feature status metadata, or stale terminal
+feature handoff text should fail the run:
+
+```bash
+python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo --strict
+```
+
 This command is shown from the repository root. If using an installed skill,
 run the script from that installed `repo-memory` skill directory.
+
+### Forward Test Manually
+
+Create disposable blind-test fixtures without running a child agent:
+
+```bash
+python3 skills/repo-memory/scripts/forward-test.py --fixture-only --keep
+```
+
+Run one live child-agent scenario when local Codex auth and token budget are
+available:
+
+```bash
+python3 skills/repo-memory/scripts/forward-test.py --scenario interrupted-worktree --model gpt-5.4-mini --reasoning-effort low --keep
+```
+
+The harness writes child-agent stdout and final messages outside each fixture
+repo so generated test logs do not contaminate scoring.
 
 ### Examples
 

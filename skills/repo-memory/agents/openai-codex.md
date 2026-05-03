@@ -17,8 +17,9 @@ Agent-specific prompts, CLI instructions, or wrapper files should point into the
 1. Check for `AGENTS.md` and any repo-level agent instruction files.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
 3. Read `docs/project-overview.md`, `docs/architecture.md`, and `docs/feature-registry.md`.
-4. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
-5. If the docs are missing, stale, or inconsistent, apply the Repo Memory workflow from [`SKILL.md`](../SKILL.md).
+4. If `docs/intake/` exists and contains raw brainstorms, project notes, or plans relevant to the work, review them and promote accepted facts into canonical docs before building from them.
+5. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
+6. If the docs are missing, stale, or inconsistent, apply the Repo Memory workflow from [`SKILL.md`](../SKILL.md).
 
 ### When resuming interrupted work
 
@@ -46,6 +47,7 @@ When telling Codex to maintain project docs, include expectations like these:
 - use the Repo Memory workflow from [`SKILL.md`](../SKILL.md)
 - treat the `docs/` tree as canonical
 - keep `docs/project-overview.md` current for project goal, problem statement, target users, success criteria, scope, and non-goals
+- review `docs/intake/` when raw brainstorms or plans exist, then promote accepted outcomes into canonical docs
 - keep active feature docs resumable for a different future agent
 - keep `docs/doc-health.md` current for freshness, conflicts, renames, and terminal feature states
 - keep `docs/observability-and-instrumentation.md` current for logs, metrics, traces, analytics, audit events, dashboards, and alerts

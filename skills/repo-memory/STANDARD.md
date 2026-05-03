@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.6
+Version: 1.7
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -25,6 +25,7 @@ where durable project truth lives:
 - observability, instrumentation, telemetry, and production signals
 - durable decisions and implementation history
 - active feature state and next-agent handoff context
+- raw brainstorms, project dumps, user notes, and planning output as intake evidence before accepted facts are promoted
 - provenance for substantial plans, specialist reviews, and tool-generated guidance that influence implementation
 - compatibility with companion spec/plan workflows, when accepted outcomes are promoted into canonical docs
 - documentation freshness, conflicts, renames, and verification evidence
@@ -87,8 +88,10 @@ docs/
     └── _template.md
 ```
 
-Optional docs are added only when the project needs the depth:
+Optional and special-purpose docs are added only when they serve a clear intake,
+workflow, or deep-dive need:
 
+- `docs/intake/`
 - `docs/requirements/user-stories-and-use-cases.md`
 - `docs/diagrams/`
 - `docs/designs/`
@@ -127,12 +130,35 @@ The skeleton is a starting state, not verified project truth. Replace
 placeholders only with confirmed user statements, source evidence, tests,
 configuration, or explicitly marked inference.
 
+## Raw Intake Folder
+
+Repos may keep `docs/intake/` as a low-friction inbox for unstructured source
+material that could shape the project:
+
+- brainstorm dumps
+- copied chat notes or user-provided project dumps
+- sketches, screenshots, imported plans, or planning-agent output
+- rough product, architecture, or feature notes that are not yet accepted
+
+`docs/intake/` is source evidence, not canonical project truth. Before building
+from intake material, agents should extract accepted facts into the relevant
+baseline, requirements, feature, design, decision, implementation, and
+doc-health docs. High-impact missing foundations should be clarified with the
+user; lower-risk unknowns should be recorded in `Open Questions`.
+
+Raw intake files may keep source filenames and rough formatting. Validation may
+ignore naming and link hygiene inside `docs/intake/` because the folder is not a
+maintained docs layer. Once content is curated as durable documentation, move or
+summarize it into the canonical docs and apply normal Repo Memory naming,
+metadata, link, and verification rules.
+
 ## Required Behaviors
 
 A Repo Memory-compliant repository must:
 
 - treat `docs/` as the canonical source of truth for durable project context
 - keep agent instruction files thin and linked to the docs set
+- review relevant `docs/intake/` source material before greenfield planning or implementation, then promote accepted outcomes into canonical docs
 - make `docs/project-overview.md` the canonical home for project goal, problem statement, target users or actors, success criteria, scope, and non-goals
 - document current behavior from evidence before documenting assumptions
 - document the users, actors, personas, journeys, acceptance paths, and edge cases that matter to user-facing or workflow-heavy systems
@@ -154,9 +180,10 @@ When docs disagree, resolve current behavior in this order:
 
 1. source code, tests, schemas, runtime config, and deployment config
 2. explicit user statements, ADRs, design docs, and code comments
-3. existing docs, after checking whether they are stale
-4. git history, changelogs, issues, and pull requests
-5. clearly marked inference
+3. raw intake files, copied planning notes, and companion artifacts, after checking whether their content was accepted or is only advisory
+4. existing docs, after checking whether they are stale
+5. git history, changelogs, issues, and pull requests
+6. clearly marked inference
 
 Do not present inferred rationale as confirmed intent.
 
@@ -206,13 +233,15 @@ They should tell the agent:
 
 1. Read `docs/README.md`.
 2. Read `docs/project-overview.md`, `docs/architecture.md`, and `docs/feature-registry.md`.
-3. Read the active `docs/features/<feature-slug>.md` before changing related code.
-4. Inspect `git status`, unstaged diffs, staged diffs, and untracked files before editing when resuming after an interruption or unknown prior agent state.
-5. Update feature handoff notes, doc health, decision log, and implementation log when warranted.
-6. Do not duplicate mutable project facts in the agent instruction file.
-7. Do not create optional deep-dive folders unless there is real content to own.
-8. Preserve useful custom docs and link them from the canonical docs layer.
-9. Treat plan and review records as advisory evidence until verified against current code, docs, and user intent.
+3. Review `docs/intake/` when it exists and contains raw brainstorms, project notes, or planning output relevant to the work.
+4. Promote accepted intake outcomes into canonical docs before building from them.
+5. Read the active `docs/features/<feature-slug>.md` before changing related code.
+6. Inspect `git status`, unstaged diffs, staged diffs, and untracked files before editing when resuming after an interruption or unknown prior agent state.
+7. Update feature handoff notes, doc health, decision log, and implementation log when warranted.
+8. Do not duplicate mutable project facts in the agent instruction file.
+9. Do not create optional deep-dive folders unless there is real content to own.
+10. Preserve useful custom docs and link them from the canonical docs layer.
+11. Treat plan and review records as advisory evidence until verified against current code, docs, and user intent.
 
 Platform guides in [`agents/`](./agents/) show how to adapt this flow for
 Codex, Claude Code, GitHub Copilot, and OpenAI Agents SDK.
@@ -231,8 +260,10 @@ Validation should catch missing required docs, broken relative links, invalid
 docs path names, and version drift in this standard repository. It also emits
 warnings for likely hygiene issues such as generated artifacts, empty optional
 deep-dive folders, invalid or stale feature status metadata, and stale
-interrupted-work handoff text in terminal feature docs. Use `--strict` to treat
-warnings as failures.
+interrupted-work handoff text in terminal feature docs. Raw files under
+`docs/intake/` are exempt from naming and relative-link checks because they are
+source material, not maintained canonical docs. Use `--strict` to treat warnings
+as failures.
 
 ## Non-Goals
 

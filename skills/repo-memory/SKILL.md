@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.6
+Version: 1.7
 
 ## Overview
 
@@ -41,10 +41,12 @@ Prefer one stable documentation system per repository:
 - one metadata schema that describes what each doc type must record
 - one evidence-based adoption path for existing repos that are missing trustworthy docs
 - one canonical project-docs layer that agent-specific instruction files point to instead of duplicating
+- one low-friction intake inbox for raw brainstorms, project notes, chat exports, and planning dumps before accepted facts are promoted
 - one provenance trail for substantial plans, specialist reviews, and tool-generated guidance that another agent may need to trust, verify, or implement
 
 Do not create overlapping documentation systems unless the repository already forces it.
 When another workflow already creates spec or plan artifacts, such as Obra Superpowers files under `docs/superpowers/specs/` or `docs/superpowers/plans/`, treat those artifacts as linked evidence and provenance. Keep accepted durable facts, current implementation state, decisions, validation, and handoff notes in the owning Repo Memory docs.
+When a repo has raw planning material under `docs/intake/`, treat it as source evidence, not canonical truth. Review it before greenfield planning or implementation, then promote accepted outcomes into the owning Repo Memory docs.
 
 Every deep-dive document should have an obvious owner and entrypoint. Baseline docs summarize; deep-dive docs hold the details that would otherwise make the baseline unreadable.
 
@@ -65,6 +67,8 @@ Default deep-dive locations:
 - `docs/ui-ux/<topic-or-flow-slug>.md` for user journeys, surfaces, interaction states, and accessibility notes
 - `docs/features/<feature-slug>/logic.md` for feature-specific logic, state transitions, or algorithms
 - `docs/features/<feature-slug>/components/<component-slug>.md` when a feature has component logic that should live beside the feature instead of in the shared component registry
+
+`docs/intake/` is different from a deep-dive folder. It is an optional raw inbox for unstructured source material such as brainstorm dumps, user notes, chat exports, imported plans, sketches, and planning-agent output. It may exist before the project has a stable structure, and raw intake files do not need to become polished docs. Accepted facts, decisions, requirements, and handoff state must still be promoted into the canonical baseline, feature, design, decision, implementation, and doc-health docs.
 
 Do not let deep-dive docs become orphaned. Link them from the owning baseline doc, feature doc, or index file.
 
@@ -146,6 +150,7 @@ Comprehensive documentation is better than sparse documentation, but unsupported
 Treat the maintained project docs as the canonical handoff surface across coding agents.
 
 - keep durable project facts, active feature state, validation status, blockers, and next steps in the project docs, not only in chat history
+- if `docs/intake/` exists, inspect relevant raw brainstorms, notes, and plans before greenfield planning or related implementation, then promote accepted facts into canonical docs before building from them
 - keep agent-specific instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar files thin; they should tell agents where the canonical docs live and how to update them
 - if multiple agent entrypoint files exist, align them to the same documentation workflow instead of letting each file define a competing source of truth
 - make every active feature doc resumable without prior chat context: another agent should be able to read the feature doc and continue safely
@@ -171,6 +176,7 @@ Treat documentation as maintained system state. When project reality changes, up
 - when a feature becomes `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the registry entry, and replace interrupted-work handoff wording with completed-state handoff: latest verified state, remaining validation gaps, and the next safe maintenance step
 - when multiple agents may work concurrently, feature docs must state active ownership, files or docs to avoid, safe parallel work, and the latest verified state
 - when one agent creates a plan for another agent to implement, keep the implementable summary and pickup instructions in the owning feature or design doc; link any larger plan artifact from there and treat it as advisory until verified against current code and user intent
+- when `docs/intake/` contains raw brainstorms, notes, or plans that materially shape the project, link the source artifact where useful, promote accepted outcomes into canonical docs, and record unresolved foundation questions in the owning doc or `docs/doc-health.md`
 - when a companion workflow creates separate spec or plan files, read the relevant artifacts before continuing related work, then promote accepted outcomes into the canonical Repo Memory docs instead of leaving state only in that companion folder
 - when a different role or specialist agent reviews work, record short reviews in the owning doc `Review Log`; create `docs/reviews/<review-slug>.md` only when the review is substantive, cross-cutting, or likely to be audited later
 - when a plan or review changes requirements, UX, architecture, contracts, or implementation state, update the canonical owning docs and record the accepted disposition instead of leaving the result only in a review artifact
@@ -218,10 +224,10 @@ actors, journeys, or workflow expectations. Use `--dry-run` to inspect the
 files before writing them.
 
 The scaffold creates the required `docs/` baseline, `docs/requirements/`,
-`docs/features/_template.md`, initial decision and implementation log entries,
-and a doc-health record that marks the skeleton placeholders as unverified.
-With `--with-agents`, it also creates a thin root `AGENTS.md` that points agents
-to the docs tree.
+`docs/features/_template.md`, `docs/intake/README.md`, initial decision and
+implementation log entries, and a doc-health record that marks the skeleton
+placeholders as unverified. With `--with-agents`, it also creates a thin root
+`AGENTS.md` that points agents to the docs tree.
 
 After scaffolding:
 
@@ -229,6 +235,34 @@ After scaffolding:
 2. Keep unknowns and assumptions explicit.
 3. Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo`.
 4. Leave the repo with a usable docs map even if implementation has not started.
+
+### 1b. Use raw intake for greenfield brainstorming and planning dumps
+
+Use `docs/intake/` as a low-friction inbox when the user or another planning
+agent has unstructured material that might shape the project:
+
+- brainstorm dumps
+- chat exports or copied conversation notes
+- product ideas, sketches, screenshots, or rough notes
+- AI-generated plans, critique passes, or planning documents that are not yet
+  accepted canonical project state
+
+Do not require the user to provide a rigid format. If the folder exists, inspect
+the relevant intake files before greenfield planning, initial scaffolding
+refinement, or implementation based on those ideas.
+
+Treat intake files as source material, not truth:
+
+1. Extract durable accepted facts into the right canonical docs.
+2. Link important intake files from `Evidence`, `Plan Provenance`, or `Source artifacts` when they materially shaped the outcome.
+3. Ask the user only for high-impact missing foundations, such as primary user, first useful workflow, platform target, privacy constraints, success criteria, or explicit non-goals.
+4. Record lower-risk unknowns in `Open Questions` and `docs/doc-health.md`.
+5. Leave raw intake files intact unless the user asks to reorganize them.
+
+Before starting implementation from a greenfield intake dump, make sure the
+canonical docs now answer the project goal, target users or actors, first
+usable scope, major constraints, tracked features, and next safe step. The
+builder should not have to reverse-engineer those from raw intake.
 
 ### 2. Run a documentation audit
 
@@ -249,6 +283,7 @@ Before standardizing an existing project, inventory the evidence:
 - UX states, accessibility behavior, responsive behavior, and design constraints when the system has a UI
 - extension points, compatibility constraints, migrations, flags, and deprecation paths that affect future evolution
 - existing docs and legacy source-of-truth files
+- raw intake material under `docs/intake/`, such as brainstorms, copied chat notes, user-provided project dumps, or planning-agent output
 - recent feature-related commits or changelog history when available
 
 Use the audit process in [references/existing-project-audit.md](./references/existing-project-audit.md).
@@ -263,6 +298,7 @@ The purpose of the audit is to answer:
 - whether user stories, UI or UX docs, design docs, or local tooling docs need first-class coverage
 - whether substantial plans or specialist reviews need provenance records, and whether their accepted outcomes have been promoted into the owning canonical docs
 - whether target users, personas, actors, success criteria, acceptance paths, and non-goals are explicit enough for another agent to preserve product intent
+- whether raw intake contains accepted direction that must be promoted before implementation, or high-impact open questions that require user clarification
 - whether observability and instrumentation are documented well enough to understand runtime health, product signals, alerts, audit trails, and privacy boundaries
 - whether existing diagrams should be preserved, linked, reorganized, or supplemented with Mermaid docs
 - which future-evolution assumptions should be captured explicitly
@@ -344,6 +380,10 @@ For repos that need a default standard, maintain these documents:
 - `docs/feature-registry.md`
 - `docs/features/<feature-slug>.md` for active or important features
 
+For greenfield repos, the scaffold also creates `docs/intake/README.md` as a
+raw inbox. Keep it as source material only; do not count raw intake files as a
+substitute for baseline docs, feature docs, decision logs, or handoff notes.
+
 Add these deep-dive docs when the project genuinely needs them:
 
 - `docs/requirements/user-stories-and-use-cases.md`
@@ -416,6 +456,7 @@ Use this mapping:
 - screen flows, interaction rules, accessibility, or responsive behavior change: update `docs/ui-ux/...`
 - feature-only flows, state machines, edge cases, or algorithms change: update `docs/features/<feature-slug>/...`
 - extension points, compatibility assumptions, migration paths, or deprecation strategy change: update architecture, design docs, and decision log
+- raw brainstorms, chat notes, or planning dumps shape accepted project direction: keep the raw source in `docs/intake/`, then update the affected canonical docs and link the intake source where useful
 - enduring technical choices change: update decision log
 - meaningful work lands: update implementation log
 - active feature state changes: update feature doc and feature registry
@@ -448,6 +489,7 @@ Before stopping, make sure another agent can determine:
 - where project-specific or feature-specific logic is documented
 - what the next safe step is
 - which docs are canonical and which agent-specific files only point to them
+- whether raw intake was reviewed, which accepted outcomes were promoted, and which intake questions remain open
 - which docs were verified, which are stale, and where conflicts or renamed docs were recorded
 
 If the docs do not answer those quickly, improve them before ending the session.
@@ -537,6 +579,7 @@ A good project documentation setup allows a new agent to answer these in under t
 - What decision history matters?
 - What assumptions were made for future evolution?
 - What should be done next?
+- If `docs/intake/` has raw notes or plans, what was promoted and what remains unresolved?
 - Which instruction files exist for different agents, and do they all point to the same canonical docs?
 
 If the answer is no, tighten the docs structure or refresh stale files.
@@ -549,19 +592,20 @@ Use this strategy when no better repo-specific process exists:
 
 1. audit the repo and inventory evidence
 2. bootstrap `docs/` with the standard file set, using the bundled `scripts/scaffold-docs.py` helper for empty or nearly empty repos
-3. populate each standard doc with current known state from evidence
-4. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
-5. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots
-6. create `docs/feature-registry.md`
-7. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, `docs/reviews/`, or `docs/ui-ux/` only for topics that need deeper treatment
-8. create per-feature docs for active, recent, or important work
-9. add feature-level deep-dive docs only when the feature has meaningful internal logic to preserve
-10. note unknowns, inferred statements, and missing rationale explicitly
-11. populate `docs/doc-health.md` with verification state, stale areas, and known conflicts
-12. align any repo-level agent instruction files to the same docs entrypoints and source-of-truth rules
-13. update the docs in the same change as the code
-14. remove disposable generated artifacts created by validation or testing
-15. leave exact handoff notes before stopping
+3. review `docs/intake/` when it contains raw brainstorms, project dumps, or planning output, then promote accepted facts into canonical docs
+4. populate each standard doc with current known state from evidence
+5. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
+6. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots
+7. create `docs/feature-registry.md`
+8. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, `docs/reviews/`, or `docs/ui-ux/` only for topics that need deeper treatment
+9. create per-feature docs for active, recent, or important work
+10. add feature-level deep-dive docs only when the feature has meaningful internal logic to preserve
+11. note unknowns, inferred statements, and missing rationale explicitly
+12. populate `docs/doc-health.md` with verification state, stale areas, known conflicts, and intake items that still need clarification
+13. align any repo-level agent instruction files to the same docs entrypoints and source-of-truth rules
+14. update the docs in the same change as the code
+15. remove disposable generated artifacts created by validation or testing
+16. leave exact handoff notes before stopping
 
 Use [references/templates.md](./references/templates.md) for the default structure and templates.
 Use [references/existing-project-audit.md](./references/existing-project-audit.md) when extracting documentation from an existing codebase.

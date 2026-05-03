@@ -10,6 +10,24 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.7] - 2026-05-03
+
+### Added
+
+- Added the `docs/intake/` workflow for raw brainstorms, copied chat notes,
+  user-provided project dumps, sketches, and planning-agent output.
+- Added scaffold output for `docs/intake/README.md` so new repos have a simple
+  place to collect unstructured project context before implementation starts.
+
+### Changed
+
+- Clarified that raw intake is source evidence, not canonical project truth:
+  accepted outcomes must be promoted into baseline, requirements, feature,
+  design, decision, implementation, and doc-health docs before building from
+  them.
+- Updated validation so raw files under `docs/intake/` are exempt from
+  canonical docs filename and relative-link checks.
+
 ## [1.6] - 2026-04-30
 
 ### Added

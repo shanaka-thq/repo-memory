@@ -5,6 +5,7 @@ Strict naming conventions and placement rules for the `docs/` folder. These rule
 ## Cross-Agent Source-of-Truth Rules
 
 - Treat the maintained `docs/` set as the canonical source of truth for architecture, requirements, feature state, implementation history, and handoff context.
+- Treat `docs/intake/` as raw source material when present, not as canonical truth. Promote accepted brainstorm, planning, or user-provided facts into the maintained docs before building from them.
 - Keep agent-specific instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar repo entrypoints concise. They should point agents to the canonical docs instead of restating mutable project facts.
 - If multiple agent instruction files exist, keep them aligned to the same docs entrypoints and active feature-tracking workflow.
 - Do not let important resume state live only in chat history. Put resumable state in `docs/features/<feature-slug>.md` and linked docs.
@@ -142,6 +143,7 @@ Rules:
 - Files in optional subfolders must be linked from the owning baseline doc, feature doc, or index.
 - Do not create partial optional subfolders (e.g., `docs/designs/` without `docs/designs/README.md`).
 - Do not create an optional subfolder that contains only `README.md`; index-only optional folders are noise unless they point to existing assets or topic docs.
+- `docs/intake/` is an allowed raw intake folder for brainstorms, project dumps, copied chat notes, imported plans, sketches, and planning-agent output. It is not a Repo Memory optional deep-dive folder. Raw intake files may keep source filenames and rough formatting; once content is accepted as durable project documentation, move or summarize it into canonical docs and apply normal naming, metadata, link, and verification rules.
 - `docs/superpowers/` is an allowed companion workflow folder for Obra Superpowers specs and plans. It is not a Repo Memory optional deep-dive folder and does not need a Repo Memory index unless the target project wants one.
 
 ## Content Placement Rules
@@ -163,6 +165,7 @@ Use this table to decide where any piece of content belongs:
 | Durable technical choices with rationale | `docs/decision-log.md` |
 | What landed and when | `docs/implementation-log.md` |
 | All tracked features and their status | `docs/feature-registry.md` |
+| Raw brainstorms, copied chat notes, user-provided project dumps, sketches, and imported planning output | `docs/intake/`, then promote accepted outcomes into the owning canonical docs |
 | Feature goal, status, checklist, handoff | `docs/features/<feature-slug>.md` |
 | Canonical resume state for interrupted work | `docs/features/<feature-slug>.md` |
 | Feature-local flows, edge cases, algorithms | `docs/features/<feature-slug>/logic.md` |
@@ -235,7 +238,7 @@ Do not invent new status values. If a feature has a state not covered here, docu
 
 | Pattern | Reason |
 | --- | --- |
-| Files named `notes.md`, `temp.md`, `todo.md` | Not part of the standard structure; use feature docs instead |
+| Files named `notes.md`, `temp.md`, `todo.md` outside `docs/intake/` | Not part of the maintained standard structure; use feature docs instead |
 | Folders named `misc/`, `old/`, `archive/` | Use `decision-log.md` or `implementation-log.md` to record history instead |
 | Deep-dive docs with no link from an owner doc | Creates orphaned docs that agents cannot discover |
 | Duplicate content across baseline and deep-dive docs | Baseline summarizes; deep-dive docs hold the detail |
@@ -244,6 +247,7 @@ Do not invent new status values. If a feature has a state not covered here, docu
 | Optional subfolders without a `README.md` index | Leaves the folder undiscoverable |
 | Plan or review findings left only in chat history | Future agents cannot verify who produced the advice, what evidence it used, or which outcomes were accepted |
 | Accepted companion spec or plan outcomes left only under `docs/superpowers/` | Future agents may miss changed requirements, decisions, validation, or handoff state in the canonical docs |
+| Accepted brainstorm or planning outcomes left only under `docs/intake/` | Raw intake is easy to miss and may contain unaccepted assumptions |
 | Baseline docs placed in subfolders | Baseline docs must live directly in `docs/` |
 | Mutable project facts duplicated across agent-specific instruction files | Creates competing sources of truth and stale handoff state |
 | Deleted feature/design history without a replacement pointer | Breaks continuity for future agents |
@@ -258,6 +262,7 @@ Before committing documentation changes, confirm:
 - [ ] Slugs are consistent across `docs/feature-registry.md`, the feature file name, and any feature subfolder.
 - [ ] Every optional subfolder has a `README.md` index.
 - [ ] No optional subfolder exists only as an empty index.
+- [ ] Accepted facts from `docs/intake/` have been promoted into canonical docs, with unresolved high-impact questions recorded.
 - [ ] Every deep-dive doc is linked from an owner doc, feature doc, or index.
 - [ ] Substantive plan and review records include provenance and are linked from the owning feature, design, UI/UX, component, or baseline doc.
 - [ ] Companion spec or plan artifacts that shaped work are linked from owning docs, with accepted outcomes promoted into canonical Repo Memory docs.

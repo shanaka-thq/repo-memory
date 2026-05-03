@@ -1,4 +1,4 @@
 interface:
   display_name: "Repo Memory Maintainer"
   short_description: "Audit, standardize, and maintain repo memory docs"
-  default_prompt: "Use $repo-memory to audit this repo, refresh docs, preserve custom docs, avoid empty optional docs, and leave handoff notes."
+  default_prompt: "Use $repo-memory to audit this repo, review docs/intake when raw brainstorms or plans exist, refresh canonical docs, preserve custom docs, avoid empty optional docs, and leave handoff notes."

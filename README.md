@@ -78,6 +78,8 @@ Use Repo Memory when you want to:
 - keep documentation current as features are researched, implemented, paused,
   recovered, or handed off
 - keep one docs layer that humans and different coding agents can share
+- give greenfield projects a simple `docs/intake/` inbox for messy brainstorms,
+  project dumps, copied chat notes, sketches, and planning output
 - bridge companion spec and plan workflows such as Obra Superpowers without
   losing canonical feature, decision, validation, or handoff state
 - track doc freshness, conflicts, renamed docs, superseded work, and
@@ -89,6 +91,7 @@ Use Repo Memory when you want to:
 | Situation | Action |
 | --- | --- |
 | Starting a new project | Run the skill to create the full `docs/` baseline |
+| Dumping greenfield brainstorms or AI plans | Put raw material in `docs/intake/`, then run the skill to promote accepted facts into canonical docs |
 | Onboarding an existing codebase | Run the skill to audit, backfill, and standardize |
 | Adding or resuming a feature | Run the skill to update feature docs and handoff notes |
 | Handing off to another agent | Run the skill to confirm docs are current and resumable |
@@ -180,6 +183,10 @@ Create the standard skeleton in a new or empty repo:
 python3 skills/repo-memory/scripts/scaffold-docs.py /path/to/repo --with-agents
 ```
 
+The scaffold includes `docs/intake/README.md` as a low-friction inbox for raw
+brainstorms, copied chat notes, user-provided project dumps, and planning output
+that still needs to be promoted into canonical docs.
+
 This command is shown from the repository root. If using an installed skill,
 run the script from that installed `repo-memory` skill directory.
 
@@ -260,6 +267,9 @@ stories, and whether tests cover the behavior people actually care about.
   for subsystems, features, designs, or flows that need more detail.
 - **Evidence first.** Document what is confirmed before what is assumed, and mark
   inferred claims clearly.
+- **Raw intake is not truth yet.** Use `docs/intake/` for messy brainstorms and
+  planning dumps, then promote accepted facts into the normal docs before
+  building from them.
 - **Easy to resume.** A paused or interrupted session should leave enough notes
   for a future human or agent to continue safely.
 - **Plans and reviews need provenance.** When a plan or specialist review shapes
@@ -281,6 +291,8 @@ The target docs layout for any project using the Repo Memory standard:
 ```text
 docs/
 ├── README.md
+├── intake/                             # raw brainstorms and planning dumps
+│   └── README.md
 ├── project-overview.md
 ├── architecture.md
 ├── interfaces-and-contracts.md

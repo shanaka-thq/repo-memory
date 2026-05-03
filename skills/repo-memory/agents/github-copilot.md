@@ -14,8 +14,9 @@ Treat the maintained `docs/` tree as the canonical cross-agent source of truth. 
 
 1. Check for an existing `AGENTS.md` or `.github/copilot-instructions.md`.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
-3. If the repo is empty or nearly empty, use `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents` to create the baseline skeleton, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
-4. If docs are missing or stale, invoke the Repo Memory workflow via the default prompt in [`agents/openai.yaml`](./openai.yaml) or by reading [`SKILL.md`](../SKILL.md) directly.
+3. Review `docs/intake/` when it contains raw brainstorms, project notes, or plans relevant to the work, then promote accepted facts into canonical docs.
+4. If the repo is empty or nearly empty, use `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents` to create the baseline skeleton, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
+5. If docs are missing or stale, invoke the Repo Memory workflow via the default prompt in [`agents/openai.yaml`](./openai.yaml) or by reading [`SKILL.md`](../SKILL.md) directly.
 
 ### When resuming work
 
@@ -46,7 +47,8 @@ This project uses the Repo Memory standard to maintain its `docs/` folder.
 When starting a session:
 1. Read `docs/README.md` for the documentation map.
 2. Read `docs/project-overview.md` and `docs/architecture.md` to orient.
-3. Check `docs/feature-registry.md` for active work.
+3. Review `docs/intake/` if raw brainstorms, project notes, or plans are relevant to the work, then promote accepted facts into canonical docs.
+4. Check `docs/feature-registry.md` for active work.
 
 When making changes:
 - Keep `docs/features/<feature-slug>.md` current for the feature you are working on.
@@ -94,6 +96,7 @@ If the target repo has a CI workflow that lints or validates docs, ensure genera
 - kebab-case file and folder names
 - no orphaned deep-dive docs
 - all optional subfolders containing a `README.md` index
+- raw `docs/intake/` source material promoted into canonical docs before implementation depends on it
 - feature registry status values matching the allowed set
 - `docs/doc-health.md` reflecting material documentation changes
 

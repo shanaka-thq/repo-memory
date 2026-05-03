@@ -114,6 +114,31 @@ or when a specialist, second-agent, human, or tool review materially shapes work
 
 When a repository also uses Obra Superpowers, keep `docs/superpowers/` as the companion artifact folder and use Repo Memory docs for current state, accepted decisions, validation, and next-agent handoff. See [superpowers-compatibility.md](./superpowers-compatibility.md).
 
+## Intake Promotion Protocol
+
+Use this protocol when `docs/intake/` contains raw brainstorms, copied chat
+notes, user-provided project dumps, sketches, imported plans, or planning-agent
+output that may shape the project.
+
+Before planning or building from intake material:
+
+1. Read the relevant intake files and identify confirmed user statements,
+   accepted direction, assumptions, rejected ideas, and open questions.
+2. Promote accepted durable facts into the owning canonical docs, such as
+   `docs/project-overview.md`, requirements, architecture, data model, UI/UX,
+   design, feature, decision-log, implementation-log, and doc-health docs.
+3. Link important intake files from `Evidence`, `Plan Provenance`, or
+   `Source artifacts` when they materially shaped the accepted direction.
+4. Ask the user only for high-impact missing foundations that would change the
+   project shape, such as primary user, first useful workflow, platform target,
+   privacy constraints, success criteria, or explicit non-goals.
+5. Record lower-risk unknowns in `Open Questions` and `docs/doc-health.md`.
+
+Do not treat raw intake as canonical truth. Leave raw files intact unless the
+user asks to reorganize them. If intake content becomes a maintained design,
+feature, or requirements document, move or summarize it into the canonical docs
+and apply normal naming, metadata, link, and verification rules.
+
 ## Interrupted Work Recovery Protocol
 
 Use this protocol when an agent crashes, a session is interrupted, work starts from a different tool, or the current working tree contains changes the new agent did not make.

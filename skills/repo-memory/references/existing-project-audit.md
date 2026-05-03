@@ -41,6 +41,7 @@ Capture:
 - test suites and what they imply about intended behavior
 - operational artifacts such as Docker, CI, deploy config, and setup scripts
 - existing docs and whether they are current, stale, or partial
+- raw intake material such as brainstorms, copied chat notes, user-provided project dumps, or planning-agent output under `docs/intake/`
 - companion workflow artifacts such as Obra Superpowers specs and plans under `docs/superpowers/`
 - whether agent-specific instruction files duplicate mutable project knowledge that should instead live in the canonical docs set
 - stale docs, conflicting docs, renamed docs, superseded work, and verification gaps that should be captured in `docs/doc-health.md`
@@ -175,6 +176,11 @@ When the feature logic is complex, also create or update:
 If companion specs or plans exist under `docs/superpowers/`, link them from the
 owning feature or design doc and promote accepted outcomes into canonical Repo
 Memory docs instead of duplicating whole artifacts.
+
+If raw intake exists under `docs/intake/`, review it before planning or
+implementation, then promote accepted user statements, decisions, requirements,
+feature ideas, constraints, and unresolved high-impact questions into the owning
+canonical docs. Leave unaccepted or speculative intake as source material.
 
 When feature work stopped or changed direction, use terminal statuses instead of deleting history:
 

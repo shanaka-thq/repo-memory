@@ -79,6 +79,12 @@ def docs_readme(project_name: str) -> str:
         - [Non-functional requirements](./requirements/non-functional-requirements.md)
         - [Feature template](./features/_template.md)
 
+        ## Intake Inbox
+
+        - [Raw intake](./intake/README.md) is the low-friction place for
+          brainstorms, project notes, chat exports, and planning dumps before
+          accepted facts are promoted into the baseline docs.
+
         ## Maintenance Rules
 
         - Keep durable project facts in this docs tree.
@@ -86,6 +92,38 @@ def docs_readme(project_name: str) -> str:
         - Update feature docs, implementation log, decision log, and doc health
           when project reality changes.
         - Keep agent instruction files thin and linked here.
+        """
+    )
+
+
+def intake_readme() -> str:
+    return clean(
+        """
+        # Intake
+
+        Use this folder as a low-friction inbox for raw brainstorms, project
+        notes, chat exports, AI plans, sketches, or imported planning docs that
+        have not yet been promoted into canonical Repo Memory docs.
+
+        ## How to Use
+
+        - Drop raw source material here when it is useful but not yet structured.
+        - Prefer kebab-case names for authored Markdown, but imported files can
+          keep their source names.
+        - Do not treat raw intake as canonical project truth.
+        - Before building from an intake item, extract accepted facts into the
+          relevant baseline, requirements, design, decision, feature, or handoff
+          docs.
+        - Link important intake files from `Evidence`, `Plan Provenance`, or
+          `Source artifacts` where they shaped accepted project direction.
+        - Record reviewed intake, unresolved questions, and stale or superseded
+          source material in `../doc-health.md` when it affects future work.
+
+        ## Suggested File Names
+
+        - `YYYY-MM-DD-initial-brainstorm.md`
+        - `YYYY-MM-DD-planning-notes.md`
+        - `YYYY-MM-DD-ai-plan.md`
         """
     )
 
@@ -306,7 +344,10 @@ def agents_md() -> str:
         1. Read `docs/README.md`.
         2. Read `docs/project-overview.md` and `docs/architecture.md`.
         3. Read `docs/feature-registry.md`.
-        4. Read the active `docs/features/<feature-slug>.md` before changing
+        4. If `docs/intake/` contains raw brainstorms, project notes, or plans,
+           review them and promote accepted facts into the canonical docs before
+           building from them.
+        5. Read the active `docs/features/<feature-slug>.md` before changing
            related code.
 
         ## Maintenance
@@ -328,6 +369,7 @@ def build_files(
 ) -> list[ScaffoldFile]:
     files = [
         ScaffoldFile("docs/README.md", docs_readme(project_name)),
+        ScaffoldFile("docs/intake/README.md", intake_readme()),
         ScaffoldFile("docs/project-overview.md", project_overview(today)),
         ScaffoldFile(
             "docs/architecture.md",
@@ -424,6 +466,7 @@ def build_files(
                 | Doc | Last verified | Evidence | Confidence | Notes |
                 | --- | --- | --- | --- | --- |
                 | `project-overview.md` | unknown | unknown | low | Replace scaffold placeholders. |
+                | `intake/README.md` | {today} | scaffold-docs.py | low | Raw intake inbox created for unstructured source material. |
 
                 ## Known Stale Areas
 
@@ -442,6 +485,7 @@ def build_files(
                 | Date | Change | Evidence |
                 | --- | --- | --- |
                 | {today} | Created Repo Memory documentation skeleton. | scaffold-docs.py |
+                | {today} | Created raw intake inbox for brainstorms and planning dumps. | `docs/intake/README.md` |
                 """
             ),
         ),

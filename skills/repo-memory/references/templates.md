@@ -7,6 +7,8 @@ Use these templates when the repository does not already define a stronger forma
 ```text
 docs/
 ├── README.md
+├── intake/                         # raw brainstorms, project dumps, and planning output
+│   └── README.md
 ├── project-overview.md
 ├── architecture.md
 ├── interfaces-and-contracts.md
@@ -63,6 +65,8 @@ For existing projects, use the baseline files as the comprehensive minimum and p
 
 The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/reviews/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, substantive reviews, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer. Do not create empty optional folders or index-only optional folders as placeholders.
 
+`docs/intake/` is also different: it is a raw source-material inbox for brainstorms, copied chat notes, imported plans, and user-provided project dumps. Use it to collect context without forcing a template, then promote accepted facts into canonical Repo Memory docs before building from them.
+
 `docs/superpowers/` is different: it is an optional companion workflow folder for Obra Superpowers specs and plans, not a Repo Memory deep-dive folder. Link those artifacts from owning feature or design docs and promote accepted outcomes into canonical Repo Memory docs.
 
 ## Empty Repository Scaffold
@@ -78,8 +82,9 @@ Resolve `<skill-dir>` to the installed `repo-memory` skill directory. When
 working from this repository root, use `skills/repo-memory/scripts/...`.
 
 The scaffold creates the required baseline docs, `docs/requirements/`,
-`docs/features/_template.md`, initial decision and implementation log entries,
-and a doc-health note that marks the placeholders as unverified. Add
+`docs/features/_template.md`, `docs/intake/README.md`, initial decision and
+implementation log entries, and a doc-health note that marks the placeholders
+as unverified. Add
 `--include-user-stories` when users, actors, journeys, or acceptance paths are
 already known. Use `--project-name "<name>"` when the target directory name is
 not the right project name.
@@ -87,6 +92,39 @@ not the right project name.
 After scaffolding, replace TODOs only with confirmed facts, user statements, or
 clearly marked inference. Keep unknowns explicit until implementation evidence
 exists.
+
+## Raw Intake README Template
+
+Use this template for `docs/intake/README.md` when a repo needs a low-friction
+place for brainstorms, planning dumps, copied chat notes, or imported project
+context before those details are promoted into the canonical docs.
+
+```md
+# Intake
+
+Use this folder as a low-friction inbox for raw brainstorms, project notes,
+chat exports, AI plans, sketches, or imported planning docs that have not yet
+been promoted into canonical Repo Memory docs.
+
+## How to Use
+
+- Drop raw source material here when it is useful but not yet structured.
+- Prefer kebab-case names for authored Markdown, but imported files can keep
+  their source names.
+- Do not treat raw intake as canonical project truth.
+- Before building from an intake item, extract accepted facts into the relevant
+  baseline, requirements, design, decision, feature, or handoff docs.
+- Link important intake files from `Evidence`, `Plan Provenance`, or `Source artifacts`
+  where they shaped accepted project direction.
+- Record reviewed intake, unresolved questions, and stale or superseded source
+  material in `../doc-health.md` when it affects future work.
+
+## Suggested File Names
+
+- `YYYY-MM-DD-initial-brainstorm.md`
+- `YYYY-MM-DD-planning-notes.md`
+- `YYYY-MM-DD-ai-plan.md`
+```
 
 ## Common Metadata Block
 
@@ -116,7 +154,8 @@ This project uses the `docs/` folder as the canonical source of truth for archit
 When starting or resuming work:
 1. Read `docs/README.md`.
 2. Read `docs/project-overview.md` and `docs/architecture.md`.
-3. Read `docs/feature-registry.md` and the active `docs/features/<feature-slug>.md` before making changes.
+3. Review `docs/intake/` if it contains raw brainstorms, project notes, or plans relevant to the work, then promote accepted facts into canonical docs.
+4. Read `docs/feature-registry.md` and the active `docs/features/<feature-slug>.md` before making changes.
 
 When making changes:
 - Update the active feature doc as the work changes.
@@ -132,6 +171,7 @@ Before stopping:
 ## Deep-Dive Placement Rules
 
 - Use `docs/requirements/user-stories-and-use-cases.md` for actors, user stories, end-to-end use cases, alternative flows, and acceptance paths in user-facing or workflow-heavy projects.
+- Use `docs/intake/` for raw brainstorm dumps, copied chat notes, imported plans, sketches, and user-provided project context before accepted content is promoted into canonical docs.
 - Use `docs/local-development.md` for local setup, scripts, tooling, fixtures, codegen, local services, and contributor troubleshooting.
 - Use `docs/observability-and-instrumentation.md` for logs, metrics, traces, analytics events, audit events, dashboards, alerts, retention, sampling, and known blind spots.
 - Use `docs/diagrams/` for maintained `.mmd`, `.drawio`, exported SVG or PNG assets, and diagram indexes.

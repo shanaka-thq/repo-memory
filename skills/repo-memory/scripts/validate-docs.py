@@ -112,6 +112,10 @@ OPTIONAL_DEEP_DIVE_DIRS = [
     "docs/ui-ux",
 ]
 
+RAW_INTAKE_DIRS = [
+    Path("docs/intake"),
+]
+
 GENERATED_ARTIFACT_NAMES = {
     "__pycache__",
     ".pytest_cache",
@@ -210,10 +214,20 @@ def is_external_link(target: str) -> bool:
     return target.startswith(("http://", "https://", "mailto:", "#"))
 
 
+def is_raw_intake_path(root: Path, path: Path) -> bool:
+    try:
+        rel = path.relative_to(root)
+    except ValueError:
+        return False
+    return any(rel == intake or intake in rel.parents for intake in RAW_INTAKE_DIRS)
+
+
 def check_relative_links(root: Path) -> list[str]:
     errors: list[str] = []
     for md in root.rglob("*.md"):
         if ".git" in md.parts:
+            continue
+        if is_raw_intake_path(root, md):
             continue
         text = strip_fenced_code(md.read_text(encoding="utf-8"))
         for target in LINK.findall(text):
@@ -243,6 +257,8 @@ def check_docs_kebab_case(root: Path) -> list[str]:
     errors: list[str] = []
     for path in docs.rglob("*"):
         if not path.is_file():
+            continue
+        if is_raw_intake_path(root, path):
             continue
         rel = path.relative_to(docs)
         for part in rel.parts:

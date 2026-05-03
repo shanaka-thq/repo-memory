@@ -21,8 +21,10 @@ This repo uses the Repo Memory standard.
 When starting work:
 1. Read `docs/README.md`.
 2. Read `docs/project-overview.md` and `docs/architecture.md`.
-3. Check `docs/feature-registry.md` and the active feature doc.
-4. Follow `Resume Context`, `Validation`, and `Next Agent Handoff`.
+3. Review `docs/intake/` if it contains raw brainstorms, project notes, or
+   plans relevant to the work, then promote accepted facts into canonical docs.
+4. Check `docs/feature-registry.md` and the active feature doc.
+5. Follow `Resume Context`, `Validation`, and `Next Agent Handoff`.
 
 When changing behavior:
 - Update affected baseline docs.
@@ -40,8 +42,9 @@ When changing behavior:
 1. Read `CLAUDE.md` or other repo-level instructions.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
 3. Check `docs/doc-health.md` for stale or conflicting docs.
-4. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
-5. If the docs are missing, stale, or inconsistent, apply the workflow from
+4. Review `docs/intake/` when it contains raw brainstorms, project notes, or plans relevant to the work.
+5. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
+6. If the docs are missing, stale, or inconsistent, apply the workflow from
    [`SKILL.md`](../SKILL.md).
 
 ## When Resuming Work

@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.7
+Version: 1.8
 
 ## Overview
 
@@ -32,7 +32,7 @@ Resolve `<skill-dir>` to the directory containing this `SKILL.md`. When working 
 Prefer one stable documentation system per repository:
 
 - one source of truth for baseline project-level docs
-- one registry for tracked features
+- one registry for tracked features and the ranked next-work queue
 - one primary feature document for ongoing work
 - optional deep-dive docs for project-specific topics, complex subsystems, and feature or component logic
 - one implementation log for what actually landed
@@ -150,6 +150,7 @@ Comprehensive documentation is better than sparse documentation, but unsupported
 Treat the maintained project docs as the canonical handoff surface across coding agents.
 
 - keep durable project facts, active feature state, validation status, blockers, and next steps in the project docs, not only in chat history
+- keep `docs/feature-registry.md` current as the ranked work queue when a user wants an agent to choose the next task
 - if `docs/intake/` exists, inspect relevant raw brainstorms, notes, and plans before greenfield planning or related implementation, then promote accepted facts into canonical docs before building from them
 - keep agent-specific instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar files thin; they should tell agents where the canonical docs live and how to update them
 - if multiple agent entrypoint files exist, align them to the same documentation workflow instead of letting each file define a competing source of truth
@@ -261,8 +262,8 @@ Treat intake files as source material, not truth:
 
 Before starting implementation from a greenfield intake dump, make sure the
 canonical docs now answer the project goal, target users or actors, first
-usable scope, major constraints, tracked features, and next safe step. The
-builder should not have to reverse-engineer those from raw intake.
+usable scope, major constraints, tracked features, and ranked next-work queue.
+The builder should not have to reverse-engineer those from raw intake.
 
 ### 2. Run a documentation audit
 
@@ -409,14 +410,15 @@ For any non-trivial feature, bug fix, integration, refactor, or research thread 
 
 1. Find or create the feature entry in `docs/feature-registry.md`.
 2. Find or create `docs/features/<feature-slug>.md`.
-3. If the feature changes user journeys, acceptance behavior, or UI states, update `docs/requirements/user-stories-and-use-cases.md` or `docs/ui-ux/...` when those docs exist or should exist.
-4. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
-5. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
-6. If the feature depends on a plan produced by another agent or tool, record the plan provenance and implementation pickup in the feature or design doc before editing.
-7. If a specialist, second-agent, human, or tool review materially informs the work, add a short `Review Log` entry or link a substantive `docs/reviews/<review-slug>.md` record.
-8. Keep the feature document current during the work.
-9. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
-10. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
+3. If no specific task was assigned, choose the lowest-rank row in the feature registry `Next Work Queue` where `Ready` is `ready`. Treat `verify-first` as a verification-only pickup, and ask for human direction before implementing `needs-human` or `blocked` rows.
+4. If the feature changes user journeys, acceptance behavior, or UI states, update `docs/requirements/user-stories-and-use-cases.md` or `docs/ui-ux/...` when those docs exist or should exist.
+5. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
+6. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
+7. If the feature depends on a plan produced by another agent or tool, record the plan provenance and implementation pickup in the feature or design doc before editing.
+8. If a specialist, second-agent, human, or tool review materially informs the work, add a short `Review Log` entry or link a substantive `docs/reviews/<review-slug>.md` record.
+9. Keep the feature document and feature registry queue current during the work.
+10. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. Update or remove the queue row so the next cloud agent does not pick completed work. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
+11. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
 
 Use one explicit status model:
 
@@ -460,6 +462,7 @@ Use this mapping:
 - enduring technical choices change: update decision log
 - meaningful work lands: update implementation log
 - active feature state changes: update feature doc and feature registry
+- next-task priority or readiness changes: update the feature registry `Next Work Queue`
 - docs are created, materially changed, verified, found stale, renamed, or superseded: update `docs/doc-health.md`
 - doc type, ownership, status, evidence, or verification metadata changes: update the document metadata according to `documentation-metadata-schema.md`
 
@@ -486,6 +489,7 @@ Before stopping, make sure another agent can determine:
 - what changed
 - what is in progress
 - what is blocked
+- what ranked queue item should be picked up next
 - where project-specific or feature-specific logic is documented
 - what the next safe step is
 - which docs are canonical and which agent-specific files only point to them
@@ -572,6 +576,7 @@ A good project documentation setup allows a new agent to answer these in under t
 - Which docs are current, stale, or known to conflict with implementation?
 - What are the current quality and operational constraints?
 - What feature work is active?
+- What is the first ready item in the ranked next-work queue?
 - Where are the key edge cases, failure modes, and UI states documented?
 - Where is the tricky feature or component logic documented?
 - What design docs explain the major solution shapes or pending changes?
@@ -596,7 +601,7 @@ Use this strategy when no better repo-specific process exists:
 4. populate each standard doc with current known state from evidence
 5. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
 6. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots
-7. create `docs/feature-registry.md`
+7. create `docs/feature-registry.md` with a `Next Work Queue` and full feature list
 8. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, `docs/reviews/`, or `docs/ui-ux/` only for topics that need deeper treatment
 9. create per-feature docs for active, recent, or important work
 10. add feature-level deep-dive docs only when the feature has meaningful internal logic to preserve

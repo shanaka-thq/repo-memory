@@ -164,7 +164,7 @@ Use this table to decide where any piece of content belongs:
 | Auth, secrets, PII, threat model | `docs/security-and-privacy.md` |
 | Durable technical choices with rationale | `docs/decision-log.md` |
 | What landed and when | `docs/implementation-log.md` |
-| All tracked features and their status | `docs/feature-registry.md` |
+| All tracked features, their status, and the ranked next-work queue | `docs/feature-registry.md` |
 | Raw brainstorms, copied chat notes, user-provided project dumps, sketches, and imported planning output | `docs/intake/`, then promote accepted outcomes into the owning canonical docs |
 | Feature goal, status, checklist, handoff | `docs/features/<feature-slug>.md` |
 | Canonical resume state for interrupted work | `docs/features/<feature-slug>.md` |
@@ -189,6 +189,8 @@ Use this table to decide where any piece of content belongs:
 - Metadata should identify doc type, owner, status, last updated date, verification state, confidence, canonical source, and related docs.
 - If metadata is unknown, write `unknown` instead of leaving the field blank.
 - Feature metadata must use the same slug and status as `docs/feature-registry.md`.
+- `docs/feature-registry.md` must include `Next Work Queue` and `Feature List` sections.
+- The `Next Work Queue` must use `ready`, `verify-first`, `needs-human`, or `blocked` readiness values.
 - Stale, superseded, deprecated, or rolled-back docs must include a replacement pointer or correction note.
 
 ## Diagram File Rules

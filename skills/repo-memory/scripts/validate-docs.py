@@ -89,6 +89,10 @@ REQUIRED_HEADINGS = {
         "Privacy and Retention",
         "Known Blind Spots",
     ],
+    "docs/feature-registry.md": [
+        "Next Work Queue",
+        "Feature List",
+    ],
 }
 
 OPTIONAL_REQUIRED_HEADINGS = {
@@ -150,6 +154,13 @@ ACTIVE_FEATURE_STATUSES = {
     "blocked",
 }
 
+ALLOWED_QUEUE_READY = {
+    "ready",
+    "verify-first",
+    "needs-human",
+    "blocked",
+}
+
 COMPLETED_FEATURE_EVIDENCE_PATTERNS = [
     re.compile(pattern, re.IGNORECASE | re.MULTILINE)
     for pattern in [
@@ -179,6 +190,7 @@ FENCE_LINE = re.compile(r"^( {0,3})([`~]{3,})(.*)$")
 VERSION = re.compile(r"^Version:\s*(\d+\.\d+)", re.MULTILINE)
 HEADING = re.compile(r"^\s{0,3}#{2,6}\s+(.+?)\s*$", re.MULTILINE)
 STATUS = re.compile(r"^\s*Status:\s*([a-z_]+)\b", re.MULTILINE | re.IGNORECASE)
+SECTION = re.compile(r"^\s{0,3}##\s+(.+?)\s*$", re.MULTILINE)
 
 
 def strip_fenced_code(text: str) -> str:
@@ -389,6 +401,71 @@ def check_terminal_feature_handoff(root: Path) -> list[str]:
     return warnings
 
 
+def split_table_row(line: str) -> list[str]:
+    return [cell.strip().strip("`") for cell in line.strip().strip("|").split("|")]
+
+
+def check_next_work_queue(root: Path) -> list[str]:
+    registry = root / "docs" / "feature-registry.md"
+    if not registry.exists():
+        return []
+
+    text = strip_fenced_code(registry.read_text(encoding="utf-8"))
+    headings = list(SECTION.finditer(text))
+    queue_start = None
+    queue_end = len(text)
+    for index, heading in enumerate(headings):
+        if heading.group(1).strip() == "Next Work Queue":
+            queue_start = heading.end()
+            if index + 1 < len(headings):
+                queue_end = headings[index + 1].start()
+            break
+    if queue_start is None:
+        return []
+
+    warnings: list[str] = []
+    rows = [
+        split_table_row(line)
+        for line in text[queue_start:queue_end].splitlines()
+        if line.strip().startswith("|") and line.strip().endswith("|")
+    ]
+    data_rows = [
+        row for row in rows
+        if row and not all(set(cell) <= {"-", ":", " "} for cell in row)
+        and row[0].lower() != "rank"
+    ]
+
+    for row in data_rows:
+        if len(row) < 9:
+            warnings.append(
+                "docs/feature-registry.md: Next Work Queue row has fewer "
+                "than 9 columns"
+            )
+            continue
+        ready = row[4].lower()
+        if ready not in ALLOWED_QUEUE_READY:
+            allowed = ", ".join(sorted(ALLOWED_QUEUE_READY))
+            warnings.append(
+                "docs/feature-registry.md: Next Work Queue row has invalid "
+                f"Ready value '{row[4]}' (allowed: {allowed})"
+            )
+        if ready in {"ready", "verify-first"}:
+            missing = []
+            if not row[5] or row[5].lower() == "todo":
+                missing.append("Why next")
+            if not row[6] or row[6].lower() == "todo":
+                missing.append("Next safe step")
+            if not row[7] or row[7].lower() == "todo":
+                missing.append("Canonical doc")
+            if missing:
+                warnings.append(
+                    "docs/feature-registry.md: Next Work Queue "
+                    f"'{row[1] or 'unnamed'}' is {ready} but missing "
+                    + ", ".join(missing)
+                )
+    return warnings
+
+
 def check_skill_version(root: Path) -> list[str]:
     package_root = root / SKILL_PACKAGE if (root / SKILL_PACKAGE).exists() else root
     skill = package_root / "SKILL.md"
@@ -448,6 +525,7 @@ def check_project_warnings(root: Path) -> list[str]:
     warnings.extend(check_generated_artifacts(root))
     warnings.extend(check_feature_statuses(root))
     warnings.extend(check_terminal_feature_handoff(root))
+    warnings.extend(check_next_work_queue(root))
     return warnings
 
 

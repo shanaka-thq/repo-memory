@@ -97,6 +97,7 @@ Feature docs and feature registry entries must use the feature statuses from `do
 | `user-stories-and-use-cases` | `Actors`, `Personas or User Segments`, `User Stories`, `Primary Use Cases`, `Alternative flows`, `Failure states`, `Acceptance notes` |
 | `observability-and-instrumentation` | `Logs`, `Metrics`, `Traces`, `Product Analytics Events`, `Audit Events`, `Dashboards and Alerts`, `Privacy and Retention`, `Known Blind Spots` |
 | `feature` | `Feature slug`, `Priority`, `Validation status`, `Next safe step` |
+| `feature-registry` | `Next Work Queue`, `Feature List` |
 | `decision-log` | `Decision ID format`, `Confidence rule`, `Supersession rule` |
 | `implementation-log` | `Entry date`, `Change summary`, `Evidence` |
 | `doc-health` | `Last full audit`, `Known stale areas`, `Open doc conflicts` |

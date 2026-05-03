@@ -57,7 +57,8 @@ def docs_readme(project_name: str) -> str:
 
         1. Read this file.
         2. Read `project-overview.md` and `architecture.md`.
-        3. Read `feature-registry.md`.
+        3. Read `feature-registry.md`; when no task is assigned, pick the
+           first `ready` row in `Next Work Queue`.
         4. Read the active `features/<feature-slug>.md` before changing related code.
 
         ## Baseline Docs
@@ -89,6 +90,8 @@ def docs_readme(project_name: str) -> str:
 
         - Keep durable project facts in this docs tree.
         - Mark unknowns explicitly instead of guessing.
+        - Keep `feature-registry.md` current as the ranked next-work queue for
+          future agents.
         - Update feature docs, implementation log, decision log, and doc health
           when project reality changes.
         - Keep agent instruction files thin and linked here.
@@ -343,7 +346,8 @@ def agents_md() -> str:
 
         1. Read `docs/README.md`.
         2. Read `docs/project-overview.md` and `docs/architecture.md`.
-        3. Read `docs/feature-registry.md`.
+        3. Read `docs/feature-registry.md`; when no task is assigned, pick the
+           first `ready` row in `Next Work Queue`.
         4. If `docs/intake/` contains raw brainstorms, project notes, or plans,
            review them and promote accepted facts into the canonical docs before
            building from them.
@@ -353,6 +357,7 @@ def agents_md() -> str:
         ## Maintenance
 
         - Keep durable project facts in `docs/`, not only in chat history.
+        - Keep `docs/feature-registry.md` current as the ranked next-work queue.
         - Update feature docs, `docs/implementation-log.md`,
           `docs/decision-log.md`, and `docs/doc-health.md` when warranted.
         - Mark inferred or unknown facts explicitly.
@@ -630,6 +635,17 @@ def build_files(
             + "\n\n"
             + clean(
                 f"""
+                ## Next Work Queue
+
+                | Rank | Work item | Type | Status | Ready | Why next | Next safe step | Canonical doc | Last verified |
+                | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+                Ready values: `ready`, `verify-first`, `needs-human`, `blocked`.
+                Pick the lowest-rank `ready` row when no task is assigned. Use
+                `verify-first` for inspection-only pickup until evidence is refreshed.
+
+                ## Feature List
+
                 | Feature | Slug | Status | Priority | Last updated | Notes |
                 | --- | --- | --- | --- | --- | --- |
 

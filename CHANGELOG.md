@@ -10,6 +10,23 @@ Minor versions add non-breaking content. Major versions restructure the workflow
 
 ---
 
+## [1.8] - 2026-05-03
+
+### Added
+
+- Added a ranked `Next Work Queue` to `docs/feature-registry.md` so cloud
+  agents can pick the first ready repo task without prior chat context.
+- Added readiness values for queue items: `ready`, `verify-first`,
+  `needs-human`, and `blocked`.
+
+### Changed
+
+- Updated the standard, skill workflow, templates, scaffold output, examples,
+  and agent guides so the feature registry owns both feature status and
+  next-work pickup state.
+- Updated validation to require `Next Work Queue` and `Feature List` sections
+  in adopted project feature registries and warn on malformed queue rows.
+
 ## [1.7] - 2026-05-03
 
 ### Added

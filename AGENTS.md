@@ -42,7 +42,7 @@ When a user asks you to apply this skill to a target repo:
 7. **Enforce the rules** in `skills/repo-memory/references/docs-structure-rules.md` for all file names, folder names, ownership decisions, and placement decisions.
 8. **Bootstrap empty repos** with `python3 skills/repo-memory/scripts/scaffold-docs.py <repo> --with-agents` when there is no implementation evidence yet.
 9. **Keep one canonical owner per capability** — preserve useful existing docs, link them from the maintained docs set, and keep agent-specific instruction files pointed into the ownership map instead of duplicating mutable project facts.
-10. **Track doc health** — use `docs/doc-health.md` in target repos to record verification state, stale docs, conflicts, renames, superseded work, and duplicate-owner migrations.
+10. **Track doc health & stop drift** — automatically run `python3 skills/repo-memory/scripts/validate-docs.py --project-docs --strict` at the start and end of your work. Fix any validation errors or drift before proceeding. Use `docs/doc-health.md` in target repos to record verification state, stale docs, conflicts, renames, superseded work, and duplicate-owner migrations.
 11. **Use metadata consistently** — apply `skills/repo-memory/references/documentation-metadata-schema.md` so doc type, status, owner, verification, evidence, and related docs are recorded predictably.
 12. **Keep next work obvious** — keep `docs/feature-registry.md` current with a ranked `Next Work Queue`; cloud agents should pick the first `ready` row when no task is assigned.
 13. **Leave the repo resumable** — always close with current handoff notes in the active feature doc before ending a session.

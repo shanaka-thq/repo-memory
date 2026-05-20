@@ -550,6 +550,12 @@ Before stopping, make sure another agent can determine:
 
 If the docs do not answer those quickly, improve them before ending the session.
 
+To automatically catch and stop drift, **you must run the validator** at the start and end of your session:
+```bash
+python3 <skill-dir>/scripts/validate-docs.py --project-docs --strict
+```
+Fix any drift, broken links, or misplaced plans before handing off.
+
 ## Deep-Dive Doc Rules
 
 Use deep-dive docs deliberately:

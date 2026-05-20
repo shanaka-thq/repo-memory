@@ -609,6 +609,47 @@ def check_project_docs(root: Path, adoption_level: str = "baseline") -> list[str
     return errors
 
 
+def check_plan_placement_drift(root: Path) -> list[str]:
+    warnings: list[str] = []
+    
+    for d in ["plan", "plans", "spec", "specs", "superpowers"]:
+        if (root / d).is_dir():
+            warnings.append(
+                f"{d}/: prohibited plan/spec directory at repo root. "
+                "Move companion artifacts to docs/superpowers/plans/ or docs/superpowers/specs/"
+            )
+            
+    for d in ["plan", "plans", "spec", "specs"]:
+        if (root / "docs" / d).is_dir():
+            warnings.append(
+                f"docs/{d}/: prohibited plan/spec directory. "
+                "Move companion artifacts to docs/superpowers/plans/ or docs/superpowers/specs/"
+            )
+            
+    for f in ["plan.md", "plans.md", "spec.md", "specs.md"]:
+        if (root / f).is_file():
+            warnings.append(
+                f"{f}: prohibited plan/spec file at repo root. "
+                "Move to docs/superpowers/plans/ or docs/superpowers/specs/"
+            )
+        if (root / "docs" / f).is_file():
+            warnings.append(
+                f"docs/{f}: prohibited plan/spec file. "
+                "Move to docs/superpowers/plans/ or docs/superpowers/specs/"
+            )
+            
+    superpowers_dir = root / "docs" / "superpowers"
+    if superpowers_dir.is_dir():
+        for p in superpowers_dir.iterdir():
+            if p.is_file() and p.name != "README.md" and not p.name.startswith("."):
+                warnings.append(
+                    f"docs/superpowers/{p.name}: plan/spec file directly in superpowers folder. "
+                    "Move to docs/superpowers/plans/ or docs/superpowers/specs/"
+                )
+                
+    return warnings
+
+
 def check_project_warnings(root: Path) -> list[str]:
     warnings: list[str] = []
     warnings.extend(check_empty_optional_deep_dive_dirs(root))
@@ -617,6 +658,7 @@ def check_project_warnings(root: Path) -> list[str]:
     warnings.extend(check_terminal_feature_handoff(root))
     warnings.extend(check_next_work_queue(root))
     warnings.extend(check_canonical_ownership_map(root))
+    warnings.extend(check_plan_placement_drift(root))
     return warnings
 
 

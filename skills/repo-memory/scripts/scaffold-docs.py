@@ -370,17 +370,20 @@ def agents_md() -> str:
         ## Startup
 
         1. Read `docs/README.md`.
-        2. Follow the Canonical Ownership Map to the owner for the current task.
-        3. Read `docs/feature-registry.md`; when no task is assigned, pick the
+        2. Run the validator (`python3 skills/repo-memory/scripts/validate-docs.py --project-docs --strict` when installed) to check for documentation drift.
+        3. Follow the Canonical Ownership Map to the owner for the current task.
+        4. Read `docs/feature-registry.md`; when no task is assigned, pick the
            first `ready` row in `Next Work Queue`.
-        4. If `docs/intake/` contains raw brainstorms, project notes, or plans,
+        5. If `docs/intake/` contains raw brainstorms, project notes, or plans,
            review them and promote accepted facts into the mapped owner before
            building from them.
-        5. Read the active `docs/features/<feature-slug>.md` before changing
+        6. Read the active `docs/features/<feature-slug>.md` before changing
            related code.
 
         ## Maintenance
 
+        - Run the validator (`python3 skills/repo-memory/scripts/validate-docs.py --project-docs --strict` when installed) before ending a session to fix drift or broken links.
+        - Place companion plans/specs only in `docs/superpowers/plans/` or `docs/superpowers/specs/` (or `docs/designs/`).
         - Keep durable project facts in their mapped owner, not only in chat history.
         - Do not duplicate mutable facts in this file.
         - Keep `docs/feature-registry.md` current as the ranked next-work queue.

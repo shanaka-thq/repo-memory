@@ -8,7 +8,13 @@ and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
 Minor versions add non-breaking content. Major versions restructure the workflow.
 
----
+## [2.1] - 2026-05-20
+
+### Added
+
+- Added automated plan and spec placement rules to `validate-docs.py` to prevent agents from creating plans in arbitrary root or docs directories.
+- Added explicit rules to `docs-structure-rules.md` prohibiting plans and specs from being placed outside of `docs/superpowers/plans/`, `docs/superpowers/specs/`, or `docs/designs/`.
+- Updated the main `AGENTS.md` and `SKILL.md` workflows, `scaffold-docs.py` templates, and `references/templates.md` snippets to require automated drift-checking validator calls at both the start and end of all agent sessions.
 
 ## [2.0] - 2026-05-20
 

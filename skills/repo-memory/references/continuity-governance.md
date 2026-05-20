@@ -6,18 +6,57 @@ Use this reference when documentation changes materially, conflicts with impleme
 
 Keep the documentation system trustworthy over time. The docs should not only describe the project; they should also show when they were verified, what changed, what is stale, what was superseded, and how another agent can continue safely.
 
+## Coexisting with Other Documentation Systems
+
+Repo Memory should complement useful repository documentation, not flatten it.
+
+- preserve strong ADRs, RFCs, architecture notes, wiki pages, support notes,
+  API specs, security docs, and team runbooks when they still add value
+- choose one canonical owner for each documentation capability
+- keep `docs/README.md` updated with the ownership map so another agent can
+  discover owners quickly
+- promote accepted durable outcomes into the mapped canonical owner when
+  external artifacts materially affect current requirements, architecture,
+  validation, or next-step guidance
+- avoid parallel current-state summaries that drift from each other
+
+The goal is one discoverable owner for each kind of current truth, with
+supporting material linked around it rather than replaced for cosmetic reasons.
+
+## Duplicate Ownership Protocol
+
+Use this protocol when two or more docs claim the same current truth.
+
+1. Identify the capability in conflict, such as decisions, API contracts, setup
+   commands, feature state, security posture, or operations.
+2. Choose one canonical owner using current evidence, existing team standards,
+   and the ownership map.
+3. Update `docs/README.md` `Canonical Ownership Map` with that owner.
+4. Convert competing docs into supporting links, indexes, or superseded records.
+5. Remove copied mutable content from adapter files such as `AGENTS.md`,
+   `CLAUDE.md`, `.github/copilot-instructions.md`, and OpenCode rules.
+6. Record the migration in the mapped doc-health owner.
+
+Prefer established world-standard owners when they are healthy. ADRs should
+usually own decisions, OpenAPI or equivalent specs should own API contracts,
+`SECURITY.md` or a threat model should own security policy, and
+`CONTRIBUTING.md` or README setup sections can own local setup when they are
+already maintained.
+
 ## Architecture and Contract Change Lifecycle
 
 For material changes to architecture, interfaces, data model, security posture, operations, local tooling, or documentation structure:
 
-1. Update the directly affected baseline doc.
-2. Update affected deep-dive docs, diagrams, feature docs, and agent instruction pointers.
-3. Add or update a decision-log entry when the change is durable.
-4. Add an implementation-log entry when work landed or behavior changed.
-5. Update `docs/doc-health.md` with verification evidence, known gaps, and stale areas.
+1. Read the ownership map and update the directly affected canonical owner.
+2. Update affected supporting docs, deep-dive docs, diagrams, feature docs, and agent instruction pointers.
+3. Add or update the mapped decision owner when the change is durable.
+4. Add an implementation-history entry when work landed or behavior changed.
+5. Update the mapped doc-health owner with verification evidence, known gaps, duplicate-owner changes, and stale areas.
 6. Record migration, compatibility, rollback, or recovery notes when the change affects existing users, data, deploys, integrations, or future agents.
 
-Do not leave architecture-impacting changes only in a feature doc. Feature docs track active work; baseline docs and decision logs preserve durable project state.
+Do not leave architecture-impacting changes only in a feature doc. Feature docs
+track active work; the mapped architecture and decision owners preserve durable
+project state.
 
 ## Conflict Resolution Protocol
 
@@ -31,9 +70,9 @@ When sources disagree, resolve in this order:
 
 After resolving a conflict:
 
-- update the stale doc
-- add a correction note to `docs/doc-health.md`
-- update decision or implementation logs if the correction changes durable understanding
+- update the stale doc or convert it into a supporting/superseded pointer
+- add a correction note to the mapped doc-health owner
+- update mapped decision or implementation owners if the correction changes durable understanding
 - keep replacement links when an old doc or slug may still be referenced
 
 ## Staleness and Verification Protocol
@@ -84,7 +123,7 @@ Avoid renames unless the current slug is actively misleading.
 
 When renaming or moving docs:
 
-- update every link in baseline docs, feature docs, indexes, diagrams, and agent instruction files
+- update every link in baseline owners, feature docs, indexes, diagrams, and agent instruction files
 - record `Formerly: <old-slug>` in the registry or index
 - keep the old doc only when it contains useful history; mark it `superseded` and link to the replacement
 - update `docs/doc-health.md` with the rename
@@ -95,6 +134,9 @@ When more than one agent may work in the repo:
 
 - active feature docs must include current owner, files or docs being touched, safe parallel work, and areas to avoid
 - another agent should check `docs/feature-registry.md`, active feature docs, and `docs/doc-health.md` before starting related work
+- if no task is assigned, the agent should pick the lowest-rank `ready` row from `docs/feature-registry.md` `Next Work Queue`
+- `verify-first` queue rows are inspection or validation tasks until the agent updates evidence and readiness
+- `needs-human` and `blocked` queue rows should not be implemented without resolving the missing direction or blocker
 - if two handoff notes conflict, prefer the one with newer verification evidence and update the stale note
 - do not overwrite another agent's feature state without reconciling the docs and recording the correction
 
@@ -109,7 +151,7 @@ or when a specialist, second-agent, human, or tool review materially shapes work
 - put short reviews in the owning doc `Review Log`
 - create `docs/reviews/<review-slug>.md` only when the record is substantive, cross-cutting, or likely to be audited later
 - treat plan and review records as advisory evidence until checked against current code, docs, and user intent
-- promote accepted outcomes into the canonical owning docs, such as requirements, UI/UX, architecture, feature, decision-log, or implementation-log docs
+- promote accepted outcomes into the mapped owners, such as requirements, UI/UX, architecture, feature, decision, or implementation-history owners
 - record rejected, adjusted, deferred, or superseded advice so future agents do not rediscover the same review context
 
 When a repository also uses Obra Superpowers, keep `docs/superpowers/` as the companion artifact folder and use Repo Memory docs for current state, accepted decisions, validation, and next-agent handoff. See [superpowers-compatibility.md](./superpowers-compatibility.md).
@@ -124,9 +166,10 @@ Before planning or building from intake material:
 
 1. Read the relevant intake files and identify confirmed user statements,
    accepted direction, assumptions, rejected ideas, and open questions.
-2. Promote accepted durable facts into the owning canonical docs, such as
+2. Promote accepted durable facts into the mapped owners, such as
    `docs/project-overview.md`, requirements, architecture, data model, UI/UX,
-   design, feature, decision-log, implementation-log, and doc-health docs.
+   design, feature, decision-history, implementation-history, and doc-health
+   docs, or into existing owners named by the ownership map.
 3. Link important intake files from `Evidence`, `Plan Provenance`, or
    `Source artifacts` when they materially shaped the accepted direction.
 4. Ask the user only for high-impact missing foundations that would change the
@@ -136,7 +179,7 @@ Before planning or building from intake material:
 
 Do not treat raw intake as canonical truth. Leave raw files intact unless the
 user asks to reorganize them. If intake content becomes a maintained design,
-feature, or requirements document, move or summarize it into the canonical docs
+feature, or requirements document, move or summarize it into the mapped owner
 and apply normal naming, metadata, link, and verification rules.
 
 ## Interrupted Work Recovery Protocol
@@ -174,9 +217,11 @@ Before stopping after documentation work:
 
 - `SKILL.md` version matches a `CHANGELOG.md` entry
 - newly referenced files are linked from `README.md`, `AGENTS.md`, or another discoverable entrypoint
+- `docs/README.md` has a current `Canonical Ownership Map`
+- no capability has two current canonical owners
 - all optional docs folders have indexes
 - no optional docs folder is only an empty index
 - changed docs are represented in `docs/doc-health.md` when applying the standard to a target repo
 - completed features use `implemented`, `verified`, or `shipped` in the feature doc and registry
 - generated artifacts from validation or forward testing are not left in the target repo
-- agent-specific instruction files still point to the canonical docs instead of duplicating mutable state
+- agent-specific instruction files still point to the ownership map instead of duplicating mutable state

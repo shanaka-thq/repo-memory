@@ -6,6 +6,10 @@ Use this reference when creating or refreshing project docs. It defines standard
 
 Every maintained doc should explain what it is, who or what owns it, how current it is, what evidence supports it, and how it relates to other docs. Use these fields as Markdown metadata blocks, not necessarily YAML front matter, unless the target repo already prefers front matter.
 
+Metadata does not override the canonical ownership map. If a doc is supporting
+context rather than the owner for a capability, its `Canonical source` should
+point to the owner instead of claiming ownership itself.
+
 ## Common Metadata Fields
 
 Use this block near the top of every maintained doc:
@@ -33,19 +37,20 @@ Related docs:
 | `Last verified` | Recommended | Last date checked against evidence | `2026-04-28` |
 | `Verified against` | Recommended | Evidence used for verification | `src/`, tests, deploy config |
 | `Confidence` | Recommended | Trust level for current content | `high`, `medium`, `low` |
-| `Canonical source` | Recommended | Where authoritative facts live | `source code`, `decision-log.md`, `API schema` |
+| `Canonical source` | Recommended | Where authoritative facts live for this doc's capability | `docs/adr/`, `openapi.yaml`, `docs/features/search-refresh.md` |
 | `Related docs` | Recommended | Important linked docs | `architecture.md`, `feature-registry.md` |
 
 For plan or review provenance, include `Inputs reviewed` and `Source artifacts`
 when a companion workflow such as Obra Superpowers created separate specs or
 plans. Source artifacts are evidence links; accepted outcomes still belong in
-the canonical owning docs.
+the mapped owner.
 
 ## Allowed Values
 
 ### Doc Type
 
 - `readme`
+- `ownership-map`
 - `project-overview`
 - `architecture`
 - `functional-requirements`
@@ -97,6 +102,7 @@ Feature docs and feature registry entries must use the feature statuses from `do
 | `user-stories-and-use-cases` | `Actors`, `Personas or User Segments`, `User Stories`, `Primary Use Cases`, `Alternative flows`, `Failure states`, `Acceptance notes` |
 | `observability-and-instrumentation` | `Logs`, `Metrics`, `Traces`, `Product Analytics Events`, `Audit Events`, `Dashboards and Alerts`, `Privacy and Retention`, `Known Blind Spots` |
 | `feature` | `Feature slug`, `Priority`, `Validation status`, `Next safe step` |
+| `feature-registry` | `Next Work Queue`, `Feature List` |
 | `decision-log` | `Decision ID format`, `Confidence rule`, `Supersession rule` |
 | `implementation-log` | `Entry date`, `Change summary`, `Evidence` |
 | `doc-health` | `Last full audit`, `Known stale areas`, `Open doc conflicts` |

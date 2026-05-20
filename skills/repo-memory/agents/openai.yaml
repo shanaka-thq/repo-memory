@@ -1,4 +1,4 @@
 interface:
   display_name: "Repo Memory Maintainer"
   short_description: "Audit, standardize, and maintain repo memory docs"
-  default_prompt: "Use $repo-memory to audit this repo, review docs/intake when raw brainstorms or plans exist, refresh canonical docs, preserve custom docs, avoid empty optional docs, and leave handoff notes."
+  default_prompt: "Use $repo-memory to audit this repo, create or update docs/README.md with a Canonical Ownership Map, review docs/intake when raw brainstorms or plans exist, preserve healthy ADRs/specs/runbooks/setup docs/security docs as canonical owners, add only missing handoff surfaces, refresh mapped owners for changed capabilities, keep docs/feature-registry.md ranked with the next ready task, avoid duplicate project facts in agent instructions, and leave handoff notes."

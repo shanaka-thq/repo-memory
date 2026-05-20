@@ -4,22 +4,39 @@ Use this reference when a repository uses Repo Memory together with Obra
 Superpowers or another companion workflow that writes separate spec and plan
 artifacts.
 
-Repo Memory remains the canonical durable memory layer. Companion specs and
-plans remain useful source artifacts, but accepted outcomes must be reflected in
-the owning Repo Memory docs before another agent relies on them as current
-project state.
+Repo Memory remains the durable ownership layer. Companion specs and plans
+remain useful source artifacts, but accepted outcomes must be reflected in the
+mapped canonical owner before another agent relies on them as current project
+state.
+
+This is the same coexistence rule Repo Memory uses for ADRs, RFCs, wiki pages,
+and older agent instruction files: keep useful companion artifacts, but do not
+leave current mutable project truth stranded only in those companion systems.
+When a companion artifact is the owner for a capability, name it in
+`docs/README.md` `Canonical Ownership Map`; otherwise keep it as supporting
+evidence.
 
 ## Default Relationship
 
-| Companion artifact | Repo Memory treatment |
-| --- | --- |
-| `docs/superpowers/specs/<date>-<topic>.md` | Link as source evidence from the owning feature, design, requirements, or project-overview doc. |
-| `docs/superpowers/plans/<date>-<topic>.md` | Link from `Plan Provenance` or the owning design doc and summarize the implementable pickup. |
-| Completed implementation from a plan | Update the feature doc, implementation log, validation notes, and decision log when warranted. |
-| Rejected or superseded spec/plan advice | Record the disposition in the owning feature or design doc so future agents do not rediscover stale advice. |
+| Companion artifact                         | Repo Memory treatment                                                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `docs/superpowers/specs/<date>-<topic>.md` | Link as source evidence from the owning feature, design, requirements, or project-overview doc.             |
+| `docs/superpowers/plans/<date>-<topic>.md` | Link from `Plan Provenance` or the owning design doc and summarize the implementable pickup.                |
+| Completed implementation from a plan       | Update the feature doc, implementation log, validation notes, and decision log when warranted.              |
+| Rejected or superseded spec/plan advice    | Record the disposition in the owning feature or design doc so future agents do not rediscover stale advice. |
 
 Do not copy whole Superpowers plans into Repo Memory docs. Summarize the parts
 that became accepted project state and link the source artifact for provenance.
+
+## Promotion Rule
+
+Use the smallest durable summary that keeps another agent safe:
+
+- keep the full plan or spec in `docs/superpowers/`
+- record accepted requirements, decisions, validation state, and next-step
+  guidance in the mapped owner
+- note when advice was adjusted, rejected, or superseded so future agents do
+  not mistake the companion artifact for current truth
 
 ## Workflow
 
@@ -28,8 +45,8 @@ that became accepted project state and link the source artifact for provenance.
 2. Treat companion specs and plans as advisory until verified against current
    code, current docs, and user intent.
 3. If a companion artifact changes requirements, architecture, UX, contracts,
-   validation, or implementation status, update the canonical owning Repo
-   Memory docs in the same work.
+   validation, or implementation status, update the mapped canonical owner in
+   the same work.
 4. Keep the next safe implementation step in the feature or design doc, not
    only in `docs/superpowers/plans/`.
 5. Update `docs/doc-health.md` when companion artifacts reveal stale docs,
@@ -43,7 +60,8 @@ that became accepted project state and link the source artifact for provenance.
   index rules. It is a companion workflow folder, not a Repo Memory baseline or
   optional deep-dive folder.
 - Use `docs/features/<feature-slug>.md` for the canonical feature state,
-  implementation checklist, validation state, and next-agent handoff.
+  implementation checklist, validation state, and next-agent handoff unless the
+  ownership map names a different owner.
 - Use `docs/designs/<design-slug>.md` when the accepted solution shape is large
   enough to outgrow the feature doc.
 - Use `docs/reviews/<review-slug>.md` only when a review or critique is

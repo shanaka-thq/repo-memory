@@ -8,7 +8,77 @@ and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
 Minor versions add non-breaking content. Major versions restructure the workflow.
 
----
+## [2.1] - 2026-05-20
+
+### Added
+
+- Added automated plan and spec placement rules to `validate-docs.py` to prevent agents from creating plans in arbitrary root or docs directories.
+- Added explicit rules to `docs-structure-rules.md` prohibiting plans and specs from being placed outside of `docs/superpowers/plans/`, `docs/superpowers/specs/`, or `docs/designs/`.
+- Updated the main `AGENTS.md` and `SKILL.md` workflows, `scaffold-docs.py` templates, and `references/templates.md` snippets to require automated drift-checking validator calls at both the start and end of all agent sessions.
+
+## [2.0] - 2026-05-20
+
+### Added
+
+- Added the `Canonical Ownership Map` model so each documentation capability has
+  one named owner, whether that owner is a Repo Memory doc or an existing ADR,
+  API spec, runbook, setup doc, security doc, or product doc.
+- Added
+  [`agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md)
+  with Codex, GitHub Copilot, VS Code, Claude Code, OpenCode, cloud-agent,
+  hook, and CI setup guidance.
+- Added an OpenCode adapter guide in
+  [`skills/repo-memory/agents/opencode.md`](./skills/repo-memory/agents/opencode.md).
+- Added validator support for `--adoption-level continuity` and
+  `--adoption-level baseline`, plus warnings for missing or suspicious
+  ownership maps.
+
+### Changed
+
+- Reframed the standard from a required file baseline to a capability ownership
+  model: Repo Memory must complement existing documentation instead of
+  duplicating world-standard docs.
+- Split adoption into a Level 1 continuity overlay and Level 2 baseline
+  coverage so existing repos can start with shared handoff state before broad
+  baseline migration.
+- Updated the skill workflow, templates, audit guidance, governance guidance,
+  agent adapters, examples, scaffold output, and README guidance around strict
+  no-duplicate ownership.
+
+## [1.9] - 2026-05-20
+
+### Added
+
+- Added progressive-adoption guidance across the standard, skill workflow,
+  references, and examples so existing repos can preserve strong docs and add
+  only the missing handoff surfaces first.
+- Added a partial-adoption example showing how Repo Memory can complement
+  existing documentation rather than replacing it wholesale.
+
+### Changed
+
+- Clarified that Level 0 is valid, adoption is optional, and strict baseline
+  requirements apply when a repo claims Repo Memory conformance.
+- Updated agent guides and prompts to prefer thin aligned instruction files,
+  preserve useful existing docs, and keep mutable project state in the
+  maintained docs layer.
+
+## [1.8] - 2026-05-03
+
+### Added
+
+- Added a ranked `Next Work Queue` to `docs/feature-registry.md` so cloud
+  agents can pick the first ready repo task without prior chat context.
+- Added readiness values for queue items: `ready`, `verify-first`,
+  `needs-human`, and `blocked`.
+
+### Changed
+
+- Updated the standard, skill workflow, templates, scaffold output, examples,
+  and agent guides so the feature registry owns both feature status and
+  next-work pickup state.
+- Updated validation to require `Next Work Queue` and `Feature List` sections
+  in adopted project feature registries and warn on malformed queue rows.
 
 ## [1.7] - 2026-05-03
 

@@ -7,68 +7,11 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
-  release:
-    name: Create Release
+  release-please:
+    name: Release Please
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Extract version from SKILL.md
-        id: version
-        run: |
-          VERSION=$(grep -m1 '^Version:' skills/repo-memory/SKILL.md | sed 's/Version:[[:space:]]*//')
-          if [ -z "$VERSION" ]; then
-            echo "Could not find Version line in SKILL.md" >&2
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Check if tag already exists
-        id: tag_check
-        run: |
-          TAG="${{ steps.version.outputs.tag }}"
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "Tag $TAG already exists — skipping release."
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "Tag $TAG does not exist — will create release."
-          fi
-
-      - name: Extract changelog entry
-        id: changelog
-        if: steps.tag_check.outputs.exists == 'false'
-        run: |
-          TAG="${{ steps.version.outputs.tag }}"
-          # Pull the section for this version from CHANGELOG.md (between this heading and the next)
-          python3 - <<PY
-          import re, pathlib, os
-          tag = os.environ['TAG']
-          version = tag.lstrip('v')
-          text = pathlib.Path('CHANGELOG.md').read_text()
-          pattern = re.compile(
-              rf'(## \[{re.escape(version)}\].*?)(?=\n## \[|\Z)', re.DOTALL
-          )
-          m = pattern.search(text)
-          body = m.group(1).strip() if m else f'Release {tag}'
-          # Write to GITHUB_OUTPUT using multiline syntax
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-              fh.write('body<<EOF\n')
-              fh.write(body + '\n')
-              fh.write('EOF\n')
-          PY
-        env:
-          TAG: ${{ steps.version.outputs.tag }}
-
-      - name: Create GitHub Release
-        if: steps.tag_check.outputs.exists == 'false'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: ${{ steps.version.outputs.tag }}
-          body: ${{ steps.changelog.outputs.body }}
+      - uses: google-github-actions/release-please-action@v4

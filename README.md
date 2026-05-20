@@ -24,6 +24,18 @@ The point is not to create heavy documentation. The point is to make the project
 easier to leave, resume, review, and change without losing why things are being
 built a certain way.
 
+Repo Memory is meant to complement strong existing documentation workflows, not
+declare war on them. If a repo already has useful ADRs, OpenAPI specs,
+architecture notes, runbooks, RFCs, wiki pages, security docs, or agent
+instructions, keep what works. Repo Memory adds a canonical ownership map and
+only the missing handoff surfaces future humans and coding agents need for
+shared state, cross-agent pickup, and safe resumption.
+
+The strict rule is: **one canonical owner per documentation capability**. ADRs
+can own decisions. `CONTRIBUTING.md` can own setup commands. `openapi.yaml` can
+own API contracts. Repo Memory should link to those owners, not create duplicate
+competing summaries.
+
 ## Install and Use
 
 Install Repo Memory from the repository root and select the skill by name:
@@ -58,9 +70,9 @@ governance files, CI, release notes, and public project documentation.
 
 This project provides a portable standard plus one installable skill package:
 
-- [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) defines the portable Repo Memory standard.
+- [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) defines the portable Repo Memory standard and capability ownership model.
 - [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) implements the standard as an agent-facing skill workflow.
-- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, continuity governance, and companion workflow guidance, including interrupted-work recovery.
+- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, continuity governance, agent integration and enforcement, and companion workflow guidance, including interrupted-work recovery.
 - [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
 - [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
 - [`skills/repo-memory/scripts/`](./skills/repo-memory/scripts/) provides empty-repo scaffolding, lightweight local validation, and manual blind forward-testing.
@@ -77,7 +89,11 @@ Use Repo Memory when you want to:
   traces, analytics events, audit events, dashboards, and alerts
 - keep documentation current as features are researched, implemented, paused,
   recovered, or handed off
-- keep one docs layer that humans and different coding agents can share
+- keep a ranked next-work queue so cloud agents can pick the next ready task
+  without burning a session on orientation
+- keep one canonical owner for each project documentation capability
+- keep one docs layer that humans and different coding agents can share without
+  duplicating ADRs, API specs, setup docs, runbooks, or active handoff state
 - give greenfield projects a simple `docs/intake/` inbox for messy brainstorms,
   project dumps, copied chat notes, sketches, and planning output
 - bridge companion spec and plan workflows such as Obra Superpowers without
@@ -86,16 +102,82 @@ Use Repo Memory when you want to:
   verification evidence
 - validate expected docs structure locally or in CI
 
+## Progressive Adoption
+
+Repo Memory can be adopted incrementally.
+
+If a repo already has solid project docs, the first useful step is often not a
+full rewrite. Start by:
+
+1. creating or updating `docs/README.md` with a `Canonical Ownership Map`
+2. naming existing ADRs, specs, runbooks, READMEs, and security docs as owners
+   where they are already strong
+3. adding only the missing cross-agent surfaces, such as
+   `docs/feature-registry.md`, `docs/doc-health.md`, and active feature docs
+4. expanding toward the full baseline only where no good existing owner exists
+
+Full baseline and continuity conformance still matter for repos that want the
+complete standard. Progressive adoption just makes the on-ramp less dramatic
+and more compatible with existing team habits.
+
 ## When to Use It
 
-| Situation | Action |
-| --- | --- |
-| Starting a new project | Run the skill to create the full `docs/` baseline |
-| Dumping greenfield brainstorms or AI plans | Put raw material in `docs/intake/`, then run the skill to promote accepted facts into canonical docs |
-| Onboarding an existing codebase | Run the skill to audit, backfill, and standardize |
-| Adding or resuming a feature | Run the skill to update feature docs and handoff notes |
-| Handing off to another agent | Run the skill to confirm docs are current and resumable |
-| Docs have drifted from code | Run the skill to realign the documentation set |
+| Situation                                                   | Action                                                                                                     |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Starting a new project                                      | Run the scaffold to create a full baseline and ownership map                                               |
+| Dumping greenfield brainstorms or AI plans                  | Put raw material in `docs/intake/`, then run the skill to promote accepted facts into the mapped owner     |
+| Existing repo with strong docs                              | Add an ownership map and continuity surfaces first; do not duplicate ADRs, specs, runbooks, or setup docs  |
+| Onboarding an existing codebase                             | Run the skill to audit evidence, assign owners, backfill only missing capabilities, and record stale areas |
+| Adding or resuming a feature                                | Run the skill to update feature docs, ranked queue, and handoff notes                                      |
+| Handing off to another agent                                | Run the skill to confirm docs are current and resumable                                                    |
+| Asking a cloud agent to pick up work                        | Point it at `docs/feature-registry.md` and tell it to pick the first `ready` row in `Next Work Queue`      |
+| Using Codex, Copilot, Claude, OpenCode, or VS Code together | Add thin tool-specific adapters that all point to `docs/README.md` and the same ownership map              |
+| Docs have drifted from code                                 | Update the single canonical owner, mark stale supporting docs, and record the correction in doc health     |
+
+## When Not to Use It
+
+Repo Memory is optional.
+
+It may be overkill when:
+
+- the repo is tiny and has little durable context beyond the code itself
+- the team already has a strong maintained documentation system and only needs
+  a few minor handoff habits rather than a new Repo Memory ownership map
+- the project is short-lived enough that feature handoff and decision history
+  are not worth the maintenance cost
+
+In those cases, keep the current workflow or adopt only the few Repo Memory
+practices that help, such as a thin agent entrypoint, a feature registry, or a
+hand-off-friendly feature doc.
+
+## Will Agents Update Docs Automatically?
+
+Not just because the skill exists.
+
+The skill helps an agent maintain documentation when that agent has the skill
+installed and chooses to use it. For reliable behavior across different tools,
+commit repo-local instructions and validation:
+
+| Layer          | What to add                                                                              | Why                                                                                             |
+| -------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Canonical docs | `docs/README.md` with a `Canonical Ownership Map`                                        | Tells every human and agent where each kind of truth lives.                                     |
+| Thin adapters  | `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, `opencode.json` when needed | Makes each tool start from the same docs without copying project facts.                         |
+| Validation     | `validate-docs.py` locally or in CI                                                      | Catches missing handoff docs, duplicate ownership rows, stale feature state, and link problems. |
+| Hooks          | Tool-specific lifecycle hooks when available                                             | Useful for reminders or pre-finish checks, but CI is the shared guarantee.                      |
+
+For setup details by tool, read
+[`agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md).
+
+## Use by Environment
+
+| Environment                       | Minimum setup                                                                                               | Expected behavior                                                                                                |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Local Codex                       | Install the skill and commit `AGENTS.md` pointing to `docs/README.md`                                       | Codex reads repo instructions, follows the ownership map, and updates mapped owners when asked to use the skill. |
+| Codex cloud or other cloud agents | Commit `AGENTS.md`, `docs/README.md`, `docs/feature-registry.md`, and active feature docs                   | The agent can pick the first `ready` queue row and resume from committed docs without chat history.              |
+| GitHub Copilot and VS Code        | Add `.github/copilot-instructions.md` and optional `.github/instructions/*.instructions.md` as thin routers | Copilot gets the same docs workflow while project facts stay in the mapped owners.                               |
+| Claude Code                       | Add `CLAUDE.md` that imports or points to `AGENTS.md`                                                       | Claude starts from its expected memory file without duplicating project facts.                                   |
+| OpenCode                          | Use `AGENTS.md`; add `opencode.json` only for shared instruction includes                                   | OpenCode gets project rules from committed files and can combine reusable instruction files.                     |
+| CI or hooks                       | Run `validate-docs.py` with the right `--adoption-level`                                                    | Missed ownership maps, broken links, malformed queue rows, and stale handoff warnings become visible.            |
 
 ## Repository Structure
 
@@ -174,6 +256,7 @@ for the skill workflow.
 5. Use [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) to check naming and placement before committing.
 6. Use [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) when docs conflict, drift, work is interrupted, files need recovery, docs are renamed, or features need terminal-state handling.
 7. Use [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) to keep doc metadata consistent across agents.
+8. Use [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md) to wire Repo Memory into Codex, GitHub Copilot, VS Code, Claude Code, OpenCode, cloud agents, hooks, and CI without creating duplicate sources of truth.
 
 ### Empty Repository Scaffold
 
@@ -185,7 +268,7 @@ python3 skills/repo-memory/scripts/scaffold-docs.py /path/to/repo --with-agents
 
 The scaffold includes `docs/intake/README.md` as a low-friction inbox for raw
 brainstorms, copied chat notes, user-provided project dumps, and planning output
-that still needs to be promoted into canonical docs.
+that still needs to be promoted into mapped owners.
 
 This command is shown from the repository root. If using an installed skill,
 run the script from that installed `repo-memory` skill directory.
@@ -206,15 +289,21 @@ python3 skills/repo-memory/scripts/validate-docs.py --skill-repo .
 Run the validator against a target repo that adopted the standard:
 
 ```bash
-python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo
+python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo --adoption-level baseline
+```
+
+Validate a partial adoption that only claims the continuity overlay:
+
+```bash
+python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo --adoption-level continuity
 ```
 
 Use `--strict` when warnings such as generated artifacts, empty optional
-deep-dive folders, inconsistent feature status metadata, or stale terminal
-feature handoff text should fail the run:
+deep-dive folders, duplicate ownership risks, inconsistent feature status
+metadata, or stale terminal feature handoff text should fail the run:
 
 ```bash
-python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo --strict
+python3 skills/repo-memory/scripts/validate-docs.py --project-docs /path/to/repo --adoption-level continuity --strict
 ```
 
 This command is shown from the repository root. If using an installed skill,
@@ -242,6 +331,9 @@ repo so generated test logs do not contaminate scoring.
 
 - [`skills/repo-memory/examples/existing-project-after/`](./skills/repo-memory/examples/existing-project-after/) shows
   a compact target repo after adoption.
+- [`skills/repo-memory/examples/existing-project-partial/`](./skills/repo-memory/examples/existing-project-partial/) shows
+  partial adoption in a repo that keeps useful existing docs and adds only the
+  missing canonical handoff surfaces.
 - [`skills/repo-memory/examples/multi-agent-handoff/`](./skills/repo-memory/examples/multi-agent-handoff/) shows how
   active feature state should let another agent resume without chat history.
 
@@ -259,8 +351,9 @@ stories, and whether tests cover the behavior people actually care about.
 
 ## Key Principles
 
-- **One place for project context** per project. Avoid overlapping documentation
-  systems when one maintained docs layer is enough.
+- **One owner per capability.** Avoid overlapping documentation systems by
+  naming the one file or folder that owns decisions, contracts, setup,
+  operations, feature state, and handoff state.
 - **Markdown first.** The standard should be readable in the repo without a
   specific AI provider, editor, plugin, or service.
 - **Two layers.** Keep stable project-wide docs concise, then add deep-dive docs
@@ -286,7 +379,8 @@ stories, and whether tests cover the behavior people actually care about.
 
 ## Default Docs Structure
 
-The target docs layout for any project using the Repo Memory standard:
+The target docs layout for a repo that wants the full Repo Memory baseline.
+Existing repos may satisfy some capabilities with existing files instead.
 
 ```text
 docs/
@@ -326,6 +420,10 @@ docs/
 
 See [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) for the full layout, templates, and placement rules.
 
+Existing repos can reach this layout progressively. Keep useful pre-existing
+docs during the transition, name them in the ownership map, then link or migrate
+them deliberately instead of rewriting everything at once.
+
 ## Naming and Structure Rules
 
 All file and folder names in `docs/` must follow strict kebab-case conventions. See [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) for the complete ruleset.
@@ -335,9 +433,9 @@ All file and folder names in `docs/` must follow strict kebab-case conventions. 
 The standard and skill use the same two-number version (`MAJOR.MINOR`) recorded
 as `Version:` in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
-| Change type | Action |
-| --- | --- |
-| New content or non-breaking additions | Increment minor |
+| Change type                                              | Action          |
+| -------------------------------------------------------- | --------------- |
+| New content or non-breaking additions                    | Increment minor |
 | Required baseline changes or structural workflow changes | Increment major |
 
 Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The release body is pulled from [`CHANGELOG.md`](./CHANGELOG.md). Update `CHANGELOG.md` in the same PR that bumps the version.
@@ -349,9 +447,12 @@ Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The rel
 - Version history: [`CHANGELOG.md`](./CHANGELOG.md)
 - AI agent instructions: [`AGENTS.md`](./AGENTS.md)
 - OpenAI Codex guide: [`skills/repo-memory/agents/openai-codex.md`](./skills/repo-memory/agents/openai-codex.md)
+- GitHub Copilot guide: [`skills/repo-memory/agents/github-copilot.md`](./skills/repo-memory/agents/github-copilot.md)
 - Claude Code guide: [`skills/repo-memory/agents/claude-code.md`](./skills/repo-memory/agents/claude-code.md)
+- OpenCode guide: [`skills/repo-memory/agents/opencode.md`](./skills/repo-memory/agents/opencode.md)
 - File templates: [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md)
 - Audit workflow: [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md)
+- Agent integration and enforcement: [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md)
 - Structure rules: [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md)
 - Documentation metadata schema: [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md)
 - Decision reconstruction: [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md)

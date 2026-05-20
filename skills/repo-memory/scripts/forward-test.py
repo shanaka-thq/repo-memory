@@ -542,8 +542,9 @@ PROMPTS = {
         "Use the Repo Memory skill at {skill_dir} to standardize this "
         "repository documentation for future agents. Preserve the existing "
         "docs/product and docs/adr knowledge; do not replace useful custom "
-        "docs. Add the missing Repo Memory entrypoints and baseline docs "
-        "needed for handoff, align AGENTS.md to the canonical docs, run "
+        "docs. Add or update a canonical ownership map, add only the missing "
+        "handoff surfaces needed for future agents, align AGENTS.md to the "
+        "mapped owners, run "
         "relevant validation, and report what changed."
     ),
     "feature-continuation": (
@@ -556,23 +557,44 @@ PROMPTS = {
     "stale-docs-conflict": (
         "Use the Repo Memory skill at {skill_dir} to audit this repository "
         "and make the docs reliable for future agents. Inspect the code and "
-        "existing docs, fix stale or conflicting documentation, create any "
-        "missing Repo Memory baseline docs that are needed, run relevant "
-        "validation, and report what changed."
+        "existing docs, fix stale or conflicting documentation in the single "
+        "mapped owner, create only missing Repo Memory docs that are needed, "
+        "run relevant validation, and report what changed."
     ),
 }
 
 
-def validator_command(repo: Path, *, strict: bool = False) -> list[str]:
+def validator_command(
+    repo: Path,
+    *,
+    strict: bool = False,
+    adoption_level: str = "continuity",
+) -> list[str]:
     script = skill_root() / "scripts" / "validate-docs.py"
-    command = [sys.executable, str(script), "--project-docs", str(repo)]
+    command = [
+        sys.executable,
+        str(script),
+        "--project-docs",
+        str(repo),
+        "--adoption-level",
+        adoption_level,
+    ]
     if strict:
         command.append("--strict")
     return command
 
 
-def validate(repo: Path, *, strict: bool = False) -> subprocess.CompletedProcess[str]:
-    return run(validator_command(repo, strict=strict), cwd=repo, check=False)
+def validate(
+    repo: Path,
+    *,
+    strict: bool = False,
+    adoption_level: str = "continuity",
+) -> subprocess.CompletedProcess[str]:
+    return run(
+        validator_command(repo, strict=strict, adoption_level=adoption_level),
+        cwd=repo,
+        check=False,
+    )
 
 
 def generated_artifacts(repo: Path) -> list[str]:

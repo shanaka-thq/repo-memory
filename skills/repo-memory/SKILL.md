@@ -5,11 +5,17 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 1.8
+Version: 2.0
 
 ## Overview
 
-Use this skill to apply the Repo Memory portable standard to a repository. Repo Memory keeps project context in maintained Markdown docs close to the code. Apply one standard structure across new and existing repositories, reconstruct missing documentation from source evidence when needed, then keep it current as features are researched, implemented, verified, paused, recovered, and handed off.
+Use this skill to apply the Repo Memory portable standard to a repository. Repo Memory keeps project context in maintained Markdown docs close to the code. Apply one standard capability model across new and existing repositories, reconstruct missing documentation from source evidence when needed, then keep it current as features are researched, implemented, verified, paused, recovered, and handed off.
+
+When a repository already has strong documentation, use Repo Memory to
+complement that workflow rather than replace it blindly. Preserve useful docs,
+name each capability's single canonical owner, add the missing handoff surfaces
+first, then grow toward full baseline coverage only where the repo genuinely
+benefits from tighter continuity.
 
 Read [STANDARD.md](./STANDARD.md) when you need the portable standard, conformance model, required behaviors, and the distinction between standard and platform adapters.
 Read [references/templates.md](./references/templates.md) when the repo needs a default structure, default file set, or example feature-tracking documents.
@@ -18,10 +24,11 @@ Read [references/docs-structure-rules.md](./references/docs-structure-rules.md) 
 Read [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) for the standard metadata fields, required doc-type fields, allowed values, and examples that make docs machine-checkable and agent-consistent.
 Read [references/decision-log-reconstruction.md](./references/decision-log-reconstruction.md) when creating or updating a decision log, especially for existing projects where durable choices must be reconstructed from code, requirements, project history, user statements, and inferred architecture.
 Read [references/continuity-governance.md](./references/continuity-governance.md) when docs change materially, conflict with code or each other, become stale, features end unexpectedly, docs are renamed, or multiple agents may be working concurrently.
-Read [references/superpowers-compatibility.md](./references/superpowers-compatibility.md) when a repository also uses Obra Superpowers specs or plans, or another companion spec/plan workflow that stores artifacts outside the canonical Repo Memory docs.
+Read [references/agent-integration-and-enforcement.md](./references/agent-integration-and-enforcement.md) when wiring Repo Memory into cloud agents, Codex, Claude Code, GitHub Copilot, VS Code, OpenCode, hooks, or CI.
+Read [references/superpowers-compatibility.md](./references/superpowers-compatibility.md) when a repository also uses Obra Superpowers specs or plans, or another companion spec/plan workflow that stores artifacts outside the mapped Repo Memory owners.
 Read [examples/README.md](./examples/README.md) when you need a concrete reference output for an adopted docs tree or multi-agent handoff.
 Run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents` when the target repo is empty or nearly empty and needs the default docs skeleton before there is code to audit.
-Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs <repo>` when you need a lightweight local check for a target repo that adopted the standard.
+Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs <repo> --adoption-level continuity` for a minimal continuity overlay, or `--adoption-level baseline` for full baseline coverage.
 Run `python3 <skill-dir>/scripts/forward-test.py --fixture-only` when you need disposable blind-test fixtures for skill behavior, and run live forward tests manually when token cost and local Codex auth are acceptable.
 When running ad hoc Python validation inside a target repo, prefer `python3 -B ...` or `PYTHONDONTWRITEBYTECODE=1 python3 ...` so validation does not leave `__pycache__` artifacts behind.
 
@@ -29,9 +36,10 @@ Resolve `<skill-dir>` to the directory containing this `SKILL.md`. When working 
 
 ## Core Principle
 
-Prefer one stable documentation system per repository:
+Prefer one canonical owner per documentation capability:
 
-- one source of truth for baseline project-level docs
+- one ownership map that names where durable truth lives
+- one source of truth for each baseline project capability
 - one registry for tracked features and the ranked next-work queue
 - one primary feature document for ongoing work
 - optional deep-dive docs for project-specific topics, complex subsystems, and feature or component logic
@@ -40,13 +48,19 @@ Prefer one stable documentation system per repository:
 - one doc-health record for freshness, verification, known drift, and conflict state
 - one metadata schema that describes what each doc type must record
 - one evidence-based adoption path for existing repos that are missing trustworthy docs
-- one canonical project-docs layer that agent-specific instruction files point to instead of duplicating
+- one canonical ownership map that agent-specific instruction files point to instead of duplicating mutable facts
 - one low-friction intake inbox for raw brainstorms, project notes, chat exports, and planning dumps before accepted facts are promoted
 - one provenance trail for substantial plans, specialist reviews, and tool-generated guidance that another agent may need to trust, verify, or implement
 
-Do not create overlapping documentation systems unless the repository already forces it.
-When another workflow already creates spec or plan artifacts, such as Obra Superpowers files under `docs/superpowers/specs/` or `docs/superpowers/plans/`, treat those artifacts as linked evidence and provenance. Keep accepted durable facts, current implementation state, decisions, validation, and handoff notes in the owning Repo Memory docs.
-When a repo has raw planning material under `docs/intake/`, treat it as source evidence, not canonical truth. Review it before greenfield planning or implementation, then promote accepted outcomes into the owning Repo Memory docs.
+Do not create duplicate canonical owners.
+If ADRs already own decisions, link ADRs instead of copying them into a second
+decision log. If OpenAPI owns API contracts, link OpenAPI instead of restating
+the contract as canonical prose. If `CONTRIBUTING.md` owns setup commands, link
+it from the ownership map instead of duplicating commands in
+`docs/local-development.md`.
+When another workflow already creates spec or plan artifacts, such as Obra Superpowers files under `docs/superpowers/specs/` or `docs/superpowers/plans/`, treat those artifacts as linked evidence and provenance. Keep accepted durable facts, current implementation state, decisions, validation, and handoff notes in mapped owners.
+When a repo has raw planning material under `docs/intake/`, treat it as source evidence, not canonical truth. Review it before greenfield planning or implementation, then promote accepted outcomes into the mapped owner.
+When a repo already has useful docs outside the default Repo Memory baseline, preserve them, name their ownership role, and link them deliberately instead of rewriting everything at once.
 
 Every deep-dive document should have an obvious owner and entrypoint. Baseline docs summarize; deep-dive docs hold the details that would otherwise make the baseline unreadable.
 
@@ -54,7 +68,7 @@ Every deep-dive document should have an obvious owner and entrypoint. Baseline d
 
 Use two layers:
 
-- baseline docs for stable project-wide understanding, contracts, requirements, and operational posture
+- baseline owners for stable project-wide understanding, contracts, requirements, and operational posture
 - deep-dive docs for project-specific details, subsystem internals, feature logic, component rules, edge cases, or state flows that need more depth than the baseline should carry
 
 Default deep-dive locations:
@@ -68,9 +82,9 @@ Default deep-dive locations:
 - `docs/features/<feature-slug>/logic.md` for feature-specific logic, state transitions, or algorithms
 - `docs/features/<feature-slug>/components/<component-slug>.md` when a feature has component logic that should live beside the feature instead of in the shared component registry
 
-`docs/intake/` is different from a deep-dive folder. It is an optional raw inbox for unstructured source material such as brainstorm dumps, user notes, chat exports, imported plans, sketches, and planning-agent output. It may exist before the project has a stable structure, and raw intake files do not need to become polished docs. Accepted facts, decisions, requirements, and handoff state must still be promoted into the canonical baseline, feature, design, decision, implementation, and doc-health docs.
+`docs/intake/` is different from a deep-dive folder. It is an optional raw inbox for unstructured source material such as brainstorm dumps, user notes, chat exports, imported plans, sketches, and planning-agent output. It may exist before the project has a stable structure, and raw intake files do not need to become polished docs. Accepted facts, decisions, requirements, and handoff state must still be promoted into the mapped baseline, feature, design, decision, implementation, and doc-health owners.
 
-Do not let deep-dive docs become orphaned. Link them from the owning baseline doc, feature doc, or index file.
+Do not let deep-dive docs become orphaned. Link them from the owning baseline owner, feature doc, or index file.
 
 Do not create optional deep-dive folders or empty index-only folders just to make the docs tree look complete. Create `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/reviews/`, `docs/ui-ux/`, or feature deep-dive folders only when there is real owned content that would make the baseline or feature doc too long or too hard to maintain.
 
@@ -151,8 +165,8 @@ Treat the maintained project docs as the canonical handoff surface across coding
 
 - keep durable project facts, active feature state, validation status, blockers, and next steps in the project docs, not only in chat history
 - keep `docs/feature-registry.md` current as the ranked work queue when a user wants an agent to choose the next task
-- if `docs/intake/` exists, inspect relevant raw brainstorms, notes, and plans before greenfield planning or related implementation, then promote accepted facts into canonical docs before building from them
-- keep agent-specific instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar files thin; they should tell agents where the canonical docs live and how to update them
+- if `docs/intake/` exists, inspect relevant raw brainstorms, notes, and plans before greenfield planning or related implementation, then promote accepted facts into the mapped owner before building from them
+- keep agent-specific instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar files thin; they should tell agents where the ownership map lives and how to update mapped owners
 - if multiple agent entrypoint files exist, align them to the same documentation workflow instead of letting each file define a competing source of truth
 - make every active feature doc resumable without prior chat context: another agent should be able to read the feature doc and continue safely
 - record the last verified state, the next safe step, blockers, risks, and the first files or docs to inspect before stopping
@@ -169,7 +183,7 @@ Treat documentation as maintained system state. When project reality changes, up
 - update `docs/doc-health.md` whenever a baseline doc, feature doc, deep-dive doc, diagram, or agent instruction file is created, materially changed, known stale, or re-verified
 - if code and docs disagree, treat source code, tests, schemas, runtime config, and deployment artifacts as the strongest current-behavior evidence, then update docs and record the correction
 - if docs disagree with each other, preserve the more specific doc as the detailed source, update the baseline summary, and link both places clearly
-- preserve useful custom docs such as ADRs, product notes, RFCs, support docs, and design notes; link them from the canonical docs instead of replacing them with duplicate summaries
+- preserve useful custom docs such as ADRs, product notes, RFCs, support docs, and design notes; link them from the ownership map instead of replacing them with duplicate summaries
 - if user statements or chat context override existing docs, record the statement as evidence and mark any older doc statement as superseded or corrected
 - when architecture, contracts, data model, security posture, local tooling, or operations change materially, update the affected baseline doc, decision log, implementation log, doc-health record, and any owning design or feature docs in the same work
 - when renaming a feature, component, design, topic, or diagram slug, update every reference and record the old slug in the affected registry or index until the transition is obvious
@@ -177,10 +191,10 @@ Treat documentation as maintained system state. When project reality changes, up
 - when a feature becomes `implemented`, `verified`, or `shipped`, update the feature doc `Status`, update the registry entry, and replace interrupted-work handoff wording with completed-state handoff: latest verified state, remaining validation gaps, and the next safe maintenance step
 - when multiple agents may work concurrently, feature docs must state active ownership, files or docs to avoid, safe parallel work, and the latest verified state
 - when one agent creates a plan for another agent to implement, keep the implementable summary and pickup instructions in the owning feature or design doc; link any larger plan artifact from there and treat it as advisory until verified against current code and user intent
-- when `docs/intake/` contains raw brainstorms, notes, or plans that materially shape the project, link the source artifact where useful, promote accepted outcomes into canonical docs, and record unresolved foundation questions in the owning doc or `docs/doc-health.md`
-- when a companion workflow creates separate spec or plan files, read the relevant artifacts before continuing related work, then promote accepted outcomes into the canonical Repo Memory docs instead of leaving state only in that companion folder
+- when `docs/intake/` contains raw brainstorms, notes, or plans that materially shape the project, link the source artifact where useful, promote accepted outcomes into the mapped owner, and record unresolved foundation questions in the owning doc or `docs/doc-health.md`
+- when a companion workflow creates separate spec or plan files, read the relevant artifacts before continuing related work, then promote accepted outcomes into mapped owners instead of leaving state only in that companion folder
 - when a different role or specialist agent reviews work, record short reviews in the owning doc `Review Log`; create `docs/reviews/<review-slug>.md` only when the review is substantive, cross-cutting, or likely to be audited later
-- when a plan or review changes requirements, UX, architecture, contracts, or implementation state, update the canonical owning docs and record the accepted disposition instead of leaving the result only in a review artifact
+- when a plan or review changes requirements, UX, architecture, contracts, or implementation state, update the mapped owner and record the accepted disposition instead of leaving the result only in a review artifact
 - when interrupted work is discovered, record what was found, what was verified, what remains uncertain, and the next safe step in the affected feature doc or `docs/doc-health.md`
 - after running tests or validation, remove disposable generated artifacts you created, such as `__pycache__`, `.pytest_cache`, `.DS_Store`, or `agent-final.txt`, unless the repo intentionally tracks or ignores them; for Python one-off checks, prefer `python3 -B` or `PYTHONDONTWRITEBYTECODE=1` to avoid creating `__pycache__` in the first place
 
@@ -210,7 +224,28 @@ For a truly empty repository, do not wait for implementation evidence before
 creating docs. Bootstrap the skeleton, mark unknowns explicitly, and leave the
 repo ready for future facts to be filled in.
 
-### 1a. Bootstrap an empty repository
+### 1a. Choose adoption depth for existing docs
+
+When a repository already has useful docs but not a full Repo Memory baseline,
+do not start by rewriting everything.
+
+Instead:
+
+1. preserve the existing docs that still carry trustworthy project context
+2. choose or create the canonical ownership map
+3. add the smallest shared-state surface another agent needs first, typically
+  `docs/README.md`, `docs/feature-registry.md`, `docs/doc-health.md`, and the
+  active feature docs
+4. add a `Canonical Ownership Map` to `docs/README.md` that names existing ADRs,
+  RFCs, architecture notes, API specs, security docs, wiki pages, or team
+  runbooks as owners where they already satisfy a capability
+5. expand toward the full baseline where stronger continuity or verification is
+  actually needed
+
+Progressive adoption is the preferred path for repos that already have working
+documentation habits but need better cross-agent continuity.
+
+### 1b. Bootstrap an empty repository
 
 When the target repo has no useful source files or docs, create the baseline
 documentation skeleton:
@@ -224,20 +259,20 @@ name. Use `--include-user-stories` when the project already has known users,
 actors, journeys, or workflow expectations. Use `--dry-run` to inspect the
 files before writing them.
 
-The scaffold creates the required `docs/` baseline, `docs/requirements/`,
-`docs/features/_template.md`, `docs/intake/README.md`, initial decision and
-implementation log entries, and a doc-health record that marks the skeleton
-placeholders as unverified. With `--with-agents`, it also creates a thin root
-`AGENTS.md` that points agents to the docs tree.
+The scaffold creates the default `docs/` baseline, ownership map,
+`docs/requirements/`, `docs/features/_template.md`, `docs/intake/README.md`,
+initial decision and implementation log entries, and a doc-health record that
+marks the skeleton placeholders as unverified. With `--with-agents`, it also
+creates a thin root `AGENTS.md` that points agents to the ownership map.
 
 After scaffolding:
 
 1. Replace placeholders only with confirmed user statements or evidence.
 2. Keep unknowns and assumptions explicit.
-3. Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo`.
+3. Run `python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo --adoption-level baseline`.
 4. Leave the repo with a usable docs map even if implementation has not started.
 
-### 1b. Use raw intake for greenfield brainstorming and planning dumps
+### 1c. Use raw intake for greenfield brainstorming and planning dumps
 
 Use `docs/intake/` as a low-friction inbox when the user or another planning
 agent has unstructured material that might shape the project:
@@ -254,20 +289,23 @@ refinement, or implementation based on those ideas.
 
 Treat intake files as source material, not truth:
 
-1. Extract durable accepted facts into the right canonical docs.
+1. Extract durable accepted facts into the right mapped owners.
 2. Link important intake files from `Evidence`, `Plan Provenance`, or `Source artifacts` when they materially shaped the outcome.
 3. Ask the user only for high-impact missing foundations, such as primary user, first useful workflow, platform target, privacy constraints, success criteria, or explicit non-goals.
 4. Record lower-risk unknowns in `Open Questions` and `docs/doc-health.md`.
 5. Leave raw intake files intact unless the user asks to reorganize them.
 
 Before starting implementation from a greenfield intake dump, make sure the
-canonical docs now answer the project goal, target users or actors, first
+mapped owners now answer the project goal, target users or actors, first
 usable scope, major constraints, tracked features, and ranked next-work queue.
 The builder should not have to reverse-engineer those from raw intake.
 
 ### 2. Run a documentation audit
 
 Before standardizing an existing project, inventory the evidence:
+
+When the repo already has decent documentation, use the audit to map and link
+that material before creating new files. The goal is convergence, not churn.
 
 - code structure and major modules
 - durable architectural, stack, tooling, product-scope, integration, data, UI, testing, operations, documentation, and security decisions
@@ -297,18 +335,22 @@ The purpose of the audit is to answer:
 - which features or subsystems need retrospective documentation
 - which project-specific details or component logic need deep-dive documentation
 - whether user stories, UI or UX docs, design docs, or local tooling docs need first-class coverage
-- whether substantial plans or specialist reviews need provenance records, and whether their accepted outcomes have been promoted into the owning canonical docs
+- whether substantial plans or specialist reviews need provenance records, and whether their accepted outcomes have been promoted into the mapped owner
 - whether target users, personas, actors, success criteria, acceptance paths, and non-goals are explicit enough for another agent to preserve product intent
 - whether raw intake contains accepted direction that must be promoted before implementation, or high-impact open questions that require user clarification
 - whether observability and instrumentation are documented well enough to understand runtime health, product signals, alerts, audit trails, and privacy boundaries
 - whether existing diagrams should be preserved, linked, reorganized, or supplemented with Mermaid docs
 - which future-evolution assumptions should be captured explicitly
 - which unknowns must remain explicit
-- whether agent instruction files duplicate mutable project knowledge that should move into the canonical docs set
+- whether agent instruction files duplicate mutable project knowledge that should move into mapped owners
 
 ### 3. Choose the source of truth
 
 If the repo already has a clear documentation standard, adopt it instead of replacing it.
+
+If that existing standard already covers most project truth well, Repo Memory
+can complement it by adding only the missing resumability surfaces, such as
+feature tracking, handoff notes, doc health, and thin agent entrypoints.
 
 If there is no clear standard, create a `docs/` structure and make it the source of truth. The default structure is in [references/templates.md](./references/templates.md).
 
@@ -400,7 +442,10 @@ Add these deep-dive docs when the project genuinely needs them:
 Only add deep-dive documents when the behavior is important, detailed, and not already captured well enough in the baseline or primary feature doc.
 Do not add empty optional indexes such as `docs/diagrams/README.md`, `docs/designs/README.md`, `docs/project-details/README.md`, `docs/components/README.md`, `docs/reviews/README.md`, or `docs/ui-ux/README.md` unless the folder also has real topic docs or existing assets to index.
 
-For existing repositories, treat these as the minimum comprehensive baseline, not as optional nice-to-haves.
+For repositories targeting full baseline adoption, treat these as the minimum
+comprehensive baseline. Existing repos can reach that baseline progressively
+while preserving useful docs and linking them into the canonical layer during
+the transition.
 
 Each document should include the metadata required by its doc type. Use [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) for field names, allowed values, and examples.
 
@@ -438,7 +483,12 @@ For existing repos, also create retrospective feature docs for active, recently 
 
 ### 8. Update the right docs when work changes
 
-Use this mapping:
+Use this mapping, but treat it as capability ownership rather than a command to
+duplicate existing docs:
+
+When a repo's ownership map names a different owner than the default path below,
+update the mapped owner and leave only a pointer from the default path if that
+pointer is useful.
 
 - behavior changes: update functional requirements
 - quality expectations or runtime assumptions change: update non-functional requirements
@@ -458,7 +508,7 @@ Use this mapping:
 - screen flows, interaction rules, accessibility, or responsive behavior change: update `docs/ui-ux/...`
 - feature-only flows, state machines, edge cases, or algorithms change: update `docs/features/<feature-slug>/...`
 - extension points, compatibility assumptions, migration paths, or deprecation strategy change: update architecture, design docs, and decision log
-- raw brainstorms, chat notes, or planning dumps shape accepted project direction: keep the raw source in `docs/intake/`, then update the affected canonical docs and link the intake source where useful
+- raw brainstorms, chat notes, or planning dumps shape accepted project direction: keep the raw source in `docs/intake/`, then update the affected mapped owners and link the intake source where useful
 - enduring technical choices change: update decision log
 - meaningful work lands: update implementation log
 - active feature state changes: update feature doc and feature registry
@@ -471,12 +521,14 @@ Use this mapping:
 When adopting an existing project:
 
 1. preserve useful existing docs
-2. absorb old source-of-truth files into the new structure where practical
-3. leave lightweight pointers from legacy docs if other workflows still reference them
-4. do not duplicate the same contract in multiple places unless there is a clear transition reason
-5. do not create orphan deep-dive docs without links from the relevant baseline doc, feature doc, or index
-6. record unknowns and inferred statements instead of pretending the reconstruction is complete
-7. collapse duplicated mutable guidance out of agent-specific instruction files into the canonical docs set where practical
+2. create or update `docs/README.md` with a `Canonical Ownership Map`
+3. add the missing canonical shared-state docs before migrating healthy docs that already work
+4. absorb old source-of-truth files into the new structure only when that reduces real drift
+5. leave lightweight pointers from legacy docs if other workflows still reference them
+6. do not duplicate the same contract, decision, command, or handoff state in multiple places
+7. do not create orphan deep-dive docs without links from the relevant owner, feature doc, or index
+8. record unknowns and inferred statements instead of pretending the reconstruction is complete
+9. collapse duplicated mutable guidance out of agent-specific instruction files into the canonical owners where practical
 
 Favor convergence, not churn.
 
@@ -585,37 +637,46 @@ A good project documentation setup allows a new agent to answer these in under t
 - What assumptions were made for future evolution?
 - What should be done next?
 - If `docs/intake/` has raw notes or plans, what was promoted and what remains unresolved?
-- Which instruction files exist for different agents, and do they all point to the same canonical docs?
+- Which instruction files exist for different agents, and do they all point to the same ownership map?
 
 If the answer is no, tighten the docs structure or refresh stale files.
 
-For an existing messy repo, the skill succeeds only if it produces a usable baseline across the full standard doc set, not just a high-level summary plus one or two polished docs.
+For an existing messy repo, the skill succeeds only if it produces usable
+ownership and handoff state without false certainty. Each adopted capability
+must have one named owner. Level 1 continuity surfaces should exist before broad
+baseline migration begins. Full baseline docs should exist only when the repo
+needs Level 2 coverage, and they should contain current known state rather than
+headings alone.
 
 ## Default Adoption Strategy
 
 Use this strategy when no better repo-specific process exists:
 
 1. audit the repo and inventory evidence
-2. bootstrap `docs/` with the standard file set, using the bundled `scripts/scaffold-docs.py` helper for empty or nearly empty repos
-3. review `docs/intake/` when it contains raw brainstorms, project dumps, or planning output, then promote accepted facts into canonical docs
-4. populate each standard doc with current known state from evidence
-5. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants
-6. populate `docs/observability-and-instrumentation.md` with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots
-7. create `docs/feature-registry.md` with a `Next Work Queue` and full feature list
-8. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, `docs/reviews/`, or `docs/ui-ux/` only for topics that need deeper treatment
-9. create per-feature docs for active, recent, or important work
-10. add feature-level deep-dive docs only when the feature has meaningful internal logic to preserve
-11. note unknowns, inferred statements, and missing rationale explicitly
-12. populate `docs/doc-health.md` with verification state, stale areas, known conflicts, and intake items that still need clarification
-13. align any repo-level agent instruction files to the same docs entrypoints and source-of-truth rules
-14. update the docs in the same change as the code
-15. remove disposable generated artifacts created by validation or testing
-16. leave exact handoff notes before stopping
+2. preserve existing useful docs and identify which capability each one already owns
+3. create or update `docs/README.md` with a `Canonical Ownership Map`
+4. bootstrap `docs/` with the standard file set, using the bundled `scripts/scaffold-docs.py` helper for empty or nearly empty repos
+5. for existing repos, add the missing continuity surfaces first, especially `docs/feature-registry.md`, `docs/doc-health.md`, and active feature docs
+6. review `docs/intake/` when it contains raw brainstorms, project dumps, or planning output, then promote accepted facts into the mapped canonical owners
+7. populate each Repo Memory-created owner with current known state from evidence
+8. add `docs/requirements/user-stories-and-use-cases.md` when the project has important actors, journeys, or workflow variants and no existing owner covers them
+9. populate the mapped observability owner with known runtime signals, product events, alerts, dashboards, audit trails, and blind spots
+10. create `docs/feature-registry.md` with a `Next Work Queue` and full feature list when no existing agent-readable owner exists
+11. add `docs/diagrams/`, `docs/project-details/`, `docs/components/`, `docs/designs/`, `docs/reviews/`, or `docs/ui-ux/` only for topics that need deeper treatment
+12. create per-feature docs for active, recent, or important work
+13. add feature-level deep-dive docs only when the feature has meaningful internal logic to preserve
+14. note unknowns, inferred statements, and missing rationale explicitly
+15. populate the mapped doc-health owner with verification state, stale areas, known conflicts, duplicate-owner migrations, and intake items that still need clarification
+16. align any repo-level agent instruction files to the same docs entrypoints and source-of-truth rules
+17. update the docs in the same change as the code
+18. remove disposable generated artifacts created by validation or testing
+19. leave exact handoff notes before stopping
 
 Use [references/templates.md](./references/templates.md) for the default structure and templates.
 Use [references/existing-project-audit.md](./references/existing-project-audit.md) when extracting documentation from an existing codebase.
 Use [references/docs-structure-rules.md](./references/docs-structure-rules.md) to verify all naming conventions and placement decisions before committing.
 Use [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) to apply consistent metadata fields across doc types.
 Use [references/continuity-governance.md](./references/continuity-governance.md) to resolve conflicts, rename docs, close abandoned work, and keep doc freshness visible.
+Use [references/agent-integration-and-enforcement.md](./references/agent-integration-and-enforcement.md) to choose agent adapters, hooks, and CI checks for Codex, Claude Code, GitHub Copilot, VS Code, OpenCode, and cloud-agent flows.
 
 For blind forward testing, use `scripts/forward-test.py`. Keep child-agent prompts task-like, pass the skill path explicitly, and write stdout/final-message logs outside the fixture repository so generated harness artifacts do not contaminate scoring.

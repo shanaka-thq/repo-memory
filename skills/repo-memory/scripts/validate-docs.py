@@ -37,11 +37,13 @@ REQUIRED_SKILL_PACKAGE_FILES = [
     "skills/repo-memory/references/existing-project-audit.md",
     "skills/repo-memory/references/decision-log-reconstruction.md",
     "skills/repo-memory/references/continuity-governance.md",
+    "skills/repo-memory/references/agent-integration-and-enforcement.md",
     "skills/repo-memory/references/superpowers-compatibility.md",
     "skills/repo-memory/references/documentation-metadata-schema.md",
     "skills/repo-memory/agents/openai-codex.md",
     "skills/repo-memory/agents/github-copilot.md",
     "skills/repo-memory/agents/claude-code.md",
+    "skills/repo-memory/agents/opencode.md",
     "skills/repo-memory/agents/openai.yaml",
     "skills/repo-memory/examples/README.md",
     "skills/repo-memory/scripts/forward-test.py",
@@ -49,7 +51,13 @@ REQUIRED_SKILL_PACKAGE_FILES = [
     "skills/repo-memory/scripts/validate-docs.py",
 ]
 
-REQUIRED_PROJECT_DOCS = [
+CONTINUITY_PROJECT_DOCS = [
+    "docs/README.md",
+    "docs/doc-health.md",
+    "docs/feature-registry.md",
+]
+
+BASELINE_PROJECT_DOCS = [
     "docs/README.md",
     "docs/project-overview.md",
     "docs/architecture.md",
@@ -191,6 +199,7 @@ VERSION = re.compile(r"^Version:\s*(\d+\.\d+)", re.MULTILINE)
 HEADING = re.compile(r"^\s{0,3}#{2,6}\s+(.+?)\s*$", re.MULTILINE)
 STATUS = re.compile(r"^\s*Status:\s*([a-z_]+)\b", re.MULTILINE | re.IGNORECASE)
 SECTION = re.compile(r"^\s{0,3}##\s+(.+?)\s*$", re.MULTILINE)
+CANONICAL_OWNER_HEADING = "Canonical Ownership Map"
 
 
 def strip_fenced_code(text: str) -> str:
@@ -298,6 +307,81 @@ def check_required_headings(root: Path) -> list[str]:
             if heading not in found:
                 errors.append(f"{path}: missing required heading '{heading}'")
     return errors
+
+
+def find_section(text: str, heading: str) -> str | None:
+    headings = list(SECTION.finditer(text))
+    for index, match in enumerate(headings):
+        if match.group(1).strip() == heading:
+            start = match.end()
+            end = headings[index + 1].start() if index + 1 < len(headings) else len(text)
+            return text[start:end]
+    return None
+
+
+def check_canonical_ownership_map(root: Path) -> list[str]:
+    docs_readme = root / "docs" / "README.md"
+    if not docs_readme.exists():
+        return []
+
+    text = strip_fenced_code(docs_readme.read_text(encoding="utf-8"))
+    section = find_section(text, CANONICAL_OWNER_HEADING)
+    if section is None:
+        return [
+            "docs/README.md: missing 'Canonical Ownership Map' section for "
+            "no-duplicate ownership"
+        ]
+
+    rows = [
+        split_table_row(line)
+        for line in section.splitlines()
+        if line.strip().startswith("|") and line.strip().endswith("|")
+    ]
+    data_rows = [
+        row for row in rows
+        if row and not all(set(cell) <= {"-", ":", " "} for cell in row)
+        and row[0].lower() != "capability"
+    ]
+    if not data_rows:
+        return [
+            "docs/README.md: Canonical Ownership Map has no capability rows"
+        ]
+
+    warnings: list[str] = []
+    seen: dict[str, str] = {}
+    for row in data_rows:
+        if len(row) < 2:
+            warnings.append(
+                "docs/README.md: Canonical Ownership Map row has fewer than "
+                "2 columns"
+            )
+            continue
+        capability = row[0].strip().lower()
+        owner = row[1].strip()
+        if not capability:
+            warnings.append(
+                "docs/README.md: Canonical Ownership Map row has an empty "
+                "Capability cell"
+            )
+            continue
+        if not owner or owner.lower() in {"todo", "unknown", "tbd"}:
+            warnings.append(
+                "docs/README.md: Canonical Ownership Map capability "
+                f"'{row[0]}' is missing a canonical owner"
+            )
+        if capability in seen:
+            warnings.append(
+                "docs/README.md: Canonical Ownership Map duplicates "
+                f"capability '{row[0]}'"
+            )
+        seen[capability] = owner
+        if re.search(r"\s+(and|or)\s+|[,;]", owner, re.IGNORECASE):
+            warnings.append(
+                "docs/README.md: Canonical Ownership Map capability "
+                f"'{row[0]}' appears to name multiple canonical owners; "
+                "put alternates in Supporting docs instead"
+            )
+    return warnings
 
 
 def check_empty_optional_deep_dive_dirs(root: Path) -> list[str]:
@@ -508,14 +592,20 @@ def check_skill_repo(root: Path) -> list[str]:
     return errors
 
 
-def check_project_docs(root: Path) -> list[str]:
+def check_project_docs(root: Path, adoption_level: str = "baseline") -> list[str]:
     errors: list[str] = []
     if not (root / "docs").exists():
         errors.append("missing docs/ directory")
         return errors
-    errors.extend(check_required(root, REQUIRED_PROJECT_DOCS))
+    required = (
+        CONTINUITY_PROJECT_DOCS
+        if adoption_level == "continuity"
+        else BASELINE_PROJECT_DOCS
+    )
+    errors.extend(check_required(root, required))
     errors.extend(check_docs_kebab_case(root))
-    errors.extend(check_required_headings(root))
+    if adoption_level == "baseline":
+        errors.extend(check_required_headings(root))
     return errors
 
 
@@ -526,6 +616,7 @@ def check_project_warnings(root: Path) -> list[str]:
     warnings.extend(check_feature_statuses(root))
     warnings.extend(check_terminal_feature_handoff(root))
     warnings.extend(check_next_work_queue(root))
+    warnings.extend(check_canonical_ownership_map(root))
     return warnings
 
 
@@ -547,6 +638,15 @@ def main() -> int:
         action="store_true",
         help="treat warnings as validation failures",
     )
+    parser.add_argument(
+        "--adoption-level",
+        choices=["continuity", "baseline"],
+        default="baseline",
+        help=(
+            "project-doc validation depth: continuity checks the minimal "
+            "handoff overlay, baseline checks the full default capability set"
+        ),
+    )
     args = parser.parse_args()
 
     root = Path(args.path).resolve()
@@ -556,7 +656,7 @@ def main() -> int:
     if args.skill_repo:
         errors.extend(check_skill_repo(root))
     if args.project_docs:
-        errors.extend(check_project_docs(root))
+        errors.extend(check_project_docs(root, args.adoption_level))
         warnings.extend(check_project_warnings(root))
     if not args.skill_repo and not args.project_docs:
         if (root / SKILL_PACKAGE / "SKILL.md").exists():
@@ -564,7 +664,7 @@ def main() -> int:
         elif (root / "SKILL.md").exists() and (root / "references").exists():
             errors.extend(check_skill_version(root))
         else:
-            errors.extend(check_project_docs(root))
+            errors.extend(check_project_docs(root, args.adoption_level))
             warnings.extend(check_project_warnings(root))
 
     errors.extend(check_relative_links(root))

@@ -61,13 +61,54 @@ docs/
             └── <component-slug>.md
 ```
 
-For existing projects, use the baseline files as the comprehensive minimum and populate every file with concise current-state content before polishing any single document too much.
+For existing projects, start with the capability owners the repo already has.
+Use the baseline files as defaults only for capabilities with no trustworthy
+existing owner.
+
+## Partial Adoption Pattern for Existing Repos
+
+When a repo already has useful architecture notes, ADRs, RFCs, wiki pages, or
+team-specific runbooks, keep them if they still help. Do not force an immediate
+rewrite just to match the full baseline.
+
+The usual minimal add-first set is:
+
+- `docs/README.md` to define the canonical ownership map
+- `docs/feature-registry.md` to track active work and the next ready task
+- `docs/doc-health.md` to record freshness, conflicts, and verification state
+- `docs/features/<feature-slug>.md` for active or risky work that needs resumable handoff
+- a thin repo-level agent entrypoint that points into the ownership map
+
+That partial setup improves cross-agent continuity immediately. Expand toward
+the full baseline when the repo needs stronger standardization or verification.
+
+## Canonical Ownership Map Template
+
+Use this in `docs/README.md` for any Level 1 or higher adoption. It prevents
+Repo Memory from duplicating ADRs, runbooks, API specs, setup docs, or other
+healthy existing documentation.
+
+```md
+## Canonical Ownership Map
+
+| Capability | Canonical owner | Supporting docs | Notes |
+| --- | --- | --- | --- |
+| Documentation map and ownership map | `docs/README.md` | `AGENTS.md` | This table owns routing, not all project facts. |
+| Decisions and rationale | `docs/adr/` | `docs/decision-log.md` | ADRs are canonical; decision log links or indexes only. |
+| Interfaces and contracts | `openapi.yaml` | `docs/interfaces-and-contracts.md` | OpenAPI is canonical; prose explains usage and gaps. |
+| Local development and tooling | `CONTRIBUTING.md` | `README.md` | Do not duplicate setup commands elsewhere. |
+| Active feature handoff | `docs/features/<feature-slug>.md` | `docs/feature-registry.md` | Repo Memory owns resumable feature state. |
+| Documentation health and conflicts | `docs/doc-health.md` | None | Tracks stale docs, duplicate-owner migrations, and verification. |
+```
+
+Each capability should appear once. Put alternatives, legacy docs, and detail
+sources in `Supporting docs`, not in `Canonical owner`.
 
 The `docs/diagrams/`, `docs/designs/`, `docs/project-details/`, `docs/components/`, `docs/reviews/`, `docs/ui-ux/`, and per-feature deep-dive folders are optional. Add them when the codebase has maintained diagrams, design decisions, project-specific behavior, substantive reviews, user-flow complexity, or feature or component logic that another agent would otherwise have to reverse-engineer. Do not create empty optional folders or index-only optional folders as placeholders.
 
-`docs/intake/` is also different: it is a raw source-material inbox for brainstorms, copied chat notes, imported plans, and user-provided project dumps. Use it to collect context without forcing a template, then promote accepted facts into canonical Repo Memory docs before building from them.
+`docs/intake/` is also different: it is a raw source-material inbox for brainstorms, copied chat notes, imported plans, and user-provided project dumps. Use it to collect context without forcing a template, then promote accepted facts into mapped owners before building from them.
 
-`docs/superpowers/` is different: it is an optional companion workflow folder for Obra Superpowers specs and plans, not a Repo Memory deep-dive folder. Link those artifacts from owning feature or design docs and promote accepted outcomes into canonical Repo Memory docs.
+`docs/superpowers/` is different: it is an optional companion workflow folder for Obra Superpowers specs and plans, not a Repo Memory deep-dive folder. Link those artifacts from owning feature or design docs and promote accepted outcomes into mapped owners.
 
 ## Empty Repository Scaffold
 
@@ -81,10 +122,10 @@ python3 <skill-dir>/scripts/scaffold-docs.py /path/to/repo --with-agents
 Resolve `<skill-dir>` to the installed `repo-memory` skill directory. When
 working from this repository root, use `skills/repo-memory/scripts/...`.
 
-The scaffold creates the required baseline docs, `docs/requirements/`,
-`docs/features/_template.md`, `docs/intake/README.md`, initial decision and
-implementation log entries, and a doc-health note that marks the placeholders
-as unverified. Add
+The scaffold creates the default baseline docs, ownership map,
+`docs/requirements/`, `docs/features/_template.md`, `docs/intake/README.md`,
+initial decision and implementation log entries, and a doc-health note that
+marks the placeholders as unverified. Add
 `--include-user-stories` when users, actors, journeys, or acceptance paths are
 already known. Use `--project-name "<name>"` when the target directory name is
 not the right project name.
@@ -97,14 +138,14 @@ exists.
 
 Use this template for `docs/intake/README.md` when a repo needs a low-friction
 place for brainstorms, planning dumps, copied chat notes, or imported project
-context before those details are promoted into the canonical docs.
+context before those details are promoted into mapped owners.
 
 ```md
 # Intake
 
 Use this folder as a low-friction inbox for raw brainstorms, project notes,
 chat exports, AI plans, sketches, or imported planning docs that have not yet
-been promoted into canonical Repo Memory docs.
+been promoted into mapped owners.
 
 ## How to Use
 
@@ -144,36 +185,45 @@ Related docs:
 
 ## Agent Instruction Snippet Template
 
-Use this snippet in repo-level instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar agent entrypoints when the target repo should treat the `docs/` folder as the canonical source of truth.
+Use this snippet in repo-level instruction files such as `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, or similar agent entrypoints when the target repo should route agents to the canonical ownership map.
+
+If the repo already has multiple agent entrypoints, keep them thin and align
+them to the same ownership map rather than letting each file carry its
+own mutable project state.
 
 ```md
 ## Documentation Source of Truth
 
-This project uses the `docs/` folder as the canonical source of truth for architecture, requirements, feature status, implementation history, and cross-agent handoff state.
+This project uses Repo Memory for cross-agent continuity.
+
+`docs/README.md` contains the Canonical Ownership Map. Update the mapped owner
+for any changed capability. Do not duplicate mutable project facts in this file.
 
 When starting or resuming work:
 1. Read `docs/README.md`.
-2. Read `docs/project-overview.md` and `docs/architecture.md`.
-3. Review `docs/intake/` if it contains raw brainstorms, project notes, or plans relevant to the work, then promote accepted facts into canonical docs.
+2. Follow the Canonical Ownership Map to the project overview, architecture, decision, contract, setup, and feature owners relevant to the task.
+3. Review `docs/intake/` if it contains raw brainstorms, project notes, or plans relevant to the work, then promote accepted facts into the mapped owner.
 4. Read `docs/feature-registry.md`; when no task is assigned, pick the first `ready` row in `Next Work Queue`.
 5. Read the active `docs/features/<feature-slug>.md` before making changes.
 
 When making changes:
 - Update the active feature doc as the work changes.
 - Update the `Next Work Queue` when priority, readiness, or pickup instructions change.
-- Put durable project facts in `docs/`, not only in agent-specific instruction files or chat history.
+- Update the mapped canonical owner for changed decisions, contracts, commands, architecture, runtime signals, or security posture.
+- Put durable project facts in their mapped owner, not only in agent-specific instruction files or chat history.
 - Keep any agent-specific instruction files short and aligned to the same docs entrypoints.
 
 Before stopping:
 - Update `docs/features/<feature-slug>.md`, especially `Implementation Status`, `Validation`, `Resume Context`, `Next Agent Handoff`, and `Exact Next Prompt` when present.
-- Update `docs/implementation-log.md` for meaningful landed work.
-- Update `docs/decision-log.md` when a durable technical choice changed.
+- Update the mapped implementation-history owner for meaningful landed work.
+- Update the mapped decision owner when a durable technical choice changed.
+- Update `docs/doc-health.md` when docs were verified, corrected, found stale, or when duplicate ownership was removed.
 ```
 
 ## Deep-Dive Placement Rules
 
 - Use `docs/requirements/user-stories-and-use-cases.md` for actors, user stories, end-to-end use cases, alternative flows, and acceptance paths in user-facing or workflow-heavy projects.
-- Use `docs/intake/` for raw brainstorm dumps, copied chat notes, imported plans, sketches, and user-provided project context before accepted content is promoted into canonical docs.
+- Use `docs/intake/` for raw brainstorm dumps, copied chat notes, imported plans, sketches, and user-provided project context before accepted content is promoted into mapped owners.
 - Use `docs/local-development.md` for local setup, scripts, tooling, fixtures, codegen, local services, and contributor troubleshooting.
 - Use `docs/observability-and-instrumentation.md` for logs, metrics, traces, analytics events, audit events, dashboards, alerts, retention, sampling, and known blind spots.
 - Use `docs/diagrams/` for maintained `.mmd`, `.drawio`, exported SVG or PNG assets, and diagram indexes.
@@ -820,7 +870,7 @@ State why this review was requested and what decision or implementation risk it 
 
 ## Accepted Outcomes
 
-- Record what was accepted, adjusted, rejected, or deferred, and where canonical docs were updated.
+- Record what was accepted, adjusted, rejected, or deferred, and where mapped owners were updated.
 
 ## Follow-Up
 
@@ -1130,25 +1180,44 @@ Describe the happy-path sequence.
 ```md
 # Documentation Standard
 
-This folder is the engineering source of truth for how the project works, what contracts exist, what decisions have been made, what work is in progress, and where detailed project or component logic is documented.
+This folder is the cross-agent continuity layer. The table below names the
+single canonical owner for each adopted documentation capability. Do not copy
+mutable facts from an owner into another file; link to the owner instead.
+
+## Canonical Ownership Map
+
+| Capability | Canonical owner | Supporting docs | Notes |
+| --- | --- | --- | --- |
+| Documentation map and ownership map | `docs/README.md` | `AGENTS.md` | This table owns routing. |
+| Project goal, users, scope, non-goals | `project-overview.md` | `README.md` | Replace with existing owner if the repo already has one. |
+| Architecture and system shape | `architecture.md` | `docs/diagrams/` | Replace with existing C4/RFC owner if present. |
+| Decisions and rationale | `decision-log.md` | `docs/adr/` | If ADRs are canonical, put `docs/adr/` here. |
+| Interfaces and contracts | `interfaces-and-contracts.md` | `openapi.yaml` | If a schema/spec is canonical, name it here. |
+| Local development and tooling | `local-development.md` | `CONTRIBUTING.md` | Avoid duplicate setup commands. |
+| Active feature handoff | `features/<feature-slug>.md` | `feature-registry.md` | Repo Memory usually owns this. |
+| Documentation health and conflicts | `doc-health.md` | None | Tracks stale docs and duplicate-owner migrations. |
 
 ## Agent Startup Order
 
 When an agent starts or resumes work:
 
 1. Read this file.
-2. Read `project-overview.md` and `architecture.md`.
+2. Use the Canonical Ownership Map to find the owner for the current task.
 3. Read `feature-registry.md`; when no task was assigned, pick the first `ready` row in `Next Work Queue`.
 4. Read the active `features/<feature-slug>.md` before making changes to that feature.
 
 ## Single Source of Truth Rules
 
-- Keep durable project facts and active handoff state in this `docs/` tree.
+- Keep durable project facts in their mapped canonical owner.
+- Keep active handoff state in the mapped feature handoff owner.
 - Keep the ranked next-work queue in `feature-registry.md` current enough that a cloud agent can pick the next safe task.
 - Keep repo-level agent instruction files concise and point them here instead of duplicating mutable facts.
 - If multiple agent instruction files exist, align them to the same docs entrypoints and feature workflow.
+- Existing ADRs, RFCs, API specs, runbooks, setup docs, and security docs can stay canonical when the ownership map says so.
 
-## Always Maintain
+## Default Repo Memory Owners
+
+Create these when the capability has no trustworthy existing owner:
 
 - `project-overview.md`
 - `architecture.md`
@@ -1237,5 +1306,5 @@ Before ending a session, confirm:
 13. Runtime signals, product analytics, audit events, dashboards, and alerts are reflected in `observability-and-instrumentation.md`.
 14. User-facing changes update user stories, use cases, and UI or UX docs when relevant.
 15. Diagram sources are preserved and linked, not replaced casually with screenshots or chat-only sketches.
-16. Any agent-specific instruction files still point to these docs as the canonical source of truth.
+16. Any agent-specific instruction files still point to the ownership map.
 17. `doc-health.md` records material doc changes, stale docs, conflicts, renames, and verification state.

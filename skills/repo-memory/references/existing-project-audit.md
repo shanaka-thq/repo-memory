@@ -4,7 +4,31 @@ Use this reference when a repository already exists but does not follow the docu
 
 ## Goal
 
-Build a comprehensive baseline of project documentation from evidence, without inventing unsupported rationale, then add targeted deep-dive docs for project-specific logic, user-facing behavior, local tooling, observability, diagrams, and component logic where the baseline is not enough. Record freshness, conflicts, stale areas, and verification evidence in `docs/doc-health.md`.
+Build a capability ownership map from evidence, without inventing unsupported
+rationale or duplicating healthy existing docs. Add targeted Repo Memory docs
+only for missing handoff surfaces, missing capability owners, or project-specific
+logic that is not already documented well enough. Record freshness, conflicts,
+duplicate-owner migrations, stale areas, and verification evidence in the mapped
+doc-health owner.
+
+## Minimal adoption path for existing docs
+
+When a repository already has useful docs, do not treat this audit as an order
+to rewrite them all.
+
+Start by:
+
+1. identifying which existing docs still carry trustworthy current context
+2. creating or updating `docs/README.md` with a `Canonical Ownership Map`
+3. adding the missing handoff surfaces first, usually `docs/README.md`,
+   `docs/feature-registry.md`, `docs/doc-health.md`, and active feature docs
+4. naming preserved ADRs, RFCs, architecture notes, API specs, runbooks,
+   security docs, or wiki pages as canonical owners where they already satisfy a
+   capability
+5. expanding toward the full baseline where the repo needs more structure,
+   verification, or cross-agent resumability
+
+The audit should reduce ambiguity, not create churn.
 
 ## Evidence Order
 
@@ -43,36 +67,36 @@ Capture:
 - existing docs and whether they are current, stale, or partial
 - raw intake material such as brainstorms, copied chat notes, user-provided project dumps, or planning-agent output under `docs/intake/`
 - companion workflow artifacts such as Obra Superpowers specs and plans under `docs/superpowers/`
-- whether agent-specific instruction files duplicate mutable project knowledge that should instead live in the canonical docs set
+- whether agent-specific instruction files duplicate mutable project knowledge that should instead live in the mapped canonical owner
+- which existing docs already own decisions, contracts, local setup, operations, security, architecture, implementation history, or other capabilities
+- whether any capability appears to have two competing canonical owners
 - stale docs, conflicting docs, renamed docs, superseded work, and verification gaps that should be captured in `docs/doc-health.md`
 
-### 2. Map the standard docs to evidence
+### 2. Map capabilities to owners and evidence
 
-For each target document, identify:
+If the repo already has a strong doc in a different location, map it first as a
+canonical owner. Preserve it and link it from the Repo Memory ownership map
+instead of copying it immediately.
 
+For each capability, identify:
+
+- canonical owner
+- supporting docs
 - primary evidence sources
 - confidence level
 - missing areas
 
-Use a simple coverage matrix:
+Use a simple ownership matrix:
 
 ```md
-| Target doc | Evidence source | Confidence | Gaps |
-| --- | --- | --- | --- |
-| `docs/architecture.md` | `src/`, `docker-compose.yml`, deployment config | High | no explicit scaling notes |
-| `docs/local-development.md` | package scripts, Makefile, setup docs | High | fixture reset flow unclear |
-| `docs/doc-health.md` | current docs, audit evidence, recent changes | Medium | full verification incomplete |
-| `docs/observability-and-instrumentation.md` | logging config, telemetry code, alert config | Medium | production retention unknown |
-| `docs/requirements/user-stories-and-use-cases.md` | UI tests, support notes, product docs | Medium | admin flows incomplete |
-| `docs/diagrams/system-context.mmd` | architecture docs, service map, deploy config | High | async edges unclear |
-| `docs/decision-log.md` | ADRs, commit history, comments | Medium | weak rationale for storage choice |
-| `docs/designs/notifications-delivery.md` | RFC notes, issue history, architecture comments | Medium | rollout plan incomplete |
-| `docs/reviews/notifications-product-review.md` | review notes, PR comments, feature doc | Medium | accepted outcomes not fully mapped |
-| `docs/project-details/order-lifecycle.md` | workflow services, tests, release notes | Medium | refund edge cases only partially confirmed |
-| `docs/components/session-manager.md` | auth code, UI state container, tests | High | no explicit cleanup rationale |
-| `docs/diagrams/checkout-flow.drawio` | workshop artifact, browser checks, support notes | Medium | Markdown-linked export missing |
-| `docs/ui-ux/checkout-flow.md` | mocks, browser checks, component stories | Medium | mobile states not fully confirmed |
-| `docs/testing-strategy.md` | `tests/`, CI, package scripts | High | no performance tests |
+| Capability | Canonical owner | Supporting docs | Evidence source | Confidence | Gaps |
+| --- | --- | --- | --- | --- | --- |
+| Architecture | `ARCHITECTURE_NOTES.md` | `docs/diagrams/system-context.mmd` | `src/`, deploy config | high | scaling notes incomplete |
+| Decisions | `docs/adr/` | `docs/decision-log.md` index only | ADRs, commit history | high | old storage rationale missing |
+| Contracts | `openapi.yaml` | `docs/interfaces-and-contracts.md` | API spec, handlers, tests | high | webhook examples missing |
+| Local development | `CONTRIBUTING.md` | `README.md` | package scripts, Makefile | high | fixture reset flow unclear |
+| Active feature handoff | `docs/features/search-refresh.md` | `docs/feature-registry.md` | recent commits, tests | medium | browser verification incomplete |
+| Documentation health | `docs/doc-health.md` | current audit | docs, links, conflicts | medium | full verification incomplete |
 ```
 
 Confidence labels should be simple:
@@ -104,7 +128,7 @@ For each candidate, record:
 - evidence sources
 - whether the current repo already documents it well enough
 - whether the source format should remain Mermaid, Draw.io, or both
-- whether any agent-specific instruction files should be reduced to lightweight pointers into the canonical docs set
+- whether any agent-specific instruction files should be reduced to lightweight pointers into the ownership map
 - whether a doc-health entry is required because the source is stale, conflicting, renamed, superseded, or only partially verified
 
 ### 4. Separate facts from rationale
@@ -174,13 +198,13 @@ When the feature logic is complex, also create or update:
 - `docs/doc-health.md` when feature state, linked docs, or verification evidence changed materially
 
 If companion specs or plans exist under `docs/superpowers/`, link them from the
-owning feature or design doc and promote accepted outcomes into canonical Repo
-Memory docs instead of duplicating whole artifacts.
+owning feature or design doc and promote accepted outcomes into mapped owners
+instead of duplicating whole artifacts.
 
 If raw intake exists under `docs/intake/`, review it before planning or
 implementation, then promote accepted user statements, decisions, requirements,
 feature ideas, constraints, and unresolved high-impact questions into the owning
-canonical docs. Leave unaccepted or speculative intake as source material.
+mapped owners. Leave unaccepted or speculative intake as source material.
 
 When feature work stopped or changed direction, use terminal statuses instead of deleting history:
 
@@ -202,7 +226,14 @@ This keeps the docs honest and still useful.
 
 ## Minimum Comprehensive Baseline
 
-For an existing project, do not consider the documentation pass complete until the standard set exists and each file has at least a concise baseline of current known state:
+For an existing project, do not consider the documentation pass complete until
+each baseline capability has one named owner and any Repo Memory-created owner
+has at least a concise baseline of current known state.
+
+Repos can reach this baseline progressively. The important first step is to add
+the missing canonical shared-state surfaces, preserve existing owners, and link
+supporting docs so another agent can resume safely without guessing where
+current truth lives.
 
 - project overview
 - architecture

@@ -23,7 +23,7 @@ Apply these rules per the [CommonMark spec 0.31.2](https://spec.commonmark.org/0
 - **Indented code blocks**: Lines indented 4+ spaces. Cannot interrupt a paragraph. Content is literal text, not parsed as Markdown.
 - **Fenced code blocks**: Open with 3+ backticks or tildes (do not mix). Closing fence must use same character with at least the same count. Info string after backtick fence cannot contain backticks. Specify language identifier after the opening fence. Content is literal text.
 - **HTML blocks**: Seven types defined by start/end tag conditions. Types 1–5 end at their matching end pattern. Type 6 ends at a blank line. Type 7 cannot interrupt a paragraph and ends at a blank line.
-- **Link reference definitions**: `[label]: destination "title"`. Case-insensitive label matching (Unicode case fold). First definition wins for duplicate labels. Cannot interrupt a paragraph.
+- **Link reference definitions**: reference-style link definitions with a label, destination, and optional title. Case-insensitive label matching (Unicode case fold). First definition wins for duplicate labels. Cannot interrupt a paragraph.
 - **Paragraphs**: Consecutive non-blank lines not interpretable as other block constructs. Leading spaces up to 3 are stripped.
 - **Blank lines**: Ignored between blocks; determine whether a list is tight or loose.
 
@@ -37,8 +37,8 @@ Apply these rules per the [CommonMark spec 0.31.2](https://spec.commonmark.org/0
 
 - **Code spans**: Backtick-delimited inline code. Line endings convert to spaces. Leading and trailing space stripped when both present (unless content is all spaces). Backslash escapes are literal inside code spans.
 - **Emphasis and strong emphasis**: `*`/`_` for `<em>`, `**`/`__` for `<strong>`. `_` is not allowed for intraword emphasis. Left-flanking / right-flanking delimiter run rules apply. Delimiter run length sum must not be a multiple of 3 when one delimiter can both open and close (unless both lengths are multiples of 3).
-- **Links**: Inline `[text](url "title")` or reference `[text][label]` / `[text][]` / `[text]`. Link text may contain inlines but not other links. Destination in `<…>` allows spaces; without angle brackets, balanced parentheses allowed. No whitespace between link text and `(` or `[`.
-- **Images**: `![alt](src "title")` — same syntax as links prefixed with `!`. Alt text is the plain-string content of the description.
+- **Links**: Inline-link syntax or reference-link syntax. Link text may contain inlines but not other links. Destination in `<…>` allows spaces; without angle brackets, balanced parentheses allowed. No whitespace between link text and the destination opener.
+- **Images**: image syntax follows the same structure as links, prefixed with `!`. Alt text is the plain-string content of the description.
 - **Autolinks**: `<URI>` or `<email>` in angle brackets. Scheme must be 2–32 characters starting with an ASCII letter. Bare URLs are not auto-linked in CommonMark (requires angle brackets).
 - **Raw HTML**: Open/close tags, comments (`<!--` … `-->`), processing instructions (`<?` … `?>`), declarations (`<!` … `>`), CDATA (`<![CDATA[` … `]]>`) are passed through as literal HTML.
 - **Hard line breaks**: Two+ trailing spaces or `\` before a line ending. Not recognized in code spans or HTML tags. Does not work at end of a block.
@@ -51,7 +51,7 @@ Apply these rules per the [CommonMark spec 0.31.2](https://spec.commonmark.org/0
 - [ ] Backtick fence info strings do not contain backtick characters.
 - [ ] Indented code blocks are preceded by a blank line (they cannot interrupt a paragraph).
 - [ ] Emphasis uses `*` for intraword; `_` only at word boundaries.
-- [ ] Links use `[text](url)` or reference syntax with no whitespace before `(` or `[`.
+- [ ] Links use valid inline-link or reference-link syntax with no whitespace before the destination opener.
 - [ ] Images include non-empty alt text.
 - [ ] Autolinks use angle brackets (`<URL>`); bare URLs are not CommonMark autolinks.
 - [ ] No unbalanced parentheses in bare link destinations (use `<…>` or escape).

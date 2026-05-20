@@ -40,11 +40,11 @@ agent chat history.
 
 After adoption:
 
-- baseline docs summarize current behavior
+- mapped owners summarize current behavior
 - feature work has a tracked owner and status
 - durable decisions are recorded with evidence and confidence
 - `doc-health.md` records what was verified and what is still uncertain
-- agent instruction files point into `docs/` instead of duplicating project
-  state
+- agent instruction files point to the ownership map instead of duplicating
+  project state
 
 See [`docs/README.md`](./docs/README.md) for the example documentation map.

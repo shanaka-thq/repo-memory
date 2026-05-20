@@ -36,6 +36,50 @@ can own decisions. `CONTRIBUTING.md` can own setup commands. `openapi.yaml` can
 own API contracts. Repo Memory should link to those owners, not create duplicate
 competing summaries.
 
+## What Is This Repository For?
+
+This repository is a **documentation standard + installable agent skill**.
+
+It helps teams keep project context understandable across humans and AI coding
+agents by defining:
+
+- what documentation capabilities need a canonical owner
+- how to keep feature state and handoff notes resumable
+- how to avoid duplicate, conflicting docs across tools
+
+It is **not** a product application, framework runtime, or template starter app.
+
+## Who This Is For
+
+- **Engineering teams** that lose context between sessions, handoffs, or tools
+- **Maintainers** who want documentation drift checks in normal workflows
+- **Agent users** (Copilot, Codex, Claude, OpenCode, etc.) who need one shared
+  source of project truth
+
+If you are just evaluating quickly: this repo gives you the standard,
+implementation workflow, examples, and validator scripts needed to adopt Repo
+Memory in another repository.
+
+## What You Should Understand in 2 Minutes
+
+After a quick scan, a new visitor should be able to answer:
+
+1. **What is it?** A portable docs ownership and handoff standard for AI-assisted software projects.
+2. **Why does it exist?** To reduce context loss and documentation drift.
+3. **How do I use it?** Install the `repo-memory` skill, then apply it to a target repo.
+4. **Where is the source of truth?** `STANDARD.md` (normative) and `SKILL.md` (workflow).
+
+## Short Version (Start Here)
+
+If the full docs feel like a lot, use this minimal path first:
+
+1. Read [`README.md`](./README.md) (this file) for what Repo Memory is.
+2. Read [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) for the canonical model.
+3. Read [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) for operational workflow.
+4. Use [`CHANGELOG.md`](./CHANGELOG.md) for current version and recent changes.
+
+Everything else is reference depth you can pull in only when needed.
+
 ## Install and Use
 
 Install Repo Memory from the repository root and select the skill by name:
@@ -65,6 +109,24 @@ This repository follows the common multi-skill repository layout:
 `skills/<skill-name>/SKILL.md`. The installable payload is
 [`skills/repo-memory/`](./skills/repo-memory/); the repository root contains
 governance files, CI, release notes, and public project documentation.
+
+### What Gets Installed (and What Does Not)
+
+When you install with `--skill repo-memory`, the installable payload is the
+`skills/repo-memory/` directory.
+
+- **Included for skill runtime:** `SKILL.md`, `STANDARD.md`, `references/`,
+  `agents/`, `examples/`, and `scripts/` under `skills/repo-memory/`.
+- **Not the skill payload:** repository-root governance and meta files such as
+  root `AGENTS.md`, root `README.md`, CI workflows, and issue templates.
+
+Root `AGENTS.md` in this repository is primarily for agents working **on this
+repository itself** (the skill source repo). It describes how to maintain this
+repo and keep standard/skill docs aligned.
+
+In contrast, when Repo Memory is applied to a target project, that target repo
+may have its own root `AGENTS.md` as a thin entrypoint into that target
+project's canonical docs.
 
 ## What This Project Provides
 

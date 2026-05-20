@@ -12,6 +12,17 @@ ADRs, specs, runbooks, setup docs, security docs, and product docs. Add a
 `Canonical Ownership Map`, create only the missing handoff surfaces, and keep
 agent-specific entrypoints thin.
 
+## Quick Start (Minimal Path)
+
+When the full docs set feels too heavy, start with these four files:
+
+1. [`README.md`](./README.md)
+2. [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
+3. [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md)
+4. [`CHANGELOG.md`](./CHANGELOG.md)
+
+Then read the rest only as needed for the task at hand.
+
 ## Entry Points
 
 Read these files in order when starting a session:

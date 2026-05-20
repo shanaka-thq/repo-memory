@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 2.1.0 <!-- x-release-please-version -->
+Version: 2.2.0 <!-- x-release-please-version -->
 
 ## Overview
 
@@ -456,7 +456,8 @@ For any non-trivial feature, bug fix, integration, refactor, or research thread 
 1. Find or create the feature entry in `docs/feature-registry.md`.
 2. Find or create `docs/features/<feature-slug>.md`.
 3. If no specific task was assigned, choose the lowest-rank row in the feature registry `Next Work Queue` where `Ready` is `ready`. Treat `verify-first` as a verification-only pickup, and ask for human direction before implementing `needs-human` or `blocked` rows.
-4. If the feature changes user journeys, acceptance behavior, or UI states, update `docs/requirements/user-stories-and-use-cases.md` or `docs/ui-ux/...` when those docs exist or should exist.
+4. **Before starting implementation, update the feature doc `Status` to `in_progress` and update the registry entry.** This signals that the feature is actively being worked on and prevents duplicate or conflicting work while the state is "half-baked".
+5. If the feature changes user journeys, acceptance behavior, or UI states, update `docs/requirements/user-stories-and-use-cases.md` or `docs/ui-ux/...` when those docs exist or should exist.
 5. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
 6. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
 7. If the feature depends on a plan produced by another agent or tool, record the plan provenance and implementation pickup in the feature or design doc before editing.

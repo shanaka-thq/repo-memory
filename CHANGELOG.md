@@ -6,7 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
-Minor versions add non-breaking content. Major versions restructure the workflow.
+## [2.2.0] - 2026-05-20
+
+### Added
+
+- Added requirement to update feature doc status to `in_progress` and update registry entry before starting implementation to prevent duplicate or conflicting work.
 
 ## [2.1] - 2026-05-20
 

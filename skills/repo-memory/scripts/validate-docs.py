@@ -578,7 +578,7 @@ def check_skill_version(root: Path) -> list[str]:
             ]
 
     changelog_text = changelog.read_text(encoding="utf-8")
-    if not re.search(rf"^##\s*(?:\[{re.escape(version)}\]|{re.escape(version)})\b", changelog_text, re.MULTILINE):
+    if not re.search(rf"^##\s*(?:\[{re.escape(version)}\]|{re.escape(version)}\b)", changelog_text, re.MULTILINE):
         return [f"CHANGELOG.md missing entry for SKILL.md version {version}"]
 
     return []

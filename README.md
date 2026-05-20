@@ -122,17 +122,17 @@ and more compatible with existing team habits.
 
 ## When to Use It
 
-| Situation | Action |
-| --- | --- |
-| Starting a new project | Run the scaffold to create a full baseline and ownership map |
-| Dumping greenfield brainstorms or AI plans | Put raw material in `docs/intake/`, then run the skill to promote accepted facts into the mapped owner |
-| Existing repo with strong docs | Add an ownership map and continuity surfaces first; do not duplicate ADRs, specs, runbooks, or setup docs |
-| Onboarding an existing codebase | Run the skill to audit evidence, assign owners, backfill only missing capabilities, and record stale areas |
-| Adding or resuming a feature | Run the skill to update feature docs, ranked queue, and handoff notes |
-| Handing off to another agent | Run the skill to confirm docs are current and resumable |
-| Asking a cloud agent to pick up work | Point it at `docs/feature-registry.md` and tell it to pick the first `ready` row in `Next Work Queue` |
-| Using Codex, Copilot, Claude, OpenCode, or VS Code together | Add thin tool-specific adapters that all point to `docs/README.md` and the same ownership map |
-| Docs have drifted from code | Update the single canonical owner, mark stale supporting docs, and record the correction in doc health |
+| Situation                                                   | Action                                                                                                     |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Starting a new project                                      | Run the scaffold to create a full baseline and ownership map                                               |
+| Dumping greenfield brainstorms or AI plans                  | Put raw material in `docs/intake/`, then run the skill to promote accepted facts into the mapped owner     |
+| Existing repo with strong docs                              | Add an ownership map and continuity surfaces first; do not duplicate ADRs, specs, runbooks, or setup docs  |
+| Onboarding an existing codebase                             | Run the skill to audit evidence, assign owners, backfill only missing capabilities, and record stale areas |
+| Adding or resuming a feature                                | Run the skill to update feature docs, ranked queue, and handoff notes                                      |
+| Handing off to another agent                                | Run the skill to confirm docs are current and resumable                                                    |
+| Asking a cloud agent to pick up work                        | Point it at `docs/feature-registry.md` and tell it to pick the first `ready` row in `Next Work Queue`      |
+| Using Codex, Copilot, Claude, OpenCode, or VS Code together | Add thin tool-specific adapters that all point to `docs/README.md` and the same ownership map              |
+| Docs have drifted from code                                 | Update the single canonical owner, mark stale supporting docs, and record the correction in doc health     |
 
 ## When Not to Use It
 
@@ -158,26 +158,26 @@ The skill helps an agent maintain documentation when that agent has the skill
 installed and chooses to use it. For reliable behavior across different tools,
 commit repo-local instructions and validation:
 
-| Layer | What to add | Why |
-| --- | --- | --- |
-| Canonical docs | `docs/README.md` with a `Canonical Ownership Map` | Tells every human and agent where each kind of truth lives. |
-| Thin adapters | `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, `opencode.json` when needed | Makes each tool start from the same docs without copying project facts. |
-| Validation | `validate-docs.py` locally or in CI | Catches missing handoff docs, duplicate ownership rows, stale feature state, and link problems. |
-| Hooks | Tool-specific lifecycle hooks when available | Useful for reminders or pre-finish checks, but CI is the shared guarantee. |
+| Layer          | What to add                                                                              | Why                                                                                             |
+| -------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Canonical docs | `docs/README.md` with a `Canonical Ownership Map`                                        | Tells every human and agent where each kind of truth lives.                                     |
+| Thin adapters  | `AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, `opencode.json` when needed | Makes each tool start from the same docs without copying project facts.                         |
+| Validation     | `validate-docs.py` locally or in CI                                                      | Catches missing handoff docs, duplicate ownership rows, stale feature state, and link problems. |
+| Hooks          | Tool-specific lifecycle hooks when available                                             | Useful for reminders or pre-finish checks, but CI is the shared guarantee.                      |
 
 For setup details by tool, read
 [`agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md).
 
 ## Use by Environment
 
-| Environment | Minimum setup | Expected behavior |
-| --- | --- | --- |
-| Local Codex | Install the skill and commit `AGENTS.md` pointing to `docs/README.md` | Codex reads repo instructions, follows the ownership map, and updates mapped owners when asked to use the skill. |
-| Codex cloud or other cloud agents | Commit `AGENTS.md`, `docs/README.md`, `docs/feature-registry.md`, and active feature docs | The agent can pick the first `ready` queue row and resume from committed docs without chat history. |
-| GitHub Copilot and VS Code | Add `.github/copilot-instructions.md` and optional `.github/instructions/*.instructions.md` as thin routers | Copilot gets the same docs workflow while project facts stay in the mapped owners. |
-| Claude Code | Add `CLAUDE.md` that imports or points to `AGENTS.md` | Claude starts from its expected memory file without duplicating project facts. |
-| OpenCode | Use `AGENTS.md`; add `opencode.json` only for shared instruction includes | OpenCode gets project rules from committed files and can combine reusable instruction files. |
-| CI or hooks | Run `validate-docs.py` with the right `--adoption-level` | Missed ownership maps, broken links, malformed queue rows, and stale handoff warnings become visible. |
+| Environment                       | Minimum setup                                                                                               | Expected behavior                                                                                                |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Local Codex                       | Install the skill and commit `AGENTS.md` pointing to `docs/README.md`                                       | Codex reads repo instructions, follows the ownership map, and updates mapped owners when asked to use the skill. |
+| Codex cloud or other cloud agents | Commit `AGENTS.md`, `docs/README.md`, `docs/feature-registry.md`, and active feature docs                   | The agent can pick the first `ready` queue row and resume from committed docs without chat history.              |
+| GitHub Copilot and VS Code        | Add `.github/copilot-instructions.md` and optional `.github/instructions/*.instructions.md` as thin routers | Copilot gets the same docs workflow while project facts stay in the mapped owners.                               |
+| Claude Code                       | Add `CLAUDE.md` that imports or points to `AGENTS.md`                                                       | Claude starts from its expected memory file without duplicating project facts.                                   |
+| OpenCode                          | Use `AGENTS.md`; add `opencode.json` only for shared instruction includes                                   | OpenCode gets project rules from committed files and can combine reusable instruction files.                     |
+| CI or hooks                       | Run `validate-docs.py` with the right `--adoption-level`                                                    | Missed ownership maps, broken links, malformed queue rows, and stale handoff warnings become visible.            |
 
 ## Repository Structure
 
@@ -433,9 +433,9 @@ All file and folder names in `docs/` must follow strict kebab-case conventions. 
 The standard and skill use the same two-number version (`MAJOR.MINOR`) recorded
 as `Version:` in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
-| Change type | Action |
-| --- | --- |
-| New content or non-breaking additions | Increment minor |
+| Change type                                              | Action          |
+| -------------------------------------------------------- | --------------- |
+| New content or non-breaking additions                    | Increment minor |
 | Required baseline changes or structural workflow changes | Increment major |
 
 Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The release body is pulled from [`CHANGELOG.md`](./CHANGELOG.md). Update `CHANGELOG.md` in the same PR that bumps the version.

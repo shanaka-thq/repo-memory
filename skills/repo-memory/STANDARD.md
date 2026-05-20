@@ -67,13 +67,13 @@ Level 0 is valid. Adoption is optional. The levels matter when a repo wants to
 describe how far it has gone toward Repo Memory conformance, not as a claim
 that every repository must adopt the full baseline immediately.
 
-| Level | Name | Requirement |
-| --- | --- | --- |
-| 0 | Not adopted | No maintained Repo Memory docs set exists. |
-| 1 | Continuity overlay | A canonical ownership map exists, no duplicate canonical owners are introduced, thin agent entrypoints point to the map, and the repo has shared handoff surfaces for active work. |
-| 2 | Baseline coverage | All baseline capabilities have canonical owners, satisfied either by existing repo-standard docs or Repo Memory docs. |
-| 3 | Verified | Baseline coverage plus metadata, verification dates, confidence, evidence links, no-duplicate ownership checks, and validator checks in local workflow or CI. |
-| 4 | Integrated | Verified plus aligned agent entrypoints and optional platform adapters, CLI, plugin, or MCP integration. |
+| Level | Name               | Requirement                                                                                                                                                                        |
+| ----- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Not adopted        | No maintained Repo Memory docs set exists.                                                                                                                                         |
+| 1     | Continuity overlay | A canonical ownership map exists, no duplicate canonical owners are introduced, thin agent entrypoints point to the map, and the repo has shared handoff surfaces for active work. |
+| 2     | Baseline coverage  | All baseline capabilities have canonical owners, satisfied either by existing repo-standard docs or Repo Memory docs.                                                              |
+| 3     | Verified           | Baseline coverage plus metadata, verification dates, confidence, evidence links, no-duplicate ownership checks, and validator checks in local workflow or CI.                      |
+| 4     | Integrated         | Verified plus aligned agent entrypoints and optional platform adapters, CLI, plugin, or MCP integration.                                                                           |
 
 A useful open source or production repo should aim for Level 2 or Level 3.
 Level 4 is optional and tool-specific.
@@ -129,23 +129,23 @@ A repo claiming Repo Memory Level 2 or higher has owners for these baseline
 capabilities. The default owner is the Repo Memory path to create when the repo
 does not already have a trustworthy owner.
 
-| Capability | Default owner when missing | Existing docs that can satisfy it |
-| --- | --- | --- |
-| Documentation map and ownership map | `docs/README.md` | Existing docs index, contributor handbook |
-| Project goal, users, scope, non-goals | `docs/project-overview.md` | Product brief, README, PRD |
-| Architecture and system shape | `docs/architecture.md` | Architecture notes, C4 docs, diagrams, RFCs |
-| Decisions and rationale | `docs/decision-log.md` | ADR folder, RFC archive, decision records |
-| Interfaces and contracts | `docs/interfaces-and-contracts.md` | OpenAPI, AsyncAPI, protobuf, GraphQL schema, MCP docs, CLI docs |
-| Data model | `docs/data-model.md` | Schema files, ERD docs, migration docs |
-| Local development and tooling | `docs/local-development.md` | README setup, CONTRIBUTING, Makefile docs |
-| Testing strategy | `docs/testing-strategy.md` | Test docs, CI docs, quality handbook |
-| Operations and runbooks | `docs/operations-runbook.md` | Runbooks, SRE docs, deploy docs |
-| Security and privacy | `docs/security-and-privacy.md` | `SECURITY.md`, threat model, compliance docs |
-| Observability and instrumentation | `docs/observability-and-instrumentation.md` | Telemetry docs, dashboard docs, analytics specs |
-| Implementation history | `docs/implementation-log.md` | CHANGELOG, release notes, migration history |
-| Feature registry and next work queue | `docs/feature-registry.md` | Usually missing; can be an existing roadmap or issue board if it is maintained in-repo and agent-readable |
-| Active feature handoff | `docs/features/<feature-slug>.md` | Usually missing; can be a maintained feature brief if it includes status, validation, and next-agent handoff |
-| Documentation health and conflicts | `docs/doc-health.md` | Usually missing; can be an existing documentation health/audit record |
+| Capability                            | Default owner when missing                  | Existing docs that can satisfy it                                                                            |
+| ------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Documentation map and ownership map   | `docs/README.md`                            | Existing docs index, contributor handbook                                                                    |
+| Project goal, users, scope, non-goals | `docs/project-overview.md`                  | Product brief, README, PRD                                                                                   |
+| Architecture and system shape         | `docs/architecture.md`                      | Architecture notes, C4 docs, diagrams, RFCs                                                                  |
+| Decisions and rationale               | `docs/decision-log.md`                      | ADR folder, RFC archive, decision records                                                                    |
+| Interfaces and contracts              | `docs/interfaces-and-contracts.md`          | OpenAPI, AsyncAPI, protobuf, GraphQL schema, MCP docs, CLI docs                                              |
+| Data model                            | `docs/data-model.md`                        | Schema files, ERD docs, migration docs                                                                       |
+| Local development and tooling         | `docs/local-development.md`                 | README setup, CONTRIBUTING, Makefile docs                                                                    |
+| Testing strategy                      | `docs/testing-strategy.md`                  | Test docs, CI docs, quality handbook                                                                         |
+| Operations and runbooks               | `docs/operations-runbook.md`                | Runbooks, SRE docs, deploy docs                                                                              |
+| Security and privacy                  | `docs/security-and-privacy.md`              | `SECURITY.md`, threat model, compliance docs                                                                 |
+| Observability and instrumentation     | `docs/observability-and-instrumentation.md` | Telemetry docs, dashboard docs, analytics specs                                                              |
+| Implementation history                | `docs/implementation-log.md`                | CHANGELOG, release notes, migration history                                                                  |
+| Feature registry and next work queue  | `docs/feature-registry.md`                  | Usually missing; can be an existing roadmap or issue board if it is maintained in-repo and agent-readable    |
+| Active feature handoff                | `docs/features/<feature-slug>.md`           | Usually missing; can be a maintained feature brief if it includes status, validation, and next-agent handoff |
+| Documentation health and conflicts    | `docs/doc-health.md`                        | Usually missing; can be an existing documentation health/audit record                                        |
 
 The canonical ownership map should name the owner for each adopted capability
 and list supporting docs separately. Supporting docs may contain useful context,

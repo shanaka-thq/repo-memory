@@ -91,14 +91,14 @@ healthy existing documentation.
 ```md
 ## Canonical Ownership Map
 
-| Capability | Canonical owner | Supporting docs | Notes |
-| --- | --- | --- | --- |
-| Documentation map and ownership map | `docs/README.md` | `AGENTS.md` | This table owns routing, not all project facts. |
-| Decisions and rationale | `docs/adr/` | `docs/decision-log.md` | ADRs are canonical; decision log links or indexes only. |
-| Interfaces and contracts | `openapi.yaml` | `docs/interfaces-and-contracts.md` | OpenAPI is canonical; prose explains usage and gaps. |
-| Local development and tooling | `CONTRIBUTING.md` | `README.md` | Do not duplicate setup commands elsewhere. |
-| Active feature handoff | `docs/features/<feature-slug>.md` | `docs/feature-registry.md` | Repo Memory owns resumable feature state. |
-| Documentation health and conflicts | `docs/doc-health.md` | None | Tracks stale docs, duplicate-owner migrations, and verification. |
+| Capability                          | Canonical owner                   | Supporting docs                    | Notes                                                            |
+| ----------------------------------- | --------------------------------- | ---------------------------------- | ---------------------------------------------------------------- |
+| Documentation map and ownership map | `docs/README.md`                  | `AGENTS.md`                        | This table owns routing, not all project facts.                  |
+| Decisions and rationale             | `docs/adr/`                       | `docs/decision-log.md`             | ADRs are canonical; decision log links or indexes only.          |
+| Interfaces and contracts            | `openapi.yaml`                    | `docs/interfaces-and-contracts.md` | OpenAPI is canonical; prose explains usage and gaps.             |
+| Local development and tooling       | `CONTRIBUTING.md`                 | `README.md`                        | Do not duplicate setup commands elsewhere.                       |
+| Active feature handoff              | `docs/features/<feature-slug>.md` | `docs/feature-registry.md`         | Repo Memory owns resumable feature state.                        |
+| Documentation health and conflicts  | `docs/doc-health.md`              | None                               | Tracks stale docs, duplicate-owner migrations, and verification. |
 ```
 
 Each capability should appear once. Put alternatives, legacy docs, and detail
@@ -200,6 +200,7 @@ This project uses Repo Memory for cross-agent continuity.
 for any changed capability. Do not duplicate mutable project facts in this file.
 
 When starting or resuming work:
+
 1. Read `docs/README.md`.
 2. Follow the Canonical Ownership Map to the project overview, architecture, decision, contract, setup, and feature owners relevant to the task.
 3. Review `docs/intake/` if it contains raw brainstorms, project notes, or plans relevant to the work, then promote accepted facts into the mapped owner.
@@ -207,6 +208,7 @@ When starting or resuming work:
 5. Read the active `docs/features/<feature-slug>.md` before making changes.
 
 When making changes:
+
 - Update the active feature doc as the work changes.
 - Update the `Next Work Queue` when priority, readiness, or pickup instructions change.
 - Update the mapped canonical owner for changed decisions, contracts, commands, architecture, runtime signals, or security posture.
@@ -214,6 +216,7 @@ When making changes:
 - Keep any agent-specific instruction files short and aligned to the same docs entrypoints.
 
 Before stopping:
+
 - Update `docs/features/<feature-slug>.md`, especially `Implementation Status`, `Validation`, `Resume Context`, `Next Agent Handoff`, and `Exact Next Prompt` when present.
 - Update the mapped implementation-history owner for meaningful landed work.
 - Update the mapped decision owner when a durable technical choice changed.
@@ -284,15 +287,15 @@ If the Markdown environment supports a shared theme, align Mermaid to that theme
 
 ## Next Work Queue
 
-| Rank | Work item | Type | Status | Ready | Why next | Next safe step | Canonical doc | Last verified |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Answer search improvements | feature | `in_progress` | `ready` | Highest user-visible search gap | Finish frontend wiring and run search flow checks | [`features/answer-search-improvements.md`](./features/answer-search-improvements.md) | 2026-04-22 |
+| Rank | Work item                  | Type    | Status        | Ready   | Why next                        | Next safe step                                    | Canonical doc                                                                        | Last verified |
+| ---- | -------------------------- | ------- | ------------- | ------- | ------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------- |
+| 1    | Answer search improvements | feature | `in_progress` | `ready` | Highest user-visible search gap | Finish frontend wiring and run search flow checks | [`features/answer-search-improvements.md`](./features/answer-search-improvements.md) | 2026-04-22    |
 
 ## Feature List
 
-| Feature | Slug | Status | Priority | Last updated | Notes |
-| --- | --- | --- | --- | --- | --- |
-| Answer search improvements | `answer-search-improvements` | `in_progress` | High | 2026-04-22 | [Feature doc](./features/answer-search-improvements.md), [Logic](./features/answer-search-improvements/logic.md) |
+| Feature                    | Slug                         | Status        | Priority | Last updated | Notes                                                                                                            |
+| -------------------------- | ---------------------------- | ------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Answer search improvements | `answer-search-improvements` | `in_progress` | High     | 2026-04-22   | [Feature doc](./features/answer-search-improvements.md), [Logic](./features/answer-search-improvements/logic.md) |
 ```
 
 Allowed statuses: `research`, `planned`, `in_progress`, `blocked`, `implemented`, `verified`, `shipped`, `abandoned`, `superseded`, `deprecated`, `rolled_back`.
@@ -355,10 +358,10 @@ Describe the user, business, developer, or operational problem this project exis
 
 ## Target Users or Actors
 
-| User or actor | Goal | Notes |
-| --- | --- | --- |
-| Primary user | What they need to accomplish | Relevant constraints or context |
-| Admin or operator | What they need to manage | Relevant permissions or responsibilities |
+| User or actor     | Goal                         | Notes                                    |
+| ----------------- | ---------------------------- | ---------------------------------------- |
+| Primary user      | What they need to accomplish | Relevant constraints or context          |
+| Admin or operator | What they need to manage     | Relevant permissions or responsibilities |
 
 ## Success Criteria
 
@@ -433,9 +436,11 @@ State the user problem and intended outcome.
 ## Scope
 
 In:
+
 - What this feature covers
 
 Out:
+
 - What it does not cover
 
 ## User Impact
@@ -483,9 +488,9 @@ Out:
 
 ## Review Log
 
-| Date | Reviewer | Tool or agent surface | Role or lens | Subject | Disposition | Record |
-| --- | --- | --- | --- | --- | --- | --- |
-| 2026-04-22 | game-design-specialist | Codex sub-agent | game designer | Search result interaction loop | accepted with follow-up changes | `../reviews/answer-search-game-design-pass.md` |
+| Date       | Reviewer               | Tool or agent surface | Role or lens  | Subject                        | Disposition                     | Record                                         |
+| ---------- | ---------------------- | --------------------- | ------------- | ------------------------------ | ------------------------------- | ---------------------------------------------- |
+| 2026-04-22 | game-design-specialist | Codex sub-agent       | game designer | Search result interaction loop | accepted with follow-up changes | `../reviews/answer-search-game-design-pass.md` |
 
 ## Change Governance
 
@@ -546,16 +551,16 @@ Related docs: `../project-overview.md`, `functional-requirements.md`, `../ui-ux/
 
 ## Actors
 
-| Actor | Primary goal | Permissions or constraints | Related journeys |
-| --- | --- | --- | --- |
-| Analyst | Find relevant answers quickly | Authenticated dashboard user | Search, inspect result |
-| Admin | Audit and tune answer quality | Advanced controls | Review low-confidence results |
+| Actor   | Primary goal                  | Permissions or constraints   | Related journeys              |
+| ------- | ----------------------------- | ---------------------------- | ----------------------------- |
+| Analyst | Find relevant answers quickly | Authenticated dashboard user | Search, inspect result        |
+| Admin   | Audit and tune answer quality | Advanced controls            | Review low-confidence results |
 
 ## Personas or User Segments
 
-| Persona or segment | Context | Needs | Risks |
-| --- | --- | --- | --- |
-| Primary persona | Where and why they use the system | Outcome they need | Failure or confusion risk |
+| Persona or segment | Context                           | Needs             | Risks                     |
+| ------------------ | --------------------------------- | ----------------- | ------------------------- |
+| Primary persona    | Where and why they use the system | Outcome they need | Failure or confusion risk |
 
 ## User Stories
 
@@ -564,8 +569,8 @@ Related docs: `../project-overview.md`, `functional-requirements.md`, `../ui-ux/
 
 ## Journey Map
 
-| Journey | Actor | Start state | Desired outcome | Related docs |
-| --- | --- | --- | --- | --- |
+| Journey              | Actor   | Start state      | Desired outcome         | Related docs                            |
+| -------------------- | ------- | ---------------- | ----------------------- | --------------------------------------- |
 | Search for an answer | Analyst | Needs a response | Finds a relevant answer | `../ui-ux/search-results-experience.md` |
 
 ## Primary Use Cases
@@ -574,30 +579,36 @@ Related docs: `../project-overview.md`, `functional-requirements.md`, `../ui-ux/
 
 Actor: Analyst
 Preconditions:
+
 - User is authenticated
 - Search index is available
 
 Main flow:
+
 1. User enters a query.
 2. System returns ranked answers.
 3. User opens a result for more detail.
 
 Alternative flows:
+
 - No results found
 - Search service degraded
 - User lacks permission
 
 Failure states:
+
 - Query validation fails
 - Search backend times out
 - Result data is stale or incomplete
 
 Acceptance notes:
+
 - Results should show ranking rationale when available
 - Empty, loading, and error states must be clear
 - Permission and privacy boundaries must be visible where relevant
 
 Instrumentation notes:
+
 - Track search request count, no-result rate, timeout rate, and result-open events when product analytics are allowed.
 
 ## Accessibility and Inclusion Notes
@@ -680,14 +691,14 @@ Related docs: `operations-runbook.md`, `security-and-privacy.md`, `requirements/
 
 ## Logs
 
-| Signal | Source | Purpose | Retention or privacy notes |
-| --- | --- | --- | --- |
+| Signal      | Source                    | Purpose                   | Retention or privacy notes               |
+| ----------- | ------------------------- | ------------------------- | ---------------------------------------- |
 | Request log | API gateway or app server | Diagnose request failures | Do not log secrets or sensitive payloads |
 
 ## Metrics
 
-| Metric | Source | Purpose | Alert or dashboard |
-| --- | --- | --- | --- |
+| Metric             | Source      | Purpose                  | Alert or dashboard   |
+| ------------------ | ----------- | ------------------------ | -------------------- |
 | Request error rate | API service | Detect degraded behavior | Operations dashboard |
 
 ## Traces
@@ -696,8 +707,8 @@ Related docs: `operations-runbook.md`, `security-and-privacy.md`, `requirements/
 
 ## Product Analytics Events
 
-| Event | Trigger | Properties | Privacy notes |
-| --- | --- | --- | --- |
+| Event              | Trigger             | Properties                 | Privacy notes                                                   |
+| ------------------ | ------------------- | -------------------------- | --------------------------------------------------------------- |
 | `search_submitted` | User submits search | query length, result count | Do not store raw sensitive query text unless explicitly allowed |
 
 ## Audit Events
@@ -746,21 +757,21 @@ Open doc conflicts:
 
 ## Verification Matrix
 
-| Doc | Last verified | Verified against | Confidence | Known drift or action |
-| --- | --- | --- | --- | --- |
-| `architecture.md` | 2026-04-28 | `src/`, deployment config, tests | high | None |
-| `data-model.md` | 2026-04-28 | schemas, migrations, storage code | medium | Confirm production retention rules |
+| Doc               | Last verified | Verified against                  | Confidence | Known drift or action              |
+| ----------------- | ------------- | --------------------------------- | ---------- | ---------------------------------- |
+| `architecture.md` | 2026-04-28    | `src/`, deployment config, tests  | high       | None                               |
+| `data-model.md`   | 2026-04-28    | schemas, migrations, storage code | medium     | Confirm production retention rules |
 
 ## Conflicts and Corrections
 
-| Date | Conflict | Resolution | Evidence |
-| --- | --- | --- | --- |
+| Date       | Conflict                                      | Resolution                                        | Evidence      |
+| ---------- | --------------------------------------------- | ------------------------------------------------- | ------------- |
 | 2026-04-28 | Legacy README described old deployment target | `operations-runbook.md` updated to current target | deploy config |
 
 ## Renames and Supersessions
 
-| Old slug or doc | New slug or doc | Status | Notes |
-| --- | --- | --- | --- |
+| Old slug or doc    | New slug or doc                 | Status     | Notes                            |
+| ------------------ | ------------------------------- | ---------- | -------------------------------- |
 | `legacy-search.md` | `answer-search-improvements.md` | superseded | New feature doc owns active work |
 ```
 
@@ -793,10 +804,10 @@ Use this folder for maintained diagram sources and rendered exports that support
 
 ## Diagram Inventory
 
-| Diagram | Format | Owner doc | Notes |
-| --- | --- | --- | --- |
-| `system-context.mmd` | Mermaid source | `../architecture.md` | Canonical architecture context diagram |
-| `search-flow.drawio` | Draw.io source | `../designs/answer-search-architecture.md` | Visual editing retained for cross-team updates |
+| Diagram                   | Format         | Owner doc                                  | Notes                                              |
+| ------------------------- | -------------- | ------------------------------------------ | -------------------------------------------------- |
+| `system-context.mmd`      | Mermaid source | `../architecture.md`                       | Canonical architecture context diagram             |
+| `search-flow.drawio`      | Draw.io source | `../designs/answer-search-architecture.md` | Visual editing retained for cross-team updates     |
 | `exports/search-flow.svg` | Rendered asset | `../designs/answer-search-architecture.md` | Used by Markdown target that cannot render Mermaid |
 
 ## Diagram Rules
@@ -813,10 +824,10 @@ Use this folder for maintained diagram sources and rendered exports that support
 
 Use this folder for substantial designs, proposals, or adopted solution shapes that need goals, tradeoffs, rollout notes, and future-evolution context.
 
-| Design | Purpose | Status |
-| --- | --- | --- |
-| `answer-search-architecture.md` | Documents the ranking pipeline redesign | `adopted` |
-| `notifications-delivery.md` | Proposes a new delivery flow | `proposed` |
+| Design                          | Purpose                                 | Status     |
+| ------------------------------- | --------------------------------------- | ---------- |
+| `answer-search-architecture.md` | Documents the ranking pipeline redesign | `adopted`  |
+| `notifications-delivery.md`     | Proposes a new delivery flow            | `proposed` |
 ```
 
 ## Reviews Index Template
@@ -828,8 +839,8 @@ Use this index when a target repo creates `docs/reviews/` for substantive review
 
 Use this folder for substantive plan, specialist, second-agent, or human reviews that need provenance beyond a short entry in the owning doc.
 
-| Review | Subject | Reviewer | Role or lens | Disposition |
-| --- | --- | --- | --- | --- |
+| Review                              | Subject                                     | Reviewer               | Role or lens  | Disposition                     |
+| ----------------------------------- | ------------------------------------------- | ---------------------- | ------------- | ------------------------------- |
 | `answer-search-game-design-pass.md` | `../features/answer-search-improvements.md` | game-design-specialist | game designer | accepted with follow-up changes |
 ```
 
@@ -941,10 +952,10 @@ Describe the chosen structure, flow, and major interfaces.
 
 Use this folder for project-specific deep-dive documentation that is too detailed for the baseline docs but important for future implementation and maintenance.
 
-| Topic | Purpose | Owner doc |
-| --- | --- | --- |
-| `order-lifecycle.md` | Describes the end-to-end order workflow and business rules | `../architecture.md` |
-| `multi-tenant-routing.md` | Documents routing and tenant resolution behavior | `../interfaces-and-contracts.md` |
+| Topic                     | Purpose                                                    | Owner doc                        |
+| ------------------------- | ---------------------------------------------------------- | -------------------------------- |
+| `order-lifecycle.md`      | Describes the end-to-end order workflow and business rules | `../architecture.md`             |
+| `multi-tenant-routing.md` | Documents routing and tenant resolution behavior           | `../interfaces-and-contracts.md` |
 ```
 
 ## Components Index Template
@@ -954,10 +965,10 @@ Use this folder for project-specific deep-dive documentation that is too detaile
 
 Use this folder for shared component or subsystem deep dives that cut across features and would otherwise be hard to reconstruct from code alone.
 
-| Component | Purpose | Owner doc |
-| --- | --- | --- |
-| `search-results-panel.md` | Documents state, rendering rules, and interaction behavior for the shared results panel | `../architecture.md` |
-| `session-manager.md` | Explains session ownership, refresh logic, and cleanup rules | `../security-and-privacy.md` |
+| Component                 | Purpose                                                                                 | Owner doc                    |
+| ------------------------- | --------------------------------------------------------------------------------------- | ---------------------------- |
+| `search-results-panel.md` | Documents state, rendering rules, and interaction behavior for the shared results panel | `../architecture.md`         |
+| `session-manager.md`      | Explains session ownership, refresh logic, and cleanup rules                            | `../security-and-privacy.md` |
 ```
 
 ## Project Detail Template
@@ -1062,10 +1073,10 @@ Reuse this template for `docs/features/<feature-slug>/components/<component-slug
 
 Use this folder for user journeys, screen or surface behavior, interaction rules, accessibility notes, and responsive requirements that should stay aligned with implementation.
 
-| Topic | Purpose | Owner doc |
-| --- | --- | --- |
+| Topic                          | Purpose                                                                   | Owner doc                                       |
+| ------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------- |
 | `search-results-experience.md` | Defines search result states, ranking presentation, and keyboard behavior | `../requirements/user-stories-and-use-cases.md` |
-| `settings-flow.md` | Documents the settings journey and permissions-related states | `../features/settings.md` |
+| `settings-flow.md`             | Documents the settings journey and permissions-related states             | `../features/settings.md`                       |
 ```
 
 ## UI and UX Doc Template
@@ -1186,16 +1197,16 @@ mutable facts from an owner into another file; link to the owner instead.
 
 ## Canonical Ownership Map
 
-| Capability | Canonical owner | Supporting docs | Notes |
-| --- | --- | --- | --- |
-| Documentation map and ownership map | `docs/README.md` | `AGENTS.md` | This table owns routing. |
-| Project goal, users, scope, non-goals | `project-overview.md` | `README.md` | Replace with existing owner if the repo already has one. |
-| Architecture and system shape | `architecture.md` | `docs/diagrams/` | Replace with existing C4/RFC owner if present. |
-| Decisions and rationale | `decision-log.md` | `docs/adr/` | If ADRs are canonical, put `docs/adr/` here. |
-| Interfaces and contracts | `interfaces-and-contracts.md` | `openapi.yaml` | If a schema/spec is canonical, name it here. |
-| Local development and tooling | `local-development.md` | `CONTRIBUTING.md` | Avoid duplicate setup commands. |
-| Active feature handoff | `features/<feature-slug>.md` | `feature-registry.md` | Repo Memory usually owns this. |
-| Documentation health and conflicts | `doc-health.md` | None | Tracks stale docs and duplicate-owner migrations. |
+| Capability                            | Canonical owner               | Supporting docs       | Notes                                                    |
+| ------------------------------------- | ----------------------------- | --------------------- | -------------------------------------------------------- |
+| Documentation map and ownership map   | `docs/README.md`              | `AGENTS.md`           | This table owns routing.                                 |
+| Project goal, users, scope, non-goals | `project-overview.md`         | `README.md`           | Replace with existing owner if the repo already has one. |
+| Architecture and system shape         | `architecture.md`             | `docs/diagrams/`      | Replace with existing C4/RFC owner if present.           |
+| Decisions and rationale               | `decision-log.md`             | `docs/adr/`           | If ADRs are canonical, put `docs/adr/` here.             |
+| Interfaces and contracts              | `interfaces-and-contracts.md` | `openapi.yaml`        | If a schema/spec is canonical, name it here.             |
+| Local development and tooling         | `local-development.md`        | `CONTRIBUTING.md`     | Avoid duplicate setup commands.                          |
+| Active feature handoff                | `features/<feature-slug>.md`  | `feature-registry.md` | Repo Memory usually owns this.                           |
+| Documentation health and conflicts    | `doc-health.md`               | None                  | Tracks stale docs and duplicate-owner migrations.        |
 
 ## Agent Startup Order
 
@@ -1270,21 +1281,21 @@ For non-trivial work, create or update:
 ```md
 ## Documentation Audit
 
-| Target doc | Evidence source | Confidence | Gaps |
-| --- | --- | --- | --- |
-| `architecture.md` | `src/`, runtime config, deploy files | High | no explicit scaling rationale |
-| `local-development.md` | package scripts, Makefile, setup docs | High | seed-data workflow unclear |
-| `doc-health.md` | current docs, code evidence, recent changes | Medium | full audit not yet completed |
-| `observability-and-instrumentation.md` | logging config, telemetry code, dashboards, alert config | Medium | production retention unknown |
-| `requirements/user-stories-and-use-cases.md` | product notes, UI tests, support docs | Medium | admin use cases incomplete |
-| `diagrams/system-context.mmd` | architecture docs, service boundaries, deploy files | High | queue edges not yet shown |
-| `decision-log.md` | legacy docs, commits, comments | Medium | some rationale inferred |
-| `designs/answer-search-architecture.md` | RFC notes, recent commits, architecture comments | Medium | rollout plan only partially documented |
-| `project-details/order-lifecycle.md` | workflow services, tests, ops notes | Medium | failure handling still inferred |
-| `components/search-results-panel.md` | UI state code, component tests | High | accessibility rationale missing |
-| `diagrams/search-flow.drawio` | design workshop artifact, implementation notes | Medium | Mermaid equivalent not maintained |
-| `ui-ux/search-results-experience.md` | design mocks, component stories, browser checks | Medium | mobile behavior not fully documented |
-| `security-and-privacy.md` | env config, auth middleware, infra docs | Medium | production posture unclear |
+| Target doc                                   | Evidence source                                          | Confidence | Gaps                                   |
+| -------------------------------------------- | -------------------------------------------------------- | ---------- | -------------------------------------- |
+| `architecture.md`                            | `src/`, runtime config, deploy files                     | High       | no explicit scaling rationale          |
+| `local-development.md`                       | package scripts, Makefile, setup docs                    | High       | seed-data workflow unclear             |
+| `doc-health.md`                              | current docs, code evidence, recent changes              | Medium     | full audit not yet completed           |
+| `observability-and-instrumentation.md`       | logging config, telemetry code, dashboards, alert config | Medium     | production retention unknown           |
+| `requirements/user-stories-and-use-cases.md` | product notes, UI tests, support docs                    | Medium     | admin use cases incomplete             |
+| `diagrams/system-context.mmd`                | architecture docs, service boundaries, deploy files      | High       | queue edges not yet shown              |
+| `decision-log.md`                            | legacy docs, commits, comments                           | Medium     | some rationale inferred                |
+| `designs/answer-search-architecture.md`      | RFC notes, recent commits, architecture comments         | Medium     | rollout plan only partially documented |
+| `project-details/order-lifecycle.md`         | workflow services, tests, ops notes                      | Medium     | failure handling still inferred        |
+| `components/search-results-panel.md`         | UI state code, component tests                           | High       | accessibility rationale missing        |
+| `diagrams/search-flow.drawio`                | design workshop artifact, implementation notes           | Medium     | Mermaid equivalent not maintained      |
+| `ui-ux/search-results-experience.md`         | design mocks, component stories, browser checks          | Medium     | mobile behavior not fully documented   |
+| `security-and-privacy.md`                    | env config, auth middleware, infra docs                  | Medium     | production posture unclear             |
 ```
 
 ## Session-Close Checklist

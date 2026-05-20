@@ -24,12 +24,12 @@ progressive adoption.
 - No spaces, underscores, capital letters, dots, or special characters.
 - Keep folder names short and descriptive.
 
-| Allowed | Not Allowed |
-| --- | --- |
+| Allowed             | Not Allowed        |
+| ------------------- | ------------------ |
 | `feature-registry/` | `FeatureRegistry/` |
-| `project-details/` | `project_details/` |
-| `ui-ux/` | `UI-UX/` |
-| `auth-flow/` | `authFlow/` |
+| `project-details/`  | `project_details/` |
+| `ui-ux/`            | `UI-UX/`           |
+| `auth-flow/`        | `authFlow/`        |
 
 ### Files
 
@@ -37,13 +37,13 @@ progressive adoption.
 - No spaces, underscores, capital letters (except `README.md`, `_template.md`), or special characters.
 - Feature slugs, component slugs, design slugs, and topic slugs must be consistent across the registry, file name, and folder name.
 
-| Allowed | Not Allowed |
-| --- | --- |
-| `functional-requirements.md` | `FunctionalRequirements.md` |
-| `local-development.md` | `local_development.md` |
+| Allowed                         | Not Allowed                   |
+| ------------------------------- | ----------------------------- |
+| `functional-requirements.md`    | `FunctionalRequirements.md`   |
+| `local-development.md`          | `local_development.md`        |
 | `answer-search-improvements.md` | `answerSearchImprovements.md` |
-| `README.md` | `readme.md` |
-| `_template.md` | `template.md` |
+| `README.md`                     | `readme.md`                   |
+| `_template.md`                  | `template.md`                 |
 
 ### Slugs
 
@@ -56,12 +56,12 @@ Rules:
 - Do not change a slug after it is registered without updating every reference.
 - Do not include version numbers or dates in slugs unless the topic is version-specific.
 
-| Topic name | Correct slug |
-| --- | --- |
+| Topic name                 | Correct slug                 |
+| -------------------------- | ---------------------------- |
 | Answer search improvements | `answer-search-improvements` |
-| Order lifecycle | `order-lifecycle` |
-| Multi-tenant routing | `multi-tenant-routing` |
-| Session manager | `session-manager` |
+| Order lifecycle            | `order-lifecycle`            |
+| Multi-tenant routing       | `multi-tenant-routing`       |
+| Session manager            | `session-manager`            |
 
 ## Default Folder and File Placement
 
@@ -152,14 +152,14 @@ Rules:
 
 Create these only when baseline docs cannot hold the detail without becoming unreadable:
 
-| Folder | When to create | Required index file |
-| --- | --- | --- |
-| `docs/diagrams/` | When diagram sources or exports are checked in | `docs/diagrams/README.md` |
-| `docs/designs/` | When significant designs or proposals need their own docs | `docs/designs/README.md` |
-| `docs/project-details/` | When domain workflows or integration quirks need deep treatment | `docs/project-details/README.md` |
-| `docs/components/` | When shared subsystems or components need behavior docs | `docs/components/README.md` |
-| `docs/reviews/` | When substantive plan, specialist, or second-agent reviews need their own records | `docs/reviews/README.md` |
-| `docs/ui-ux/` | When user journeys, interaction states, or accessibility need dedicated docs | `docs/ui-ux/README.md` |
+| Folder                  | When to create                                                                    | Required index file              |
+| ----------------------- | --------------------------------------------------------------------------------- | -------------------------------- |
+| `docs/diagrams/`        | When diagram sources or exports are checked in                                    | `docs/diagrams/README.md`        |
+| `docs/designs/`         | When significant designs or proposals need their own docs                         | `docs/designs/README.md`         |
+| `docs/project-details/` | When domain workflows or integration quirks need deep treatment                   | `docs/project-details/README.md` |
+| `docs/components/`      | When shared subsystems or components need behavior docs                           | `docs/components/README.md`      |
+| `docs/reviews/`         | When substantive plan, specialist, or second-agent reviews need their own records | `docs/reviews/README.md`         |
+| `docs/ui-ux/`           | When user journeys, interaction states, or accessibility need dedicated docs      | `docs/ui-ux/README.md`           |
 
 Rules:
 
@@ -178,38 +178,38 @@ Treat these as the default locations for Repo Memory-owned capabilities. If a re
 already has a strong doc in another location, preserve it first, then link or
 migrate it deliberately instead of creating competing current-state summaries.
 
-| Content type | Correct location |
-| --- | --- |
-| Project goal, problem statement, target users or actors, success criteria, scope, non-goals | `docs/project-overview.md` |
-| Service boundaries, major modules, topology | `docs/architecture.md` |
-| APIs, schemas, MCP tools, CLI, contracts | `docs/interfaces-and-contracts.md` |
-| Entities, relationships, lifecycle, storage | `docs/data-model.md` |
-| Setup, commands, scripts, codegen, fixtures | `docs/local-development.md` |
-| Doc freshness, verification state, known drift | `docs/doc-health.md` |
-| Logs, metrics, traces, analytics events, audit events, dashboards, alerts | `docs/observability-and-instrumentation.md` |
-| Test strategy, coverage gaps, tools | `docs/testing-strategy.md` |
-| Deploy, ops, runbooks, alerts, rollback | `docs/operations-runbook.md` |
-| Auth, secrets, PII, threat model | `docs/security-and-privacy.md` |
-| Durable technical choices with rationale | `docs/decision-log.md` |
-| What landed and when | `docs/implementation-log.md` |
-| All tracked features, their status, and the ranked next-work queue | `docs/feature-registry.md` |
-| Raw brainstorms, copied chat notes, user-provided project dumps, sketches, and imported planning output | `docs/intake/`, then promote accepted outcomes into the mapped owner |
-| Feature goal, status, checklist, handoff | `docs/features/<feature-slug>.md` |
-| Canonical resume state for interrupted work | `docs/features/<feature-slug>.md` |
-| Feature-local flows, edge cases, algorithms | `docs/features/<feature-slug>/logic.md` |
-| Feature-local component behavior | `docs/features/<feature-slug>/components/<component-slug>.md` |
-| Functional behaviors and acceptance criteria | `docs/requirements/functional-requirements.md` |
-| Performance, scalability, compliance limits | `docs/requirements/non-functional-requirements.md` |
-| Actors, personas, user stories, journeys, alternative flows, failure states, acceptance paths | `docs/requirements/user-stories-and-use-cases.md` |
-| Diagram sources and exports | `docs/diagrams/<topic-slug>.mmd` or `.drawio` |
-| Proposed or adopted designs and tradeoffs | `docs/designs/<design-slug>.md` |
-| Domain rules, integration quirks too long for baseline | `docs/project-details/<topic-slug>.md` |
-| Shared subsystem or component behavior | `docs/components/<component-slug>.md` |
-| Substantive specialist or second-agent review records | `docs/reviews/<review-slug>.md` |
-| Short plan or review provenance for one feature | `docs/features/<feature-slug>.md` |
-| Major plan, proposal, or rollout shape | `docs/designs/<design-slug>.md` |
-| Companion workflow specs and plans | `docs/superpowers/specs/<date>-<topic>.md` and `docs/superpowers/plans/<date>-<topic>.md`, linked from the owning Repo Memory doc |
-| User journeys, screen states, accessibility | `docs/ui-ux/<topic-or-flow-slug>.md` |
+| Content type                                                                                            | Correct location                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Project goal, problem statement, target users or actors, success criteria, scope, non-goals             | `docs/project-overview.md`                                                                                                        |
+| Service boundaries, major modules, topology                                                             | `docs/architecture.md`                                                                                                            |
+| APIs, schemas, MCP tools, CLI, contracts                                                                | `docs/interfaces-and-contracts.md`                                                                                                |
+| Entities, relationships, lifecycle, storage                                                             | `docs/data-model.md`                                                                                                              |
+| Setup, commands, scripts, codegen, fixtures                                                             | `docs/local-development.md`                                                                                                       |
+| Doc freshness, verification state, known drift                                                          | `docs/doc-health.md`                                                                                                              |
+| Logs, metrics, traces, analytics events, audit events, dashboards, alerts                               | `docs/observability-and-instrumentation.md`                                                                                       |
+| Test strategy, coverage gaps, tools                                                                     | `docs/testing-strategy.md`                                                                                                        |
+| Deploy, ops, runbooks, alerts, rollback                                                                 | `docs/operations-runbook.md`                                                                                                      |
+| Auth, secrets, PII, threat model                                                                        | `docs/security-and-privacy.md`                                                                                                    |
+| Durable technical choices with rationale                                                                | `docs/decision-log.md`                                                                                                            |
+| What landed and when                                                                                    | `docs/implementation-log.md`                                                                                                      |
+| All tracked features, their status, and the ranked next-work queue                                      | `docs/feature-registry.md`                                                                                                        |
+| Raw brainstorms, copied chat notes, user-provided project dumps, sketches, and imported planning output | `docs/intake/`, then promote accepted outcomes into the mapped owner                                                              |
+| Feature goal, status, checklist, handoff                                                                | `docs/features/<feature-slug>.md`                                                                                                 |
+| Canonical resume state for interrupted work                                                             | `docs/features/<feature-slug>.md`                                                                                                 |
+| Feature-local flows, edge cases, algorithms                                                             | `docs/features/<feature-slug>/logic.md`                                                                                           |
+| Feature-local component behavior                                                                        | `docs/features/<feature-slug>/components/<component-slug>.md`                                                                     |
+| Functional behaviors and acceptance criteria                                                            | `docs/requirements/functional-requirements.md`                                                                                    |
+| Performance, scalability, compliance limits                                                             | `docs/requirements/non-functional-requirements.md`                                                                                |
+| Actors, personas, user stories, journeys, alternative flows, failure states, acceptance paths           | `docs/requirements/user-stories-and-use-cases.md`                                                                                 |
+| Diagram sources and exports                                                                             | `docs/diagrams/<topic-slug>.mmd` or `.drawio`                                                                                     |
+| Proposed or adopted designs and tradeoffs                                                               | `docs/designs/<design-slug>.md`                                                                                                   |
+| Domain rules, integration quirks too long for baseline                                                  | `docs/project-details/<topic-slug>.md`                                                                                            |
+| Shared subsystem or component behavior                                                                  | `docs/components/<component-slug>.md`                                                                                             |
+| Substantive specialist or second-agent review records                                                   | `docs/reviews/<review-slug>.md`                                                                                                   |
+| Short plan or review provenance for one feature                                                         | `docs/features/<feature-slug>.md`                                                                                                 |
+| Major plan, proposal, or rollout shape                                                                  | `docs/designs/<design-slug>.md`                                                                                                   |
+| Companion workflow specs and plans                                                                      | `docs/superpowers/specs/<date>-<topic>.md` and `docs/superpowers/plans/<date>-<topic>.md`, linked from the owning Repo Memory doc |
+| User journeys, screen states, accessibility                                                             | `docs/ui-ux/<topic-or-flow-slug>.md`                                                                                              |
 
 ## Metadata Rules
 
@@ -262,18 +262,18 @@ docs/diagrams/
 
 Feature docs and feature registry entries must use one of these status values exactly:
 
-| Status | Meaning |
-| --- | --- |
-| `research` | Being investigated; no implementation started |
-| `planned` | Scoped and ready; implementation not yet started |
-| `in_progress` | Actively being implemented |
-| `blocked` | Waiting on something external |
-| `implemented` | Code landed; not yet verified end-to-end |
-| `verified` | Manually or automatically confirmed working |
-| `shipped` | Released to users |
-| `abandoned` | Work intentionally stopped without shipping |
-| `superseded` | Replaced by another feature, design, or approach |
-| `deprecated` | Still exists but should not be extended for new work |
+| Status        | Meaning                                                   |
+| ------------- | --------------------------------------------------------- |
+| `research`    | Being investigated; no implementation started             |
+| `planned`     | Scoped and ready; implementation not yet started          |
+| `in_progress` | Actively being implemented                                |
+| `blocked`     | Waiting on something external                             |
+| `implemented` | Code landed; not yet verified end-to-end                  |
+| `verified`    | Manually or automatically confirmed working               |
+| `shipped`     | Released to users                                         |
+| `abandoned`   | Work intentionally stopped without shipping               |
+| `superseded`  | Replaced by another feature, design, or approach          |
+| `deprecated`  | Still exists but should not be extended for new work      |
 | `rolled_back` | Landed work was reverted or disabled after implementation |
 
 Do not invent new status values. If a feature has a state not covered here, document the reason in the feature file under `Open Questions`.
@@ -287,23 +287,23 @@ Do not invent new status values. If a feature has a state not covered here, docu
 
 ## Prohibited Patterns
 
-| Pattern | Reason |
-| --- | --- |
-| Files named `notes.md`, `temp.md`, `todo.md` outside `docs/intake/` | Not part of the maintained standard structure; use feature docs instead |
-| Folders named `misc/`, `old/`, `archive/` | Use `decision-log.md` or `implementation-log.md` to record history instead |
-| Deep-dive docs with no link from an owner doc | Creates orphaned docs that agents cannot discover |
-| Duplicate content across baseline and deep-dive docs | Baseline summarizes; deep-dive docs hold the detail |
-| Duplicate canonical owners for one capability | Creates conflicting truth; use the ownership map to name one owner |
-| Empty optional deep-dive folders | Delete them until there is real topic content to own |
-| Slugs with uppercase letters, spaces, or underscores | Breaks consistency across registry, file names, and folder names |
-| Optional subfolders without a `README.md` index | Leaves the folder undiscoverable |
-| Plan or review findings left only in chat history | Future agents cannot verify who produced the advice, what evidence it used, or which outcomes were accepted |
-| Accepted companion spec or plan outcomes left only under `docs/superpowers/` | Future agents may miss changed requirements, decisions, validation, or handoff state in mapped owners |
-| Accepted brainstorm or planning outcomes left only under `docs/intake/` | Raw intake is easy to miss and may contain unaccepted assumptions |
-| Baseline docs placed in subfolders | Baseline docs must live directly in `docs/` |
-| Mutable project facts duplicated across agent-specific instruction files | Creates competing sources of truth and stale handoff state |
-| Deleted feature/design history without a replacement pointer | Breaks continuity for future agents |
-| Renamed slugs without registry or index notes | Makes old links and prior handoffs hard to interpret |
+| Pattern                                                                      | Reason                                                                                                      |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Files named `notes.md`, `temp.md`, `todo.md` outside `docs/intake/`          | Not part of the maintained standard structure; use feature docs instead                                     |
+| Folders named `misc/`, `old/`, `archive/`                                    | Use `decision-log.md` or `implementation-log.md` to record history instead                                  |
+| Deep-dive docs with no link from an owner doc                                | Creates orphaned docs that agents cannot discover                                                           |
+| Duplicate content across baseline and deep-dive docs                         | Baseline summarizes; deep-dive docs hold the detail                                                         |
+| Duplicate canonical owners for one capability                                | Creates conflicting truth; use the ownership map to name one owner                                          |
+| Empty optional deep-dive folders                                             | Delete them until there is real topic content to own                                                        |
+| Slugs with uppercase letters, spaces, or underscores                         | Breaks consistency across registry, file names, and folder names                                            |
+| Optional subfolders without a `README.md` index                              | Leaves the folder undiscoverable                                                                            |
+| Plan or review findings left only in chat history                            | Future agents cannot verify who produced the advice, what evidence it used, or which outcomes were accepted |
+| Accepted companion spec or plan outcomes left only under `docs/superpowers/` | Future agents may miss changed requirements, decisions, validation, or handoff state in mapped owners       |
+| Accepted brainstorm or planning outcomes left only under `docs/intake/`      | Raw intake is easy to miss and may contain unaccepted assumptions                                           |
+| Baseline docs placed in subfolders                                           | Baseline docs must live directly in `docs/`                                                                 |
+| Mutable project facts duplicated across agent-specific instruction files     | Creates competing sources of truth and stale handoff state                                                  |
+| Deleted feature/design history without a replacement pointer                 | Breaks continuity for future agents                                                                         |
+| Renamed slugs without registry or index notes                                | Makes old links and prior handoffs hard to interpret                                                        |
 
 ## Enforcement Checklist
 

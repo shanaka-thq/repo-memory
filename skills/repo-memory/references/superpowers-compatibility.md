@@ -18,12 +18,12 @@ evidence.
 
 ## Default Relationship
 
-| Companion artifact | Repo Memory treatment |
-| --- | --- |
-| `docs/superpowers/specs/<date>-<topic>.md` | Link as source evidence from the owning feature, design, requirements, or project-overview doc. |
-| `docs/superpowers/plans/<date>-<topic>.md` | Link from `Plan Provenance` or the owning design doc and summarize the implementable pickup. |
-| Completed implementation from a plan | Update the feature doc, implementation log, validation notes, and decision log when warranted. |
-| Rejected or superseded spec/plan advice | Record the disposition in the owning feature or design doc so future agents do not rediscover stale advice. |
+| Companion artifact                         | Repo Memory treatment                                                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `docs/superpowers/specs/<date>-<topic>.md` | Link as source evidence from the owning feature, design, requirements, or project-overview doc.             |
+| `docs/superpowers/plans/<date>-<topic>.md` | Link from `Plan Provenance` or the owning design doc and summarize the implementable pickup.                |
+| Completed implementation from a plan       | Update the feature doc, implementation log, validation notes, and decision log when warranted.              |
+| Rejected or superseded spec/plan advice    | Record the disposition in the owning feature or design doc so future agents do not rediscover stale advice. |
 
 Do not copy whole Superpowers plans into Repo Memory docs. Summarize the parts
 that became accepted project state and link the source artifact for provenance.

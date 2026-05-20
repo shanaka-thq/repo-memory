@@ -71,13 +71,13 @@ When making changes to this repository itself:
 
 ## Agent-Specific Guides
 
-| Platform | Guide |
-| --- | --- |
-| OpenAI Agents SDK | [`skills/repo-memory/agents/openai.yaml`](./skills/repo-memory/agents/openai.yaml) |
-| OpenAI Codex | [`skills/repo-memory/agents/openai-codex.md`](./skills/repo-memory/agents/openai-codex.md) |
-| GitHub Copilot | [`skills/repo-memory/agents/github-copilot.md`](./skills/repo-memory/agents/github-copilot.md) |
-| Claude Code | [`skills/repo-memory/agents/claude-code.md`](./skills/repo-memory/agents/claude-code.md) |
-| OpenCode | [`skills/repo-memory/agents/opencode.md`](./skills/repo-memory/agents/opencode.md) |
+| Platform          | Guide                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------- |
+| OpenAI Agents SDK | [`skills/repo-memory/agents/openai.yaml`](./skills/repo-memory/agents/openai.yaml)             |
+| OpenAI Codex      | [`skills/repo-memory/agents/openai-codex.md`](./skills/repo-memory/agents/openai-codex.md)     |
+| GitHub Copilot    | [`skills/repo-memory/agents/github-copilot.md`](./skills/repo-memory/agents/github-copilot.md) |
+| Claude Code       | [`skills/repo-memory/agents/claude-code.md`](./skills/repo-memory/agents/claude-code.md)       |
+| OpenCode          | [`skills/repo-memory/agents/opencode.md`](./skills/repo-memory/agents/opencode.md)             |
 
 ## Quality Checks Before Stopping
 

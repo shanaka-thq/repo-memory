@@ -22,11 +22,13 @@ users rely on.
 ## Scope
 
 In:
+
 - current search refresh logic
 - fallback-path verification
 - resumable handoff guidance
 
 Out:
+
 - full migration of the legacy architecture notes
 - broader architecture rewrite
 

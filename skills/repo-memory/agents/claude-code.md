@@ -25,6 +25,7 @@ other agents.
 This repo uses the Repo Memory standard.
 
 When starting work:
+
 1. Read `docs/README.md` for the Canonical Ownership Map.
 2. Follow the mapped owner for project overview, architecture, decisions,
    contracts, setup, security, operations, and feature state.
@@ -37,6 +38,7 @@ When starting work:
    `Next Agent Handoff`.
 
 When changing behavior:
+
 - Update the mapped owner for each changed documentation capability.
 - Update `docs/feature-registry.md` when next-work priority or readiness changes.
 - Update the active feature doc.

@@ -67,6 +67,7 @@ To make Copilot agents automatically apply this skill in a target repository, ad
 This project uses the Repo Memory standard to maintain its `docs/` folder.
 
 When starting a session:
+
 1. Read `docs/README.md` for the Canonical Ownership Map.
 2. Follow the mapped owner for project overview, architecture, decisions,
    contracts, setup, operations, security, and feature state.
@@ -77,6 +78,7 @@ When starting a session:
    `docs/feature-registry.md` `Next Work Queue`.
 
 When making changes:
+
 - Keep `docs/features/<feature-slug>.md` current for the feature you are working on.
 - Keep `docs/feature-registry.md` current as the ranked next-work queue.
 - Follow naming and placement rules from `docs/docs-structure-rules.md` (copy or link `references/docs-structure-rules.md` into the target repo if needed).

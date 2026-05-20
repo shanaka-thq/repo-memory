@@ -89,14 +89,14 @@ For each capability, identify:
 Use a simple ownership matrix:
 
 ```md
-| Capability | Canonical owner | Supporting docs | Evidence source | Confidence | Gaps |
-| --- | --- | --- | --- | --- | --- |
-| Architecture | `ARCHITECTURE_NOTES.md` | `docs/diagrams/system-context.mmd` | `src/`, deploy config | high | scaling notes incomplete |
-| Decisions | `docs/adr/` | `docs/decision-log.md` index only | ADRs, commit history | high | old storage rationale missing |
-| Contracts | `openapi.yaml` | `docs/interfaces-and-contracts.md` | API spec, handlers, tests | high | webhook examples missing |
-| Local development | `CONTRIBUTING.md` | `README.md` | package scripts, Makefile | high | fixture reset flow unclear |
-| Active feature handoff | `docs/features/search-refresh.md` | `docs/feature-registry.md` | recent commits, tests | medium | browser verification incomplete |
-| Documentation health | `docs/doc-health.md` | current audit | docs, links, conflicts | medium | full verification incomplete |
+| Capability             | Canonical owner                   | Supporting docs                    | Evidence source           | Confidence | Gaps                            |
+| ---------------------- | --------------------------------- | ---------------------------------- | ------------------------- | ---------- | ------------------------------- |
+| Architecture           | `ARCHITECTURE_NOTES.md`           | `docs/diagrams/system-context.mmd` | `src/`, deploy config     | high       | scaling notes incomplete        |
+| Decisions              | `docs/adr/`                       | `docs/decision-log.md` index only  | ADRs, commit history      | high       | old storage rationale missing   |
+| Contracts              | `openapi.yaml`                    | `docs/interfaces-and-contracts.md` | API spec, handlers, tests | high       | webhook examples missing        |
+| Local development      | `CONTRIBUTING.md`                 | `README.md`                        | package scripts, Makefile | high       | fixture reset flow unclear      |
+| Active feature handoff | `docs/features/search-refresh.md` | `docs/feature-registry.md`         | recent commits, tests     | medium     | browser verification incomplete |
+| Documentation health   | `docs/doc-health.md`              | current audit                      | docs, links, conflicts    | medium     | full verification incomplete    |
 ```
 
 Confidence labels should be simple:

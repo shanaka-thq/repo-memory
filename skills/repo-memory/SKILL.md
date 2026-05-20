@@ -234,13 +234,13 @@ Instead:
 1. preserve the existing docs that still carry trustworthy project context
 2. choose or create the canonical ownership map
 3. add the smallest shared-state surface another agent needs first, typically
-  `docs/README.md`, `docs/feature-registry.md`, `docs/doc-health.md`, and the
-  active feature docs
+   `docs/README.md`, `docs/feature-registry.md`, `docs/doc-health.md`, and the
+   active feature docs
 4. add a `Canonical Ownership Map` to `docs/README.md` that names existing ADRs,
-  RFCs, architecture notes, API specs, security docs, wiki pages, or team
-  runbooks as owners where they already satisfy a capability
+   RFCs, architecture notes, API specs, security docs, wiki pages, or team
+   runbooks as owners where they already satisfy a capability
 5. expand toward the full baseline where stronger continuity or verification is
-  actually needed
+   actually needed
 
 Progressive adoption is the preferred path for repos that already have working
 documentation habits but need better cross-agent continuity.

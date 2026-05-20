@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 2.1
+Version: 2.1.0 <!-- x-release-please-version -->
 
 ## Overview
 

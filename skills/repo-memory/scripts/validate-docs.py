@@ -195,7 +195,7 @@ STALE_TERMINAL_HANDOFF_PATTERNS = [
 KEBAB_PATH = re.compile(r"^[a-z0-9][a-z0-9-]*(\.[a-z0-9]+)?$")
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 FENCE_LINE = re.compile(r"^( {0,3})([`~]{3,})(.*)$")
-VERSION = re.compile(r"^Version:\s*(\d+\.\d+)", re.MULTILINE)
+VERSION = re.compile(r"^Version:\s*(\d+\.\d+(?:\.\d+)?)", re.MULTILINE)
 HEADING = re.compile(r"^\s{0,3}#{2,6}\s+(.+?)\s*$", re.MULTILINE)
 STATUS = re.compile(r"^\s*Status:\s*([a-z_]+)\b", re.MULTILINE | re.IGNORECASE)
 SECTION = re.compile(r"^\s{0,3}##\s+(.+?)\s*$", re.MULTILINE)
@@ -578,7 +578,7 @@ def check_skill_version(root: Path) -> list[str]:
             ]
 
     changelog_text = changelog.read_text(encoding="utf-8")
-    if not re.search(rf"^## \[{re.escape(version)}\]", changelog_text, re.MULTILINE):
+    if not re.search(rf"^##\s*(?:\[{re.escape(version)}\]|{re.escape(version)})\b", changelog_text, re.MULTILINE):
         return [f"CHANGELOG.md missing entry for SKILL.md version {version}"]
 
     return []

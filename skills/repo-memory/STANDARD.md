@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 1.7
+Version: 1.8
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -25,6 +25,7 @@ where durable project truth lives:
 - observability, instrumentation, telemetry, and production signals
 - durable decisions and implementation history
 - active feature state and next-agent handoff context
+- a ranked next-work queue so cloud agents can choose the next safe task without prior chat context
 - raw brainstorms, project dumps, user notes, and planning output as intake evidence before accepted facts are promoted
 - provenance for substantial plans, specialist reviews, and tool-generated guidance that influence implementation
 - compatibility with companion spec/plan workflows, when accepted outcomes are promoted into canonical docs
@@ -164,7 +165,8 @@ A Repo Memory-compliant repository must:
 - document the users, actors, personas, journeys, acceptance paths, and edge cases that matter to user-facing or workflow-heavy systems
 - document logging, metrics, traces, analytics events, audit events, alerts, dashboards, and privacy boundaries in `docs/observability-and-instrumentation.md`
 - mark inferred, stale, superseded, deprecated, or unknown facts explicitly
-- track feature work in `docs/feature-registry.md` and feature docs
+- track feature work and the ranked next-work queue in `docs/feature-registry.md`
+- make the first ready row in `docs/feature-registry.md` the default next task when a user asks an agent to pick up the next repo task
 - keep active feature docs resumable without prior chat history
 - keep implementable plans in the owning feature or design doc, with provenance for the planner, tool, role or lens, inputs reviewed, assumptions, confidence, and next safe implementation step
 - link companion spec or plan artifacts from the owning Repo Memory doc when another workflow materially shaped the work, then promote accepted outcomes into canonical docs
@@ -206,6 +208,34 @@ Feature docs and feature registry entries use these status values:
 Do not invent new status values. Add detail in the feature doc when the state
 needs explanation.
 
+## Next Work Queue
+
+`docs/feature-registry.md` owns the ranked next-work queue. Use it when a
+human or cloud agent asks what should be picked up next.
+
+The queue should include:
+
+- `Rank`
+- `Work item`
+- `Type`
+- `Status`
+- `Ready`
+- `Why next`
+- `Next safe step`
+- `Canonical doc`
+- `Last verified`
+
+Use these readiness values:
+
+- `ready`: safe for an agent to implement from the linked canonical doc
+- `verify-first`: inspect or validate current code and docs before editing
+- `needs-human`: product, scope, or priority direction is missing
+- `blocked`: known dependency, failing state, or unresolved conflict prevents progress
+
+When no task is assigned, agents should choose the lowest-rank `ready` row. If
+no row is ready, they should perform verification only for `verify-first` rows
+or ask for human direction for `needs-human` and `blocked` rows.
+
 ## Metadata
 
 Maintained docs should include metadata that records:
@@ -235,13 +265,14 @@ They should tell the agent:
 2. Read `docs/project-overview.md`, `docs/architecture.md`, and `docs/feature-registry.md`.
 3. Review `docs/intake/` when it exists and contains raw brainstorms, project notes, or planning output relevant to the work.
 4. Promote accepted intake outcomes into canonical docs before building from them.
-5. Read the active `docs/features/<feature-slug>.md` before changing related code.
-6. Inspect `git status`, unstaged diffs, staged diffs, and untracked files before editing when resuming after an interruption or unknown prior agent state.
-7. Update feature handoff notes, doc health, decision log, and implementation log when warranted.
-8. Do not duplicate mutable project facts in the agent instruction file.
-9. Do not create optional deep-dive folders unless there is real content to own.
-10. Preserve useful custom docs and link them from the canonical docs layer.
-11. Treat plan and review records as advisory evidence until verified against current code, docs, and user intent.
+5. If no specific task was assigned, choose the lowest-rank `ready` item in the feature registry `Next Work Queue`; if none is ready, verify only `verify-first` items or ask for human input on `needs-human` or `blocked` items.
+6. Read the active `docs/features/<feature-slug>.md` before changing related code.
+7. Inspect `git status`, unstaged diffs, staged diffs, and untracked files before editing when resuming after an interruption or unknown prior agent state.
+8. Update the feature registry queue, feature handoff notes, doc health, decision log, and implementation log when warranted.
+9. Do not duplicate mutable project facts in the agent instruction file.
+10. Do not create optional deep-dive folders unless there is real content to own.
+11. Preserve useful custom docs and link them from the canonical docs layer.
+12. Treat plan and review records as advisory evidence until verified against current code, docs, and user intent.
 
 Platform guides in [`agents/`](./agents/) show how to adapt this flow for
 Codex, Claude Code, GitHub Copilot, and OpenAI Agents SDK.
@@ -259,8 +290,9 @@ python3 <skill-dir>/scripts/validate-docs.py --project-docs /path/to/repo
 Validation should catch missing required docs, broken relative links, invalid
 docs path names, and version drift in this standard repository. It also emits
 warnings for likely hygiene issues such as generated artifacts, empty optional
-deep-dive folders, invalid or stale feature status metadata, and stale
-interrupted-work handoff text in terminal feature docs. Raw files under
+deep-dive folders, invalid or stale feature status metadata, malformed
+next-work queue readiness values, and stale interrupted-work handoff text in
+terminal feature docs. Raw files under
 `docs/intake/` are exempt from naming and relative-link checks because they are
 source material, not maintained canonical docs. Use `--strict` to treat warnings
 as failures.

@@ -77,6 +77,8 @@ Use Repo Memory when you want to:
   traces, analytics events, audit events, dashboards, and alerts
 - keep documentation current as features are researched, implemented, paused,
   recovered, or handed off
+- keep a ranked next-work queue so cloud agents can pick the next ready task
+  without burning a session on orientation
 - keep one docs layer that humans and different coding agents can share
 - give greenfield projects a simple `docs/intake/` inbox for messy brainstorms,
   project dumps, copied chat notes, sketches, and planning output
@@ -93,8 +95,9 @@ Use Repo Memory when you want to:
 | Starting a new project | Run the skill to create the full `docs/` baseline |
 | Dumping greenfield brainstorms or AI plans | Put raw material in `docs/intake/`, then run the skill to promote accepted facts into canonical docs |
 | Onboarding an existing codebase | Run the skill to audit, backfill, and standardize |
-| Adding or resuming a feature | Run the skill to update feature docs and handoff notes |
+| Adding or resuming a feature | Run the skill to update feature docs, ranked queue, and handoff notes |
 | Handing off to another agent | Run the skill to confirm docs are current and resumable |
+| Asking a cloud agent to pick up work | Point it at `docs/feature-registry.md` and tell it to pick the first `ready` row in `Next Work Queue` |
 | Docs have drifted from code | Run the skill to realign the documentation set |
 
 ## Repository Structure

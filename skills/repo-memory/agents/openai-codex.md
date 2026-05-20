@@ -17,9 +17,10 @@ Agent-specific prompts, CLI instructions, or wrapper files should point into the
 1. Check for `AGENTS.md` and any repo-level agent instruction files.
 2. If the repo has a `docs/` folder, read `docs/README.md` first.
 3. Read `docs/project-overview.md`, `docs/architecture.md`, and `docs/feature-registry.md`.
-4. If `docs/intake/` exists and contains raw brainstorms, project notes, or plans relevant to the work, review them and promote accepted facts into canonical docs before building from them.
-5. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
-6. If the docs are missing, stale, or inconsistent, apply the Repo Memory workflow from [`SKILL.md`](../SKILL.md).
+4. If no task was assigned, pick the lowest-rank `ready` row in `docs/feature-registry.md` `Next Work Queue`.
+5. If `docs/intake/` exists and contains raw brainstorms, project notes, or plans relevant to the work, review them and promote accepted facts into canonical docs before building from them.
+6. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
+7. If the docs are missing, stale, or inconsistent, apply the Repo Memory workflow from [`SKILL.md`](../SKILL.md).
 
 ### When resuming interrupted work
 
@@ -34,11 +35,12 @@ Agent-specific prompts, CLI instructions, or wrapper files should point into the
 
 ### When finishing a session
 
-1. Update the active feature doc, especially `Implementation Status`, `Validation`, `Resume Context`, and `Next Agent Handoff`.
-2. Update `docs/implementation-log.md` if meaningful work landed.
-3. Update `docs/decision-log.md` if a lasting technical choice changed.
-4. Update `docs/doc-health.md` when docs were materially changed, verified, found stale, renamed, or superseded.
-5. If the repo has multiple agent instruction files, keep them aligned to the same docs entrypoints before stopping.
+1. Update `docs/feature-registry.md`, especially `Next Work Queue`, when priority, readiness, or pickup instructions change.
+2. Update the active feature doc, especially `Implementation Status`, `Validation`, `Resume Context`, and `Next Agent Handoff`.
+3. Update `docs/implementation-log.md` if meaningful work landed.
+4. Update `docs/decision-log.md` if a lasting technical choice changed.
+5. Update `docs/doc-health.md` when docs were materially changed, verified, found stale, renamed, or superseded.
+6. If the repo has multiple agent instruction files, keep them aligned to the same docs entrypoints before stopping.
 
 ## Recommended Codex Prompt Shape
 
@@ -49,6 +51,7 @@ When telling Codex to maintain project docs, include expectations like these:
 - keep `docs/project-overview.md` current for project goal, problem statement, target users, success criteria, scope, and non-goals
 - review `docs/intake/` when raw brainstorms or plans exist, then promote accepted outcomes into canonical docs
 - keep active feature docs resumable for a different future agent
+- keep `docs/feature-registry.md` ranked so a cloud agent can pick the first `ready` row
 - keep `docs/doc-health.md` current for freshness, conflicts, renames, and terminal feature states
 - keep `docs/observability-and-instrumentation.md` current for logs, metrics, traces, analytics, audit events, dashboards, and alerts
 - update implementation and decision logs when warranted

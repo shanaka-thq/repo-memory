@@ -189,6 +189,14 @@ def build_interrupted_worktree(repo: Path) -> None:
         Canonical source: `docs/feature-registry.md`
         Related docs: `features/rounding-policy.md`
 
+        ## Next Work Queue
+
+        | Rank | Work item | Type | Status | Ready | Why next | Next safe step | Canonical doc | Last verified |
+        | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+        | 1 | Rounding policy | feature | `in_progress` | `ready` | Interrupted money-splitting bug has known expected behavior | Inspect the working tree before editing, then finish cent allocation | [`features/rounding-policy.md`](./features/rounding-policy.md) | 2026-04-29 |
+
+        ## Feature List
+
         | Feature | Status | Owner | Canonical doc | Notes |
         | --- | --- | --- | --- | --- |
         | Rounding policy | in_progress | current-agent-or-team | `features/rounding-policy.md` | Interrupted work exists in the tree. |
@@ -386,6 +394,14 @@ def build_feature_continuation(repo: Path) -> None:
         Canonical source: `docs/feature-registry.md`
         Related docs: `features/add-due-dates.md`
 
+        ## Next Work Queue
+
+        | Rank | Work item | Type | Status | Ready | Why next | Next safe step | Canonical doc | Last verified |
+        | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+        | 1 | Add due dates | feature | `in_progress` | `ready` | Active user-visible feature with implementation scope already defined | Add optional due date support to CLI, persistence, output, tests, and docs | [`features/add-due-dates.md`](./features/add-due-dates.md) | 2026-04-29 |
+
+        ## Feature List
+
         | Feature | Status | Owner | Canonical doc | Notes |
         | --- | --- | --- | --- | --- |
         | Add due dates | in_progress | current-agent-or-team | `features/add-due-dates.md` | Implement next. |
@@ -531,10 +547,11 @@ PROMPTS = {
         "relevant validation, and report what changed."
     ),
     "feature-continuation": (
-        "Use the Repo Memory skill at {skill_dir} to continue the active Add "
-        "due dates feature. Read the repo docs first, implement the scoped "
-        "feature, update tests and Repo Memory docs or handoff notes, run "
-        "relevant validation, and report what changed."
+        "Use the Repo Memory skill at {skill_dir} to pick up the next ready "
+        "task from docs/feature-registry.md. Read the repo docs first, "
+        "implement the scoped feature from the ranked queue, update tests and "
+        "Repo Memory docs or handoff notes, run relevant validation, and report "
+        "what changed."
     ),
     "stale-docs-conflict": (
         "Use the Repo Memory skill at {skill_dir} to audit this repository "

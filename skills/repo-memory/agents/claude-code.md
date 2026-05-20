@@ -23,11 +23,14 @@ When starting work:
 2. Read `docs/project-overview.md` and `docs/architecture.md`.
 3. Review `docs/intake/` if it contains raw brainstorms, project notes, or
    plans relevant to the work, then promote accepted facts into canonical docs.
-4. Check `docs/feature-registry.md` and the active feature doc.
-5. Follow `Resume Context`, `Validation`, and `Next Agent Handoff`.
+4. Check `docs/feature-registry.md`; when no task is assigned, pick the first
+   `ready` row in `Next Work Queue`.
+5. Check the active feature doc and follow `Resume Context`, `Validation`, and
+   `Next Agent Handoff`.
 
 When changing behavior:
 - Update affected baseline docs.
+- Update `docs/feature-registry.md` when next-work priority or readiness changes.
 - Update the active feature doc.
 - Update `docs/implementation-log.md` for meaningful landed work.
 - Update `docs/decision-log.md` for durable technical choices.
@@ -50,17 +53,19 @@ When changing behavior:
 ## When Resuming Work
 
 1. Read the active `docs/features/<feature-slug>.md`.
-2. Check `Resume Context`, `Validation`, `Next Agent Handoff`, and
+2. If no task was assigned, choose the lowest-rank `ready` row in `docs/feature-registry.md`.
+3. Check `Resume Context`, `Validation`, `Next Agent Handoff`, and
    `Exact Next Prompt`.
-3. Prefer the docs over chat memory when they conflict, then update stale docs.
-4. Check `docs/doc-health.md` before changing shared architecture or contracts.
+4. Prefer the docs over chat memory when they conflict, then update stale docs.
+5. Check `docs/doc-health.md` before changing shared architecture or contracts.
 
 ## When Finishing Work
 
 1. Update the active feature doc.
-2. Update implementation and decision logs when warranted.
-3. Record verification status and stale areas in `docs/doc-health.md`.
-4. Keep `CLAUDE.md`, `AGENTS.md`, and other agent entrypoints aligned to the
+2. Update `docs/feature-registry.md` `Next Work Queue`.
+3. Update implementation and decision logs when warranted.
+4. Record verification status and stale areas in `docs/doc-health.md`.
+5. Keep `CLAUDE.md`, `AGENTS.md`, and other agent entrypoints aligned to the
    same docs workflow.
 
 ## Related Docs

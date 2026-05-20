@@ -35,7 +35,8 @@ When a user asks you to apply this skill to a target repo:
 7. **Keep one canonical docs layer** — agent-specific instruction files should point into the maintained docs set instead of duplicating mutable project facts.
 8. **Track doc health** — use `docs/doc-health.md` in target repos to record verification state, stale docs, conflicts, renames, and superseded work.
 9. **Use metadata consistently** — apply `skills/repo-memory/references/documentation-metadata-schema.md` so doc type, status, owner, verification, evidence, and related docs are recorded predictably.
-10. **Leave the repo resumable** — always close with current handoff notes in the active feature doc before ending a session.
+10. **Keep next work obvious** — keep `docs/feature-registry.md` current with a ranked `Next Work Queue`; cloud agents should pick the first `ready` row when no task is assigned.
+11. **Leave the repo resumable** — always close with current handoff notes in the active feature doc before ending a session.
 
 ## Maintaining This Skill Repo
 

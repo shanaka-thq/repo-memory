@@ -21,19 +21,21 @@ Treat the maintained `docs/` tree as the canonical cross-agent source of truth. 
 ### When resuming work
 
 1. Read the relevant `docs/features/<feature-slug>.md` for the current feature.
-2. Check `docs/feature-registry.md` for status of related features.
-3. Read `Resume Context`, `Validation`, and `Next Agent Handoff` in the feature doc.
-4. Follow the `Exact Next Prompt` section when present.
-5. Check `docs/doc-health.md` for known stale docs, conflicts, renamed docs, and terminal feature states when available.
+2. Check `docs/feature-registry.md` for status of related features and the ranked `Next Work Queue`.
+3. If no task was assigned, pick the lowest-rank `ready` row in `Next Work Queue`.
+4. Read `Resume Context`, `Validation`, and `Next Agent Handoff` in the feature doc.
+5. Follow the `Exact Next Prompt` section when present.
+6. Check `docs/doc-health.md` for known stale docs, conflicts, renamed docs, and terminal feature states when available.
 
 ### When finishing a session
 
-1. Update the feature doc status, `Resume Context`, and `Next Agent Handoff` section.
-2. Update `docs/implementation-log.md` if meaningful work landed.
-3. Update `docs/decision-log.md` if a lasting technical choice changed.
-4. Update `docs/doc-health.md` when docs were materially changed, verified, found stale, renamed, or superseded.
-5. Confirm all new or changed docs follow the rules in [`references/docs-structure-rules.md`](../references/docs-structure-rules.md).
-6. Keep `.github/copilot-instructions.md` or `AGENTS.md` aligned to the canonical docs flow instead of storing mutable feature state there.
+1. Update `docs/feature-registry.md`, especially `Next Work Queue`, when priority, readiness, or pickup instructions change.
+2. Update the feature doc status, `Resume Context`, and `Next Agent Handoff` section.
+3. Update `docs/implementation-log.md` if meaningful work landed.
+4. Update `docs/decision-log.md` if a lasting technical choice changed.
+5. Update `docs/doc-health.md` when docs were materially changed, verified, found stale, renamed, or superseded.
+6. Confirm all new or changed docs follow the rules in [`references/docs-structure-rules.md`](../references/docs-structure-rules.md).
+7. Keep `.github/copilot-instructions.md` or `AGENTS.md` aligned to the canonical docs flow instead of storing mutable feature state there.
 
 ## Linking This Skill to a Target Repo
 
@@ -49,9 +51,11 @@ When starting a session:
 2. Read `docs/project-overview.md` and `docs/architecture.md` to orient.
 3. Review `docs/intake/` if raw brainstorms, project notes, or plans are relevant to the work, then promote accepted facts into canonical docs.
 4. Check `docs/feature-registry.md` for active work.
+5. When no task is assigned, pick the first `ready` row in `docs/feature-registry.md` `Next Work Queue`.
 
 When making changes:
 - Keep `docs/features/<feature-slug>.md` current for the feature you are working on.
+- Keep `docs/feature-registry.md` current as the ranked next-work queue.
 - Follow naming and placement rules from `docs/docs-structure-rules.md` (copy or link `references/docs-structure-rules.md` into the target repo if needed).
 - Update `docs/implementation-log.md` when meaningful work lands.
 - Update `docs/decision-log.md` when an architectural choice changes.

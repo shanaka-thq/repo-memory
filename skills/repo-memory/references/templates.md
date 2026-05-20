@@ -155,10 +155,12 @@ When starting or resuming work:
 1. Read `docs/README.md`.
 2. Read `docs/project-overview.md` and `docs/architecture.md`.
 3. Review `docs/intake/` if it contains raw brainstorms, project notes, or plans relevant to the work, then promote accepted facts into canonical docs.
-4. Read `docs/feature-registry.md` and the active `docs/features/<feature-slug>.md` before making changes.
+4. Read `docs/feature-registry.md`; when no task is assigned, pick the first `ready` row in `Next Work Queue`.
+5. Read the active `docs/features/<feature-slug>.md` before making changes.
 
 When making changes:
 - Update the active feature doc as the work changes.
+- Update the `Next Work Queue` when priority, readiness, or pickup instructions change.
 - Put durable project facts in `docs/`, not only in agent-specific instruction files or chat history.
 - Keep any agent-specific instruction files short and aligned to the same docs entrypoints.
 
@@ -230,12 +232,27 @@ If the Markdown environment supports a shared theme, align Mermaid to that theme
 ```md
 # Feature Registry
 
+## Next Work Queue
+
+| Rank | Work item | Type | Status | Ready | Why next | Next safe step | Canonical doc | Last verified |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Answer search improvements | feature | `in_progress` | `ready` | Highest user-visible search gap | Finish frontend wiring and run search flow checks | [`features/answer-search-improvements.md`](./features/answer-search-improvements.md) | 2026-04-22 |
+
+## Feature List
+
 | Feature | Slug | Status | Priority | Last updated | Notes |
 | --- | --- | --- | --- | --- | --- |
 | Answer search improvements | `answer-search-improvements` | `in_progress` | High | 2026-04-22 | [Feature doc](./features/answer-search-improvements.md), [Logic](./features/answer-search-improvements/logic.md) |
 ```
 
 Allowed statuses: `research`, `planned`, `in_progress`, `blocked`, `implemented`, `verified`, `shipped`, `abandoned`, `superseded`, `deprecated`, `rolled_back`.
+
+Use `Next Work Queue` as the cloud-agent pickup surface. The lowest-rank row
+with `Ready` set to `ready` is the default next task when a user asks an agent
+to pick up repo work without choosing a feature manually. Use `verify-first`
+when the agent should inspect or validate before editing, `needs-human` when
+the next step depends on product direction, and `blocked` when known blockers
+prevent progress.
 
 ## Decision Log Entry Template
 
@@ -1121,12 +1138,13 @@ When an agent starts or resumes work:
 
 1. Read this file.
 2. Read `project-overview.md` and `architecture.md`.
-3. Read `feature-registry.md`.
+3. Read `feature-registry.md`; when no task was assigned, pick the first `ready` row in `Next Work Queue`.
 4. Read the active `features/<feature-slug>.md` before making changes to that feature.
 
 ## Single Source of Truth Rules
 
 - Keep durable project facts and active handoff state in this `docs/` tree.
+- Keep the ranked next-work queue in `feature-registry.md` current enough that a cloud agent can pick the next safe task.
 - Keep repo-level agent instruction files concise and point them here instead of duplicating mutable facts.
 - If multiple agent instruction files exist, align them to the same docs entrypoints and feature workflow.
 
@@ -1167,6 +1185,7 @@ Create these only when the topic needs more detail than the baseline set should 
 For non-trivial work, create or update:
 
 - `features/<feature-slug>.md`
+- the `feature-registry.md` `Next Work Queue`
 - `requirements/user-stories-and-use-cases.md` when user journeys or acceptance paths changed
 - `diagrams/...` when architecture views, flows, or state diagrams changed
 - `ui-ux/...` when screen states, interaction rules, or accessibility changed
@@ -1208,14 +1227,15 @@ Before ending a session, confirm:
 3. Files touched are listed.
 4. Blockers and risks are explicit.
 5. The next step is written for another agent, not just for yourself.
-6. The implementation log is updated if meaningful work landed.
-7. The decision log is updated if a lasting technical choice changed.
-8. Inferred statements and missing rationale are explicitly marked.
-9. Any deep-dive docs are linked from their parent feature doc, index, or baseline doc.
-10. Tricky project or component logic is documented in the repo, not stranded in chat history.
-11. Local tooling changes are reflected in `local-development.md`.
-12. Runtime signals, product analytics, audit events, dashboards, and alerts are reflected in `observability-and-instrumentation.md`.
-13. User-facing changes update user stories, use cases, and UI or UX docs when relevant.
-14. Diagram sources are preserved and linked, not replaced casually with screenshots or chat-only sketches.
-15. Any agent-specific instruction files still point to these docs as the canonical source of truth.
-16. `doc-health.md` records material doc changes, stale docs, conflicts, renames, and verification state.
+6. The feature registry `Next Work Queue` reflects what a cloud agent should pick next.
+7. The implementation log is updated if meaningful work landed.
+8. The decision log is updated if a lasting technical choice changed.
+9. Inferred statements and missing rationale are explicitly marked.
+10. Any deep-dive docs are linked from their parent feature doc, index, or baseline doc.
+11. Tricky project or component logic is documented in the repo, not stranded in chat history.
+12. Local tooling changes are reflected in `local-development.md`.
+13. Runtime signals, product analytics, audit events, dashboards, and alerts are reflected in `observability-and-instrumentation.md`.
+14. User-facing changes update user stories, use cases, and UI or UX docs when relevant.
+15. Diagram sources are preserved and linked, not replaced casually with screenshots or chat-only sketches.
+16. Any agent-specific instruction files still point to these docs as the canonical source of truth.
+17. `doc-health.md` records material doc changes, stale docs, conflicts, renames, and verification state.

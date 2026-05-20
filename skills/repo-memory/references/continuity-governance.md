@@ -95,6 +95,9 @@ When more than one agent may work in the repo:
 
 - active feature docs must include current owner, files or docs being touched, safe parallel work, and areas to avoid
 - another agent should check `docs/feature-registry.md`, active feature docs, and `docs/doc-health.md` before starting related work
+- if no task is assigned, the agent should pick the lowest-rank `ready` row from `docs/feature-registry.md` `Next Work Queue`
+- `verify-first` queue rows are inspection or validation tasks until the agent updates evidence and readiness
+- `needs-human` and `blocked` queue rows should not be implemented without resolving the missing direction or blocker
 - if two handoff notes conflict, prefer the one with newer verification evidence and update the stale note
 - do not overwrite another agent's feature state without reconciling the docs and recording the correction
 

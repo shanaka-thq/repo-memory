@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -135,6 +136,14 @@ GENERATED_ARTIFACT_NAMES = {
     "agent-final.txt",
 }
 
+IGNORED_DIR_NAMES = {
+    ".git", ".github", ".claude",
+    "node_modules", ".venv", "venv", "env",
+    "dist", "build", "out", "target",
+    ".next", ".nuxt", ".cache", ".turbo",
+    "vendor", "coverage", ".idea", ".vscode",
+}
+
 ALLOWED_FEATURE_STATUSES = {
     "research",
     "planned",
@@ -202,6 +211,17 @@ SECTION = re.compile(r"^\s{0,3}##\s+(.+?)\s*$", re.MULTILINE)
 CANONICAL_OWNER_HEADING = "Canonical Ownership Map"
 
 
+def iter_paths(base: Path):
+    """Yield every dir entry and file under base, pruning IGNORED_DIR_NAMES."""
+    for dirpath, dirnames, filenames in os.walk(base):
+        dirnames[:] = [d for d in dirnames if d not in IGNORED_DIR_NAMES]
+        dp = Path(dirpath)
+        for name in dirnames:
+            yield dp / name
+        for name in filenames:
+            yield dp / name
+
+
 def strip_fenced_code(text: str) -> str:
     lines = text.splitlines(keepends=True)
     stripped: list[str] = []
@@ -245,20 +265,20 @@ def is_raw_intake_path(root: Path, path: Path) -> bool:
 
 def check_relative_links(root: Path) -> list[str]:
     errors: list[str] = []
-    for md in root.rglob("*.md"):
-        if ".git" in md.parts:
+    for path in iter_paths(root):
+        if not path.is_file() or path.suffix != ".md":
             continue
-        if is_raw_intake_path(root, md):
+        if is_raw_intake_path(root, path):
             continue
-        text = strip_fenced_code(md.read_text(encoding="utf-8"))
+        text = strip_fenced_code(path.read_text(encoding="utf-8"))
         for target in LINK.findall(text):
             if is_external_link(target):
                 continue
             rel = target.split("#", 1)[0]
             if not rel:
                 continue
-            if not (md.parent / rel).resolve().exists():
-                errors.append(f"{md.relative_to(root)}: broken link -> {target}")
+            if not (path.parent / rel).resolve().exists():
+                errors.append(f"{path.relative_to(root)}: broken link -> {target}")
     return errors
 
 
@@ -276,7 +296,7 @@ def check_docs_kebab_case(root: Path) -> list[str]:
         return []
 
     errors: list[str] = []
-    for path in docs.rglob("*"):
+    for path in iter_paths(docs):
         if not path.is_file():
             continue
         if is_raw_intake_path(root, path):
@@ -393,8 +413,8 @@ def check_empty_optional_deep_dive_dirs(root: Path) -> list[str]:
 
         files = [
             path
-            for path in directory.rglob("*")
-            if path.is_file() and ".git" not in path.parts
+            for path in iter_paths(directory)
+            if path.is_file()
         ]
         meaningful = [
             path
@@ -411,9 +431,7 @@ def check_empty_optional_deep_dive_dirs(root: Path) -> list[str]:
 
 def check_generated_artifacts(root: Path) -> list[str]:
     warnings: list[str] = []
-    for path in root.rglob("*"):
-        if ".git" in path.parts:
-            continue
+    for path in iter_paths(root):
         if path.name in GENERATED_ARTIFACT_NAMES:
             warnings.append(
                 f"{path.relative_to(root)}: generated or harness artifact "

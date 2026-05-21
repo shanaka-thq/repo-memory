@@ -59,6 +59,8 @@ def iter_paths(base: Path):
             yield dp / name
         for name in filenames:
             yield dp / name
+
+
 TERMINAL_FEATURE_STATUSES = {
     "implemented",
     "verified",

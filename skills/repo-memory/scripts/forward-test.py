@@ -40,6 +40,27 @@ GENERATED_ARTIFACT_NAMES = {
     ".DS_Store",
     "agent-final.txt",
 }
+
+IGNORED_DIR_NAMES = {
+    ".git", ".github", ".claude",
+    "node_modules", ".venv", "venv", "env",
+    "dist", "build", "out", "target",
+    ".next", ".nuxt", ".cache", ".turbo",
+    "vendor", "coverage", ".idea", ".vscode",
+}
+
+
+def iter_paths(base: Path):
+    """Yield every dir entry and file under base, pruning IGNORED_DIR_NAMES."""
+    for dirpath, dirnames, filenames in os.walk(base):
+        dirnames[:] = [d for d in dirnames if d not in IGNORED_DIR_NAMES]
+        dp = Path(dirpath)
+        for name in dirnames:
+            yield dp / name
+        for name in filenames:
+            yield dp / name
+
+
 TERMINAL_FEATURE_STATUSES = {
     "implemented",
     "verified",
@@ -599,9 +620,7 @@ def validate(
 
 def generated_artifacts(repo: Path) -> list[str]:
     found: list[str] = []
-    for path in repo.rglob("*"):
-        if ".git" in path.parts:
-            continue
+    for path in iter_paths(repo):
         if path.name in GENERATED_ARTIFACT_NAMES:
             found.append(str(path.relative_to(repo)))
     return sorted(found)
@@ -613,7 +632,7 @@ def empty_optional_dirs(repo: Path) -> list[str]:
         directory = repo / rel_dir
         if not directory.is_dir():
             continue
-        files = [path for path in directory.rglob("*") if path.is_file()]
+        files = [path for path in iter_paths(directory) if path.is_file()]
         meaningful = [
             path
             for path in files

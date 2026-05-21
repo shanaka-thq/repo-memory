@@ -458,13 +458,13 @@ For any non-trivial feature, bug fix, integration, refactor, or research thread 
 3. If no specific task was assigned, choose the lowest-rank row in the feature registry `Next Work Queue` where `Ready` is `ready`. Treat `verify-first` as a verification-only pickup, and ask for human direction before implementing `needs-human` or `blocked` rows.
 4. **Before starting implementation, update the feature doc `Status` to `in_progress` and update the registry entry.** This signals that the feature is actively being worked on and prevents duplicate or conflicting work while the state is "half-baked".
 5. If the feature changes user journeys, acceptance behavior, or UI states, update `docs/requirements/user-stories-and-use-cases.md` or `docs/ui-ux/...` when those docs exist or should exist.
-5. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
-6. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
-7. If the feature depends on a plan produced by another agent or tool, record the plan provenance and implementation pickup in the feature or design doc before editing.
-8. If a specialist, second-agent, human, or tool review materially informs the work, add a short `Review Log` entry or link a substantive `docs/reviews/<review-slug>.md` record.
-9. Keep the feature document and feature registry queue current during the work.
-10. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. Update or remove the queue row so the next cloud agent does not pick completed work. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
-11. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
+6. If the feature has non-trivial workflows, state, edge cases, algorithms, or feature-specific component behavior, add linked deep-dive docs under `docs/features/<feature-slug>/`.
+7. If the feature introduces a durable design or major tradeoff, add or update a design doc in `docs/designs/`.
+8. If the feature depends on a plan produced by another agent or tool, record the plan provenance and implementation pickup in the feature or design doc before editing.
+9. If a specialist, second-agent, human, or tool review materially informs the work, add a short `Review Log` entry or link a substantive `docs/reviews/<review-slug>.md` record.
+10. Keep the feature document and feature registry queue current during the work.
+11. Leave a clean `Next Agent Handoff` section before ending the session. If the scoped work is implemented, verified, or shipped, set the feature doc `Status` and feature registry row to the matching terminal state. Update or remove the queue row so the next cloud agent does not pick completed work. For terminal feature states, remove stale wording such as `interrupted`, `resume carefully`, or `do not discard uncommitted work` unless unresolved uncommitted work still exists and is explicitly documented as a current risk.
+12. If the repo uses multiple agent instruction files, keep them aligned to the same feature doc and docs entrypoints.
 
 Use one explicit status model:
 
@@ -552,9 +552,11 @@ Before stopping, make sure another agent can determine:
 If the docs do not answer those quickly, improve them before ending the session.
 
 To automatically catch and stop drift, **you must run the validator** at the start and end of your session:
+
 ```bash
 python3 <skill-dir>/scripts/validate-docs.py --project-docs --strict
 ```
+
 Fix any drift, broken links, or misplaced plans before handing off.
 
 ## Deep-Dive Doc Rules

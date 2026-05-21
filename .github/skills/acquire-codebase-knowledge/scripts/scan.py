@@ -31,10 +31,10 @@ RECENT_COMMITS_LIMIT = 20
 CHURN_LIMIT = 20
 
 EXCLUDE_DIRS = {
-    "node_modules", ".git", "dist", "build", "out", ".next", ".nuxt",
-    "__pycache__", ".venv", "venv", ".tox", "target", "vendor",
-    "coverage", ".nyc_output", "generated", ".cache", ".turbo",
-    ".yarn", ".pnp", "bin", "obj"
+    "node_modules", ".git", ".github", ".claude", "dist", "build", "out",
+    ".next", ".nuxt", "__pycache__", ".venv", "venv", "env", ".tox",
+    "target", "vendor", "coverage", ".nyc_output", "generated", ".cache",
+    ".turbo", ".yarn", ".pnp", "bin", "obj", ".idea", ".vscode",
 }
 
 MANIFESTS = [

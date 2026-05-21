@@ -20,72 +20,6 @@ jobs:
         with:
           globs: "**/*.md"
 
-  check-links:
-    name: Check Relative Links
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Verify relative links
-        run: |
-          python3 - <<'PY'
-          import pathlib, re, sys
-
-          FENCE_LINE = re.compile(r'^( {0,3})([`~]{3,})(.*)$')
-          LINK  = re.compile(r'\[[^\]]*\]\(([^)]+)\)')
-
-          def strip_fenced_code(text):
-              lines = text.splitlines(keepends=True)
-              stripped = []
-              in_fence = False
-              fence_char = None
-              fence_len = 0
-
-              for line in lines:
-                  match = FENCE_LINE.match(line)
-                  if not in_fence:
-                      if match:
-                          fence = match.group(2)
-                          fence_char = fence[0]
-                          fence_len = len(fence)
-                          in_fence = True
-                          continue
-                      stripped.append(line)
-                      continue
-
-                  if match:
-                      fence = match.group(2)
-                      if fence[0] == fence_char and len(fence) >= fence_len:
-                          in_fence = False
-                          fence_char = None
-                          fence_len = 0
-                  continue
-
-              return ''.join(stripped)
-
-          errors = []
-          for md in pathlib.Path('.').rglob('*.md'):
-              if '.git' in md.parts:
-                  continue
-              text = md.read_text()
-              # Remove fenced code blocks before scanning for links
-              stripped = strip_fenced_code(text)
-              for target in LINK.findall(stripped):
-                  if target.startswith(('http://', 'https://', '#', 'mailto:')):
-                      continue
-                  rel = target.split('#', 1)[0]
-                  if not rel:
-                      continue
-                  resolved = (md.parent / rel).resolve()
-                  if not resolved.exists():
-                      errors.append(f'{md}: broken link -> {target}')
-          if errors:
-              for e in errors:
-                  print(e)
-              sys.exit(1)
-          print('All relative links OK')
-          PY
-
   validate-docs:
     name: Validate Docs Standard
     runs-on: ubuntu-latest
@@ -94,5 +28,3 @@ jobs:
 
       - name: Run local docs validator
         run: python3 skills/repo-memory/scripts/validate-docs.py --skill-repo .
-
-

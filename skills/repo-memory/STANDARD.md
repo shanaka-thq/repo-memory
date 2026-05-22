@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 2.3.0 <!-- x-release-please-version -->
+Version: 2.4.0 <!-- x-release-please-version -->
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence
@@ -27,6 +27,7 @@ where durable project truth lives:
 - active feature state and next-agent handoff context
 - a ranked next-work queue so cloud agents can choose the next safe task without prior chat context
 - raw brainstorms, project dumps, user notes, and planning output as intake evidence before accepted facts are promoted
+- evidence extraction reports that list candidate behavior, requirements, and feature areas before accepted findings are promoted
 - provenance for substantial plans, specialist reviews, and tool-generated guidance that influence implementation
 - compatibility with companion spec/plan workflows, when accepted outcomes are promoted into mapped owners
 - documentation freshness, conflicts, renames, and verification evidence
@@ -180,6 +181,7 @@ Optional and special-purpose docs are added only when they serve a clear intake,
 workflow, or deep-dive need:
 
 - `docs/intake/`
+- `docs/intake/YYYY-MM-DD-evidence-extraction.md` for optional evidence extraction reports
 - `docs/requirements/user-stories-and-use-cases.md`
 - `docs/diagrams/`
 - `docs/designs/`
@@ -253,6 +255,7 @@ When a repository claims Repo Memory Level 1 or higher conformance, it must:
 - avoid duplicate canonical owners for the same mutable project fact, decision, contract, or handoff state
 - keep agent instruction files thin and linked to the ownership map and active handoff surfaces
 - review relevant `docs/intake/` source material before greenfield planning or implementation, then promote accepted outcomes into mapped owners
+- treat evidence extraction reports as intake source material until accepted findings are promoted into mapped owners
 - use existing standard docs as canonical owners when they already satisfy a capability
 - make the mapped project-overview owner the canonical home for project goal, problem statement, target users or actors, success criteria, scope, and non-goals
 - document current behavior from evidence before documenting assumptions

@@ -134,7 +134,7 @@ This project provides a portable standard plus one installable skill package:
 
 - [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) defines the portable Repo Memory standard and capability ownership model.
 - [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) implements the standard as an agent-facing skill workflow.
-- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, decision reconstruction, continuity governance, agent integration and enforcement, and companion workflow guidance, including interrupted-work recovery.
+- [`skills/repo-memory/references/`](./skills/repo-memory/references/) contains rules, templates, metadata schema, audit workflow, evidence extraction, decision reconstruction, continuity governance, agent integration and enforcement, and companion workflow guidance, including interrupted-work recovery.
 - [`skills/repo-memory/agents/`](./skills/repo-memory/agents/) contains thin platform adapters for agent tools.
 - [`skills/repo-memory/examples/`](./skills/repo-memory/examples/) shows what adoption and handoff state look like.
 - [`skills/repo-memory/scripts/`](./skills/repo-memory/scripts/) provides empty-repo scaffolding, lightweight local validation, and manual blind forward-testing.
@@ -145,6 +145,8 @@ Use Repo Memory when you want to:
 - audit an existing repo and backfill missing or stale documentation
 - reconstruct architecture, requirements, decisions, and feature state from
   code evidence
+- extract candidate behavior, requirements, and feature areas into a reviewable
+  intake report before promoting accepted findings into canonical docs
 - keep project goals, users or actors, success criteria, scope, and non-goals
   explicit
 - document observability and instrumentation signals such as logs, metrics,
@@ -315,10 +317,11 @@ for the skill workflow.
 2. Read [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) for the complete workflow.
 3. Use [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) as a copy-paste starting point for any new doc.
 4. Use [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md) to audit an existing codebase.
-5. Use [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) to check naming and placement before committing.
-6. Use [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) when docs conflict, drift, work is interrupted, files need recovery, docs are renamed, or features need terminal-state handling.
-7. Use [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) to keep doc metadata consistent across agents.
-8. Use [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md) to wire Repo Memory into Codex, GitHub Copilot, VS Code, Claude Code, OpenCode, cloud agents, hooks, and CI without creating duplicate sources of truth.
+5. Use [`skills/repo-memory/references/evidence-extraction-workflow.md`](./skills/repo-memory/references/evidence-extraction-workflow.md) when extracting candidate behavior, requirements, features, or handoff context from existing evidence.
+6. Use [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) to check naming and placement before committing.
+7. Use [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) when docs conflict, drift, work is interrupted, files need recovery, docs are renamed, or features need terminal-state handling.
+8. Use [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) to keep doc metadata consistent across agents.
+9. Use [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md) to wire Repo Memory into Codex, GitHub Copilot, VS Code, Claude Code, OpenCode, cloud agents, hooks, and CI without creating duplicate sources of truth.
 
 ### Empty Repository Scaffold
 
@@ -514,6 +517,7 @@ Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The rel
 - OpenCode guide: [`skills/repo-memory/agents/opencode.md`](./skills/repo-memory/agents/opencode.md)
 - File templates: [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md)
 - Audit workflow: [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md)
+- Evidence extraction workflow: [`skills/repo-memory/references/evidence-extraction-workflow.md`](./skills/repo-memory/references/evidence-extraction-workflow.md)
 - Agent integration and enforcement: [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md)
 - Structure rules: [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md)
 - Documentation metadata schema: [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md)

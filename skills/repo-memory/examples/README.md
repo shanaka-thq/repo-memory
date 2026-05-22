@@ -18,6 +18,9 @@ feature state, doc health, and handoff surfaces.
   missing handoff surfaces.
 - [`multi-agent-handoff/`](./multi-agent-handoff/) — a feature handoff example
   showing how one agent leaves enough context for another agent to continue.
+- [`evidence-extraction/`](./evidence-extraction/) — an example of keeping raw
+  extracted behavior in intake while promoting accepted findings into mapped
+  owners.
 - [`superpowers-bridge/`](./superpowers-bridge/) — an example of linking Obra
   Superpowers specs and plans without making them the canonical handoff state.
 

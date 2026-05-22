@@ -6,22 +6,36 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
-## [2.3.0](https://github.com/akanahs-dev/repo-memory/compare/v2.2.0...v2.3.0) (2026-05-21)
+## [2.4.0] - 2026-05-22
 
+### Added
+
+- Added an evidence extraction workflow for turning repository evidence into
+  candidate behavior, requirements, feature areas, and handoff context before
+  accepted findings are promoted into mapped owners.
+- Added an evidence extraction example showing raw extraction output in
+  `docs/intake/` with accepted feature state promoted into canonical docs.
+
+### Changed
+
+- Updated the standard, skill workflow, README, roadmap, examples, and
+  validator required-file list so evidence extraction is discoverable without
+  adding premature automation.
+
+## [2.3.0](https://github.com/akanahs-dev/repo-memory/compare/v2.2.0...v2.3.0) (2026-05-21)
 
 ### Features
 
-* enforce plan and specification directory placement via new validator check and updated documentation rules ([5571f1d](https://github.com/akanahs-dev/repo-memory/commit/5571f1d9fd2901563375616e81f4fb211de5c962))
-* enhance documentation with quick start guide and repository purpose clarification ([6aee226](https://github.com/akanahs-dev/repo-memory/commit/6aee226e36374c197c596e6a2086553cf262950f))
-* migrate release management to release-please and update documentation versioning strategy ([514e3e8](https://github.com/akanahs-dev/repo-memory/commit/514e3e8a331f6d9634840cc9e6cc8ccd1ab33a95))
-
+- enforce plan and specification directory placement via new validator check and updated documentation rules ([5571f1d](https://github.com/akanahs-dev/repo-memory/commit/5571f1d9fd2901563375616e81f4fb211de5c962))
+- enhance documentation with quick start guide and repository purpose clarification ([6aee226](https://github.com/akanahs-dev/repo-memory/commit/6aee226e36374c197c596e6a2086553cf262950f))
+- migrate release management to release-please and update documentation versioning strategy ([514e3e8](https://github.com/akanahs-dev/repo-memory/commit/514e3e8a331f6d9634840cc9e6cc8ccd1ab33a95))
 
 ### Bug Fixes
 
-* clean up workflows — remove duplicate link check, explicit release config ([69ceb92](https://github.com/akanahs-dev/repo-memory/commit/69ceb92cde991ce7ee255a9de9b2d10b96a2c554))
-* ignore infra and dependency dirs in all validation traversals ([7ec8652](https://github.com/akanahs-dev/repo-memory/commit/7ec865253f6a853eb2c84d4fa16641a459303f61))
-* make markdownlint pass — exclude infra dirs, fix lint errors in docs ([bb98c87](https://github.com/akanahs-dev/repo-memory/commit/bb98c87128c7e95464a337b6556aa8e64a153f36))
-* resolve version drift and changelog header regex in validator ([e69c123](https://github.com/akanahs-dev/repo-memory/commit/e69c123dff7d62fd490478f7f933f6d57b96ec6f))
+- clean up workflows - remove duplicate link check, explicit release config ([69ceb92](https://github.com/akanahs-dev/repo-memory/commit/69ceb92cde991ce7ee255a9de9b2d10b96a2c554))
+- ignore infra and dependency dirs in all validation traversals ([7ec8652](https://github.com/akanahs-dev/repo-memory/commit/7ec865253f6a853eb2c84d4fa16641a459303f61))
+- make markdownlint pass - exclude infra dirs, fix lint errors in docs ([bb98c87](https://github.com/akanahs-dev/repo-memory/commit/bb98c87128c7e95464a337b6556aa8e64a153f36))
+- resolve version drift and changelog header regex in validator ([e69c123](https://github.com/akanahs-dev/repo-memory/commit/e69c123dff7d62fd490478f7f933f6d57b96ec6f))
 
 ## [2.2.0] - 2026-05-20
 

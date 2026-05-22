@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 2.3.0 <!-- x-release-please-version -->
+Version: 2.4.0 <!-- x-release-please-version -->
 
 ## Overview
 
@@ -20,6 +20,7 @@ benefits from tighter continuity.
 Read [STANDARD.md](./STANDARD.md) when you need the portable standard, conformance model, required behaviors, and the distinction between standard and platform adapters.
 Read [references/templates.md](./references/templates.md) when the repo needs a default structure, default file set, or example feature-tracking documents.
 Read [references/existing-project-audit.md](./references/existing-project-audit.md) when the repo is already populated but does not comply with the documentation standard, or when you need to backfill architecture, requirements, decisions, or feature state from code and history.
+Read [references/evidence-extraction-workflow.md](./references/evidence-extraction-workflow.md) when you need to extract candidate behavior, requirements, features, or handoff context from existing evidence before promoting accepted findings into mapped owners.
 Read [references/docs-structure-rules.md](./references/docs-structure-rules.md) for the strict naming conventions, placement rules, and enforcement checklist that all documentation must satisfy.
 Read [references/documentation-metadata-schema.md](./references/documentation-metadata-schema.md) for the standard metadata fields, required doc-type fields, allowed values, and examples that make docs machine-checkable and agent-consistent.
 Read [references/decision-log-reconstruction.md](./references/decision-log-reconstruction.md) when creating or updating a decision log, especially for existing projects where durable choices must be reconstructed from code, requirements, project history, user statements, and inferred architecture.
@@ -48,6 +49,7 @@ Prefer one canonical owner per documentation capability:
 - one doc-health record for freshness, verification, known drift, and conflict state
 - one metadata schema that describes what each doc type must record
 - one evidence-based adoption path for existing repos that are missing trustworthy docs
+- one evidence extraction workflow for turning repo evidence into reviewable candidates before accepted findings are promoted
 - one canonical ownership map that agent-specific instruction files point to instead of duplicating mutable facts
 - one low-friction intake inbox for raw brainstorms, project notes, chat exports, and planning dumps before accepted facts are promoted
 - one provenance trail for substantial plans, specialist reviews, and tool-generated guidance that another agent may need to trust, verify, or implement
@@ -299,6 +301,27 @@ Before starting implementation from a greenfield intake dump, make sure the
 mapped owners now answer the project goal, target users or actors, first
 usable scope, major constraints, tracked features, and ranked next-work queue.
 The builder should not have to reverse-engineer those from raw intake.
+
+### 1d. Extract candidate behavior from existing evidence
+
+Use [references/evidence-extraction-workflow.md](./references/evidence-extraction-workflow.md)
+when the user asks what behavior, requirements, features, or handoff context can
+be extracted from an existing repository.
+
+Keep the extraction report separate from canonical truth:
+
+1. Inventory evidence before making claims.
+2. Write candidate surfaces and suggested promotions to `docs/intake/` when the
+   target repo has Repo Memory docs.
+3. Mark confidence and cite the evidence for every candidate that may be
+   promoted.
+4. Promote only accepted findings into the mapped owners.
+5. Record unresolved or low-confidence findings in `docs/doc-health.md`.
+
+Do not turn implementation heuristics into requirements. A source pattern,
+test name, route, or config key can suggest a candidate surface, but the mapped
+requirements, feature, decision, or architecture owner should only receive the
+finding after it has evidence and a clear disposition.
 
 ### 2. Run a documentation audit
 

@@ -18,6 +18,8 @@ not a guarantee of dates or release scope.
 - Expand `skills/repo-memory/examples/` with before-and-after documentation sets.
 - Improve the empty-repo scaffold helper with richer metadata and optional
   baseline variants.
+- Refine the evidence extraction workflow with more examples before adding
+  optional automation.
 - Improve `skills/repo-memory/scripts/validate-docs.py` coverage for metadata, orphaned docs,
   feature statuses, and stale links.
 - Expand the blind forward-test harness with more realistic fixtures and
@@ -31,6 +33,8 @@ not a guarantee of dates or release scope.
 
 - Add an audit command that reports missing baseline docs and likely stale
   areas without rewriting files.
+- Explore an optional extraction helper after the evidence report shape has
+  proven stable in examples.
 - Explore optional packaging as a CLI, plugin, or MCP integration.
 - Add richer examples for multi-agent handoff and concurrent work.
 

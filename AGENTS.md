@@ -33,12 +33,13 @@ Read these files in order when starting a session:
 4. [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) — strict naming and placement rules that all docs must follow
 5. [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) — copy-paste templates for every standard doc type
 6. [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md) — audit workflow for backfilling docs in existing projects
-7. [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) — standard metadata fields by doc type
-8. [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md) — comprehensive decision log reconstruction
-9. [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) — freshness, conflict, rename, feature closure, and multi-agent protocols
-10. [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md) — Codex, Copilot, VS Code, Claude Code, OpenCode, cloud-agent, hook, and CI setup guidance
-11. [`skills/repo-memory/references/superpowers-compatibility.md`](./skills/repo-memory/references/superpowers-compatibility.md) — bridge guidance for Obra Superpowers specs/plans and similar companion workflows
-12. [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md) — concrete reference outputs for adopted docs and handoff state
+7. [`skills/repo-memory/references/evidence-extraction-workflow.md`](./skills/repo-memory/references/evidence-extraction-workflow.md) — workflow for extracting candidate behavior and requirements before promotion
+8. [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) — standard metadata fields by doc type
+9. [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md) — comprehensive decision log reconstruction
+10. [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) — freshness, conflict, rename, feature closure, and multi-agent protocols
+11. [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md) — Codex, Copilot, VS Code, Claude Code, OpenCode, cloud-agent, hook, and CI setup guidance
+12. [`skills/repo-memory/references/superpowers-compatibility.md`](./skills/repo-memory/references/superpowers-compatibility.md) — bridge guidance for Obra Superpowers specs/plans and similar companion workflows
+13. [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md) — concrete reference outputs for adopted docs and handoff state
 
 ## How to Apply This Skill
 

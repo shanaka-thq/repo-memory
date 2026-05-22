@@ -36,6 +36,7 @@ REQUIRED_SKILL_PACKAGE_FILES = [
     "skills/repo-memory/references/templates.md",
     "skills/repo-memory/references/docs-structure-rules.md",
     "skills/repo-memory/references/existing-project-audit.md",
+    "skills/repo-memory/references/evidence-extraction-workflow.md",
     "skills/repo-memory/references/decision-log-reconstruction.md",
     "skills/repo-memory/references/continuity-governance.md",
     "skills/repo-memory/references/agent-integration-and-enforcement.md",

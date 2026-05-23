@@ -21,6 +21,8 @@ and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 - Updated the standard, skill workflow, README, roadmap, examples, and
   validator required-file list so evidence extraction is discoverable without
   adding premature automation.
+- Refreshed the generated `docs/README.md` and template to be shorter,
+  friendlier, and easier to scan.
 
 ## [2.3.0](https://github.com/akanahs-dev/repo-memory/compare/v2.2.0...v2.3.0) (2026-05-21)
 

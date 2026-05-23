@@ -48,78 +48,70 @@ def metadata(
 def docs_readme(project_name: str) -> str:
     return clean(
         f"""
-        # {project_name} Documentation
+        # {project_name} Docs 🧭
 
-        This `docs/` tree stores project context, architecture, requirements,
-        feature status, and handoff state. The `Canonical Ownership Map` below
-        names the single owner for each documentation capability.
+        Welcome, future human or agent. This folder is the project map, not a
+        mystery novel. Use it to find the one place each kind of project truth
+        lives.
 
-        ## Agent Startup Order
+        ## Start Here
 
-        1. Read this file.
-        2. Use the `Canonical Ownership Map` to find the owner for the current
-           task.
-        3. Read `feature-registry.md`; when no task is assigned, pick the
-           first `ready` row in `Next Work Queue`.
-        4. Read the active `features/<feature-slug>.md` before changing related code.
+        1. Find the topic in the ownership map.
+        2. Open only the owner you need.
+        3. If no task was assigned, use `feature-registry.md` and pick the
+           first `ready` row.
+        4. Before changing a feature, read its `features/<feature-slug>.md`.
+
+        ```mermaid
+        flowchart TD
+          A["Start here"] --> B["Find the topic"]
+          B --> C["Open the canonical owner"]
+          C --> D["Update that owner when facts change"]
+          B --> E["No task assigned?"]
+          E --> F["Use feature-registry.md"]
+        ```
 
         ## Canonical Ownership Map
 
+        One row, one owner. Supporting docs can help, but the owner is where
+        current truth changes.
+
         | Capability | Canonical owner | Supporting docs | Notes |
         | --- | --- | --- | --- |
-        | Project goal, users, scope, and success criteria | `project-overview.md` | `README.md` | Keep product intent here. |
-        | Architecture and runtime topology | `architecture.md` | `data-model.md`, `interfaces-and-contracts.md` | Replace this owner if a stronger existing architecture doc exists. |
-        | Interfaces and contracts | `interfaces-and-contracts.md` | `architecture.md` | Use an OpenAPI, schema, protobuf, or MCP spec as owner if one exists. |
-        | Data model | `data-model.md` | `interfaces-and-contracts.md` | Keep durable entity and storage rules here. |
-        | Local development and tooling | `local-development.md` | `testing-strategy.md` | Use `CONTRIBUTING.md` as owner if it exists and is current. |
-        | Documentation health and conflicts | `doc-health.md` | `feature-registry.md` | Track stale docs, verification, and duplicate-owner migrations. |
-        | Observability and runtime signals | `observability-and-instrumentation.md` | `operations-runbook.md` | Keep logs, metrics, traces, analytics, dashboards, and alerts here. |
-        | Testing strategy | `testing-strategy.md` | `local-development.md` | Keep test layers and commands here. |
-        | Operations and support | `operations-runbook.md` | `observability-and-instrumentation.md` | Use an existing runbook as owner if one exists. |
-        | Security and privacy | `security-and-privacy.md` | None | Use `SECURITY.md` as owner if it exists and is current. |
-        | Decisions and rationale | `decision-log.md` | `implementation-log.md` | Use `docs/adr/` as owner if ADRs exist. |
-        | Implementation history | `implementation-log.md` | `decision-log.md`, `features/` | Record meaningful landed work here. |
-        | Feature state and next work | `feature-registry.md` | `features/` | Keep the ranked `Next Work Queue` here. |
-        | Functional requirements | `requirements/functional-requirements.md` | `project-overview.md` | Keep accepted behavior requirements here. |
-        | Non-functional requirements | `requirements/non-functional-requirements.md` | `project-overview.md` | Keep quality attributes and constraints here. |
-        | Active feature handoff | `features/<feature-slug>.md` | `feature-registry.md` | Keep resume context, validation, and next handoff in feature docs. |
+        | Goal, users, scope | `project-overview.md` | root `README.md` | Product intent goes here. |
+        | Functional requirements | `requirements/functional-requirements.md` | `project-overview.md` | Accepted behavior. |
+        | Non-functional requirements | `requirements/non-functional-requirements.md` | `project-overview.md` | Quality attributes and constraints. |
+        | Architecture | `architecture.md` | `data-model.md`, `interfaces-and-contracts.md` | Replace with a stronger existing architecture owner if one exists. |
+        | Interfaces and contracts | `interfaces-and-contracts.md` | API specs, schemas, MCP docs | External contracts beat prose summaries. |
+        | Data model | `data-model.md` | schemas, migrations | Durable entities, relationships, and lifecycle. |
+        | Local development | `local-development.md` | `CONTRIBUTING.md` | Commands live in one place. Everyone breathes easier. |
+        | Testing strategy | `testing-strategy.md` | CI docs | Test layers, gaps, and verification habits. |
+        | Observability | `observability-and-instrumentation.md` | dashboards, analytics docs | Logs, metrics, traces, alerts, and production clues. |
+        | Operations and support | `operations-runbook.md` | deploy docs | Runbooks, rollout notes, and support paths. |
+        | Security and privacy | `security-and-privacy.md` | `SECURITY.md` | Secrets, PII, permissions, and trust boundaries. |
+        | Decisions and rationale | `decision-log.md` | ADRs | Why choices were made. |
+        | Implementation history | `implementation-log.md` | changelog | What landed and when. |
+        | Feature state and next work | `feature-registry.md` | `features/` | Queue, statuses, and default next task. |
+        | Active handoff | `features/<feature-slug>.md` | `feature-registry.md` | Resume context, validation, and next safe step. |
+        | Doc health | `doc-health.md` | this file | Stale docs, conflicts, verification gaps. |
+        | Raw ideas and evidence | `intake/README.md` | intake files | Brain dumps live here until accepted facts graduate. 🎓 |
 
-        ## Default Owners
+        ## Handy Links
 
-        - [Project overview](./project-overview.md)
-        - [Architecture](./architecture.md)
-        - [Interfaces and contracts](./interfaces-and-contracts.md)
-        - [Data model](./data-model.md)
-        - [Local development](./local-development.md)
-        - [Doc health](./doc-health.md)
-        - [Observability and instrumentation](./observability-and-instrumentation.md)
-        - [Testing strategy](./testing-strategy.md)
-        - [Operations runbook](./operations-runbook.md)
-        - [Security and privacy](./security-and-privacy.md)
-        - [Decision log](./decision-log.md)
-        - [Implementation log](./implementation-log.md)
-        - [Feature registry](./feature-registry.md)
-        - [Functional requirements](./requirements/functional-requirements.md)
-        - [Non-functional requirements](./requirements/non-functional-requirements.md)
-        - [Feature template](./features/_template.md)
+        - 🧠 Product intent: [project-overview.md](./project-overview.md)
+        - 🧱 Architecture: [architecture.md](./architecture.md)
+        - ✅ Requirements: [requirements/](./requirements/)
+        - 🧪 Tests: [testing-strategy.md](./testing-strategy.md)
+        - 🚦 Next work: [feature-registry.md](./feature-registry.md)
+        - 🩺 Doc health: [doc-health.md](./doc-health.md)
+        - 📥 Raw intake: [intake/README.md](./intake/README.md)
 
-        ## Intake Inbox
+        ## Tiny Rules
 
-        - [Raw intake](./intake/README.md) is the low-friction place for
-          brainstorms, project notes, chat exports, and planning dumps before
-          accepted facts are promoted into the mapped owners.
-
-        ## Maintenance Rules
-
-        - Keep each durable project fact in its mapped owner.
-        - Do not duplicate facts owned by ADRs, specs, runbooks, setup docs,
-          security docs, or other maintained project docs.
-        - Mark unknowns explicitly instead of guessing.
-        - Keep `feature-registry.md` current as the ranked next-work queue for
-          future agents.
-        - Update feature docs, implementation log, decision log, and doc health
-          when project reality changes.
-        - Keep agent instruction files thin and linked here.
+        - Keep facts in their owner, not sprinkled everywhere.
+        - Link to strong existing docs instead of copying them.
+        - Mark unknowns as unknown. Guessing wears a fake mustache.
+        - When reality changes, update the owner and `doc-health.md`.
         """
     )
 

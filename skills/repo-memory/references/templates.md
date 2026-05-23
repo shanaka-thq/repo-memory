@@ -1191,93 +1191,65 @@ Describe the happy-path sequence.
 
 ## Docs README Template
 
-```md
-# Documentation Standard
+````md
+# Project Docs 🧭
 
-This folder is the cross-agent continuity layer. The table below names the
-single canonical owner for each adopted documentation capability. Do not copy
-mutable facts from an owner into another file; link to the owner instead.
+Welcome, future human or agent. This folder is the project map, not a mystery
+novel. Use it to find the one place each kind of project truth lives.
+
+## Start Here
+
+1. Find the topic in the ownership map.
+2. Open only the owner you need.
+3. If no task was assigned, use `feature-registry.md` and pick the first
+   `ready` row.
+4. Before changing a feature, read its `features/<feature-slug>.md`.
+
+```mermaid
+flowchart TD
+  A["Start here"] --> B["Find the topic"]
+  B --> C["Open the canonical owner"]
+  C --> D["Update that owner when facts change"]
+  B --> E["No task assigned?"]
+  E --> F["Use feature-registry.md"]
+```
 
 ## Canonical Ownership Map
 
-| Capability                            | Canonical owner               | Supporting docs       | Notes                                                    |
-| ------------------------------------- | ----------------------------- | --------------------- | -------------------------------------------------------- |
-| Documentation map and ownership map   | `docs/README.md`              | `AGENTS.md`           | This table owns routing.                                 |
-| Project goal, users, scope, non-goals | `project-overview.md`         | `README.md`           | Replace with existing owner if the repo already has one. |
-| Architecture and system shape         | `architecture.md`             | `docs/diagrams/`      | Replace with existing C4/RFC owner if present.           |
-| Decisions and rationale               | `decision-log.md`             | `docs/adr/`           | If ADRs are canonical, put `docs/adr/` here.             |
-| Interfaces and contracts              | `interfaces-and-contracts.md` | `openapi.yaml`        | If a schema/spec is canonical, name it here.             |
-| Local development and tooling         | `local-development.md`        | `CONTRIBUTING.md`     | Avoid duplicate setup commands.                          |
-| Active feature handoff                | `features/<feature-slug>.md`  | `feature-registry.md` | Repo Memory usually owns this.                           |
-| Documentation health and conflicts    | `doc-health.md`               | None                  | Tracks stale docs and duplicate-owner migrations.        |
+One row, one owner. Supporting docs can help, but the owner is where current
+truth changes.
 
-## Agent Startup Order
+| Capability | Canonical owner | Supporting docs | Notes |
+| --- | --- | --- | --- |
+| Goal, users, scope | `project-overview.md` | root `README.md` | Product intent goes here. |
+| Functional requirements | `requirements/functional-requirements.md` | `project-overview.md` | Accepted behavior. |
+| Non-functional requirements | `requirements/non-functional-requirements.md` | `project-overview.md` | Quality attributes and constraints. |
+| Architecture | `architecture.md` | `data-model.md`, `interfaces-and-contracts.md` | Replace with a stronger existing architecture owner if one exists. |
+| Interfaces and contracts | `interfaces-and-contracts.md` | API specs, schemas, MCP docs | External contracts beat prose summaries. |
+| Local development | `local-development.md` | `CONTRIBUTING.md` | Commands live in one place. Everyone breathes easier. |
+| Testing strategy | `testing-strategy.md` | CI docs | Test layers, gaps, and verification habits. |
+| Feature state and next work | `feature-registry.md` | `features/` | Queue, statuses, and default next task. |
+| Active handoff | `features/<feature-slug>.md` | `feature-registry.md` | Resume context, validation, and next safe step. |
+| Doc health | `doc-health.md` | this file | Stale docs, conflicts, verification gaps. |
+| Raw ideas and evidence | `intake/README.md` | intake files | Brain dumps live here until accepted facts graduate. 🎓 |
 
-When an agent starts or resumes work:
+## Handy Links
 
-1. Read this file.
-2. Use the Canonical Ownership Map to find the owner for the current task.
-3. Read `feature-registry.md`; when no task was assigned, pick the first `ready` row in `Next Work Queue`.
-4. Read the active `features/<feature-slug>.md` before making changes to that feature.
+- 🧠 Product intent: [project-overview.md](./project-overview.md)
+- 🧱 Architecture: [architecture.md](./architecture.md)
+- ✅ Requirements: [requirements/](./requirements/)
+- 🧪 Tests: [testing-strategy.md](./testing-strategy.md)
+- 🚦 Next work: [feature-registry.md](./feature-registry.md)
+- 🩺 Doc health: [doc-health.md](./doc-health.md)
+- 📥 Raw intake: [intake/README.md](./intake/README.md)
 
-## Single Source of Truth Rules
+## Tiny Rules
 
-- Keep durable project facts in their mapped canonical owner.
-- Keep active handoff state in the mapped feature handoff owner.
-- Keep the ranked next-work queue in `feature-registry.md` current enough that a cloud agent can pick the next safe task.
-- Keep repo-level agent instruction files concise and point them here instead of duplicating mutable facts.
-- If multiple agent instruction files exist, align them to the same docs entrypoints and feature workflow.
-- Existing ADRs, RFCs, API specs, runbooks, setup docs, and security docs can stay canonical when the ownership map says so.
-
-## Default Repo Memory Owners
-
-Create these when the capability has no trustworthy existing owner:
-
-- `project-overview.md`
-- `architecture.md`
-- `requirements/functional-requirements.md`
-- `requirements/non-functional-requirements.md`
-- `interfaces-and-contracts.md`
-- `data-model.md`
-- `local-development.md`
-- `doc-health.md`
-- `observability-and-instrumentation.md`
-- `testing-strategy.md`
-- `operations-runbook.md`
-- `security-and-privacy.md`
-- `decision-log.md`
-- `implementation-log.md`
-- `feature-registry.md`
-
-## Optional Deep Dives
-
-Create these only when the topic needs more detail than the baseline set should hold:
-
-- `requirements/user-stories-and-use-cases.md`
-- `diagrams/<topic-slug>.mmd`
-- `diagrams/<topic-slug>.drawio`
-- `designs/<design-slug>.md`
-- `project-details/<topic-slug>.md`
-- `components/<component-slug>.md`
-- `ui-ux/<topic-or-flow-slug>.md`
-- `features/<feature-slug>/logic.md`
-- `features/<feature-slug>/components/<component-slug>.md`
-
-## Per-feature Maintenance
-
-For non-trivial work, create or update:
-
-- `features/<feature-slug>.md`
-- the `feature-registry.md` `Next Work Queue`
-- `requirements/user-stories-and-use-cases.md` when user journeys or acceptance paths changed
-- `diagrams/...` when architecture views, flows, or state diagrams changed
-- `ui-ux/...` when screen states, interaction rules, or accessibility changed
-- `designs/...` when the solution shape or rollout plan changed materially
-- linked deep-dive docs when the feature has meaningful internal logic
-- `doc-health.md` when docs were materially changed, verified, stale, renamed, or superseded
-- `implementation-log.md`
-- `decision-log.md` when the change is architectural
-```
+- Keep facts in their owner, not sprinkled everywhere.
+- Link to strong existing docs instead of copying them.
+- Mark unknowns as unknown. Guessing wears a fake mustache.
+- When reality changes, update the owner and `doc-health.md`.
+````
 
 ## Existing Project Audit Snippet
 

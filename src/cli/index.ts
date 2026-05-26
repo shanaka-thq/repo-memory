@@ -4,6 +4,8 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Command } from 'commander';
 import { runDoctorCommand } from '../commands/doctor';
+import { runValidateCommand } from '../commands/validate';
+import { runGenerateCommand } from '../commands/generate';
 
 const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf8'));
 
@@ -68,15 +70,18 @@ program
 program
   .command('validate')
   .description('Validate Repo Memory files and project health')
-  .action(() => {
-    console.log('Command "validate" is not implemented in Milestone 1.');
+  .option('--json', 'Output results in JSON format')
+  .action((options) => {
+    runValidateCommand(options);
   });
 
 program
   .command('generate')
   .description('Generate derived indexes (feature registry, next work queue, doc health)')
-  .action(() => {
-    console.log('Command "generate" is not implemented in Milestone 1.');
+  .option('--dry-run', 'Show what would be written without writing', false)
+  .option('--json', 'Output results in JSON format')
+  .action((options) => {
+    runGenerateCommand({ ...options, dryRun: options.dryRun });
   });
 
 program

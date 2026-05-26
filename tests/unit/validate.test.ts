@@ -121,6 +121,23 @@ describe('runValidation', () => {
     expect(result.issues.some((i) => i.message.includes('frontmatter'))).toBe(true);
   });
 
+  it('does not fail when frontmatter is missing and require_feature_frontmatter is false', () => {
+    fs.writeFileSync(
+      path.join(tmpDir, 'repo-memory.config.yml'),
+      VALID_CONFIG_YAML.replace('require_feature_frontmatter: true', 'require_feature_frontmatter: false'),
+      'utf8'
+    );
+    fs.writeFileSync(
+      path.join(tmpDir, 'docs', 'features', 'no-fm.md'),
+      '# No Frontmatter\n\nBody.\n',
+      'utf8'
+    );
+
+    const result = runValidation(tmpDir);
+    expect(result.valid).toBe(true);
+    expect(result.errorCount).toBe(0);
+  });
+
   it('returns invalid when a feature file has an invalid status', () => {
     fs.writeFileSync(
       path.join(tmpDir, 'docs', 'features', 'bad.md'),

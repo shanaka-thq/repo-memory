@@ -65,6 +65,7 @@ export function loadFeatures(featuresDir: string): FeatureIndexResult {
   const features: FeatureEntry[] = mdFiles.map((filePath) => {
     const slug = slugFromPath(filePath);
     const rawContent = fs.readFileSync(filePath, 'utf8');
+    const hasFrontmatterFence = rawContent.trimStart().startsWith('---');
 
     let parsed;
     try {
@@ -73,7 +74,7 @@ export function loadFeatures(featuresDir: string): FeatureIndexResult {
       return {
         slug,
         filePath,
-        hasFrontmatter: false,
+        hasFrontmatter: hasFrontmatterFence,
         frontmatter: null,
         errors: [`YAML parse error: ${err.message}`],
       };

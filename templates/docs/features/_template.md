@@ -25,7 +25,7 @@ Last updated: YYYY-MM-DD
 Last verified: YYYY-MM-DD
 Confidence: medium
 Canonical source: `docs/features/feature-slug.md`
-Related docs: `../feature-registry.md`
+Related docs: `../generated/feature-registry.md`
 
 ## Summary
 

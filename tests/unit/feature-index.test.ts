@@ -74,6 +74,15 @@ describe('loadFeatures', () => {
     expect(features[0].errors.some((e) => e.includes('status'))).toBe(true);
   });
 
+  it('keeps hasFrontmatter=true for malformed YAML frontmatter', () => {
+    const content = `---\nid: bad\ntitle: [unterminated\n---\n`;
+    fs.writeFileSync(path.join(tmpDir, 'bad-yaml.md'), content, 'utf8');
+    const { features } = loadFeatures(tmpDir);
+    expect(features[0].hasFrontmatter).toBe(true);
+    expect(features[0].frontmatter).toBeNull();
+    expect(features[0].errors[0]).toContain('YAML parse error');
+  });
+
   it('reports an id mismatch when frontmatter id differs from the file slug', () => {
     const content = validFrontmatter({ id: 'wrong-id' });
     fs.writeFileSync(path.join(tmpDir, 'my-feature.md'), content, 'utf8');

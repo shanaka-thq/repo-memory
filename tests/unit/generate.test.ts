@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { runGeneration } from '../../src/commands/generate';
+import { runGeneration, runGenerateCommand } from '../../src/commands/generate';
 
 const VALID_CONFIG_YAML = `\
 version: 3
@@ -195,8 +195,8 @@ describe('runGeneration', () => {
     const result = runGeneration(tmpDir);
     const health = result.generated.find((f) => f.path.endsWith('doc-health.md'))!;
     expect(health.content).toContain('Total feature files: 2');
-    expect(health.content).toContain('Valid (parseable frontmatter): 1');
-    expect(health.content).toContain('Invalid or missing frontmatter: 1');
+    expect(health.content).toContain('Valid (schema-valid frontmatter): 1');
+    expect(health.content).toContain('Missing or schema-invalid frontmatter: 1');
   });
 
   it('reports duplicate IDs as an error', () => {
@@ -232,5 +232,67 @@ describe('runGeneration', () => {
         normalize(result2.generated[i].content)
       );
     }
+  });
+
+  it('emits only JSON output in --json --dry-run mode when errors exist', () => {
+    fs.writeFileSync(path.join(tmpDir, 'docs', 'features', 'dup-a.md'), validFeatureFm('dup-id'), 'utf8');
+    fs.writeFileSync(
+      path.join(tmpDir, 'docs', 'features', 'dup-b.md'),
+      validFeatureFm('dup-id', { title: 'Dup B' }),
+      'utf8'
+    );
+
+    let output = '';
+    const logSpy = vi.spyOn(console, 'log').mockImplementation((msg) => {
+      output = String(msg);
+    });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      runGenerateCommand({ json: true, dryRun: true, projectRoot: tmpDir });
+    } finally {
+      logSpy.mockRestore();
+      errorSpy.mockRestore();
+    }
+
+    const parsed = JSON.parse(output);
+    expect(parsed.success).toBe(false);
+    expect(parsed.dryRun).toBe(true);
+    expect(Array.isArray(parsed.wouldGenerate)).toBe(true);
+    expect(parsed.errors.length).toBeGreaterThan(0);
+    expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('emits JSON and exits with code 1 in --json mode when errors exist', () => {
+    fs.writeFileSync(path.join(tmpDir, 'docs', 'features', 'dup-a.md'), validFeatureFm('dup-id'), 'utf8');
+    fs.writeFileSync(
+      path.join(tmpDir, 'docs', 'features', 'dup-b.md'),
+      validFeatureFm('dup-id', { title: 'Dup B' }),
+      'utf8'
+    );
+
+    let output = '';
+    const logSpy = vi.spyOn(console, 'log').mockImplementation((msg) => {
+      output = String(msg);
+    });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
+      throw new Error('exit');
+    }) as any);
+
+    try {
+      expect(() => runGenerateCommand({ json: true, projectRoot: tmpDir })).toThrow('exit');
+    } finally {
+      logSpy.mockRestore();
+      errorSpy.mockRestore();
+      exitSpy.mockRestore();
+    }
+
+    const parsed = JSON.parse(output);
+    expect(parsed.success).toBe(false);
+    expect(parsed.dryRun).toBe(false);
+    expect(Array.isArray(parsed.generated)).toBe(true);
+    expect(parsed.errors.length).toBeGreaterThan(0);
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 });

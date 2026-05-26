@@ -48,17 +48,25 @@ export function runValidation(projectRoot: string): ValidationResult {
 
   const featuresDir = path.resolve(projectRoot, config.paths.features);
   const { features, duplicateIds } = loadFeatures(featuresDir);
+  const missingFrontmatterMessage = 'Missing YAML frontmatter block';
 
   for (const entry of features) {
     const relPath = path.relative(projectRoot, entry.filePath);
+    const hasOnlyMissingFrontmatterError =
+      !entry.hasFrontmatter &&
+      entry.errors.length === 1 &&
+      entry.errors[0] === missingFrontmatterMessage;
 
-    if (!entry.hasFrontmatter && config.validation.require_feature_frontmatter) {
+    if (hasOnlyMissingFrontmatterError && config.validation.require_feature_frontmatter) {
       issues.push({
         file: relPath,
         type: 'error',
         message: 'Missing YAML frontmatter block (require_feature_frontmatter is enabled)',
       });
-    } else if (entry.errors.length > 0) {
+      continue;
+    }
+
+    if (entry.errors.length > 0 && !hasOnlyMissingFrontmatterError) {
       for (const err of entry.errors) {
         issues.push({ file: relPath, type: 'error', message: err });
       }

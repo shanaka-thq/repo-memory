@@ -98,19 +98,17 @@ function buildFeatureRegistry(
     '-'.repeat(cols.lastUpdated),
   ].join(' | ');
 
-  const tableRows = rows
-    .map((r) =>
-      [
-        pad(r.id, cols.id),
-        pad(r.title, cols.title),
-        pad(r.status, cols.status),
-        pad(r.priority, cols.priority),
-        pad(r.ready, cols.ready),
-        pad(r.owner, cols.owner),
-        pad(r.lastUpdated, cols.lastUpdated),
-      ].join(' | ')
-    )
-    .join('\n');
+  const tableRows = rows.map((r) =>
+    [
+      pad(r.id, cols.id),
+      pad(r.title, cols.title),
+      pad(r.status, cols.status),
+      pad(r.priority, cols.priority),
+      pad(r.ready, cols.ready),
+      pad(r.owner, cols.owner),
+      pad(r.lastUpdated, cols.lastUpdated),
+    ].join(' | ')
+  );
 
   const invalidCount = features.length - validFeatures.length;
   const invalidNote =
@@ -129,7 +127,7 @@ function buildFeatureRegistry(
     '',
     `| ${header1} |`,
     `| ${separator} |`,
-    ...rows.map((r, i) => `| ${tableRows.split('\n')[i]} |`),
+    ...tableRows.map((r) => `| ${r} |`),
     '',
   ].join('\n');
 }
@@ -251,7 +249,7 @@ function buildDocHealth(
   const total = features.length;
   const valid = features.filter((f) => f.frontmatter !== null).length;
   const invalid = total - valid;
-  const withErrors = features.filter((f) => f.errors.length > 0 && f.frontmatter === null);
+  const withErrors = features.filter((f) => f.errors.length > 0);
 
   const statusCounts: Record<string, number> = {};
   for (const f of features) {
@@ -286,8 +284,8 @@ function buildDocHealth(
     '## Feature Doc Summary',
     '',
     `- Total feature files: ${total}`,
-    `- Valid (parseable frontmatter): ${valid}`,
-    `- Invalid or missing frontmatter: ${invalid}`,
+    `- Valid (schema-valid frontmatter): ${valid}`,
+    `- Missing or schema-invalid frontmatter: ${invalid}`,
     '',
     '## Status Distribution',
     '',
@@ -378,6 +376,28 @@ export function runGenerateCommand(options: GenerateOptions): void {
     process.exit(1);
   }
 
+  if (options.json) {
+    if (!options.dryRun && result.errors.length === 0) {
+      writeGeneratedFiles(result.generated);
+    }
+
+    const payload = {
+      success: result.errors.length === 0,
+      dryRun: Boolean(options.dryRun),
+      ...(options.dryRun
+        ? { wouldGenerate: result.generated.map((f) => f.path) }
+        : { generated: result.generated.map((f) => f.path) }),
+      errors: result.errors,
+    };
+    console.log(JSON.stringify(payload));
+
+    if (result.errors.length > 0 && !options.dryRun) {
+      process.exit(1);
+    }
+
+    return;
+  }
+
   if (result.errors.length > 0) {
     for (const err of result.errors) {
       console.error(`[ERROR] ${err}`);
@@ -388,30 +408,15 @@ export function runGenerateCommand(options: GenerateOptions): void {
   }
 
   if (options.dryRun) {
-    if (options.json) {
-      console.log(JSON.stringify({ dryRun: true, wouldGenerate: result.generated.map((f) => f.path) }));
-    } else {
-      console.log('Repo Memory Generate (dry run)');
-      console.log('==============================');
-      for (const file of result.generated) {
-        console.log(`Would write: ${file.path}`);
-      }
+    console.log('Repo Memory Generate (dry run)');
+    console.log('==============================');
+    for (const file of result.generated) {
+      console.log(`Would write: ${file.path}`);
     }
     return;
   }
 
   writeGeneratedFiles(result.generated);
-
-  if (options.json) {
-    console.log(
-      JSON.stringify({
-        success: true,
-        generated: result.generated.map((f) => f.path),
-        errors: result.errors,
-      })
-    );
-    return;
-  }
 
   console.log('Repo Memory Generate');
   console.log('====================');

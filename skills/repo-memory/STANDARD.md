@@ -1,6 +1,8 @@
 # Repo Memory Portable Standard
 
-Version: 2.4.0 <!-- x-release-please-version -->
+Version: 2.3.0 <!-- x-release-please-version -->
+
+> This version marker is managed by release-please. Do not edit it manually.
 
 Repo Memory is a repo-native project context standard for AI-assisted software
 projects. It defines documentation files, metadata, status values, evidence

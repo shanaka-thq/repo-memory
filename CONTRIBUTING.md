@@ -18,8 +18,9 @@ or easier to validate.
 ## Before Opening a Pull Request
 
 1. Read [`AGENTS.md`](./AGENTS.md).
-2. If you changed `skills/repo-memory/SKILL.md`, bump its `Version:` value.
-3. Add a matching entry to [`CHANGELOG.md`](./CHANGELOG.md).
+2. If your change affects a release, update [`CHANGELOG.md`](./CHANGELOG.md).
+3. Do not manually edit the `Version:` markers in `skills/repo-memory/SKILL.md`
+   or `skills/repo-memory/STANDARD.md`; Release Please manages them.
 4. If you added a reference document, link it from [`README.md`](./README.md)
    and [`AGENTS.md`](./AGENTS.md).
 5. If you added a template block, include a short usage note above it.

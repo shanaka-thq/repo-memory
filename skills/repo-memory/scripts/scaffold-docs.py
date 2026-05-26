@@ -759,7 +759,122 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         action="store_true",
         help="Print files that would be created without writing them.",
     )
+    parser.add_argument(
+        "--new-feature",
+        help="Scaffold a single new feature file and register it in the registry.",
+    )
+    parser.add_argument(
+        "--priority",
+        default="medium",
+        help="Priority for the new feature (default: medium).",
+    )
+    parser.add_argument(
+        "--status",
+        default="planned",
+        help="Status for the new feature (default: planned).",
+    )
     return parser.parse_args(argv)
+
+
+import re
+
+def split_table_row(line: str) -> list[str]:
+    return [cell.strip().strip("`").strip() for cell in line.strip().strip("|").split("|")]
+
+
+def register_feature_in_file(registry_path: Path, slug: str, status: str, priority: str, today: str) -> None:
+    if not registry_path.exists():
+        return
+
+    content = registry_path.read_text(encoding="utf-8")
+    lines = content.splitlines()
+
+    queue_heading_idx = -1
+    list_heading_idx = -1
+    for idx, line in enumerate(lines):
+        if line.strip().startswith("## Next Work Queue"):
+            queue_heading_idx = idx
+        elif line.strip().startswith("## Feature List"):
+            list_heading_idx = idx
+
+    # Append to Next Work Queue
+    if queue_heading_idx != -1:
+        last_row_idx = -1
+        for idx in range(queue_heading_idx + 1, len(lines)):
+            line = lines[idx].strip()
+            if line.startswith("|"):
+                last_row_idx = idx
+            elif last_row_idx != -1:
+                break
+        
+        if last_row_idx != -1:
+            title = slug.replace("-", " ").title()
+            new_queue_row = f"| TBD | {title} | feature | `{status}` | `ready` | TODO: why this is next | TODO: next safe step | [`features/{slug}.md`](./features/{slug}.md) | {today} |"
+            lines.insert(last_row_idx + 1, new_queue_row)
+            if list_heading_idx > last_row_idx:
+                list_heading_idx += 1
+
+    # Append to Feature List
+    if list_heading_idx != -1:
+        last_row_idx = -1
+        for idx in range(list_heading_idx + 1, len(lines)):
+            line = lines[idx].strip()
+            if line.startswith("|"):
+                last_row_idx = idx
+            elif last_row_idx != -1:
+                break
+        
+        if last_row_idx != -1:
+            title = slug.replace("-", " ").title()
+            new_list_row = f"| {title} | `{slug}` | `{status}` | {priority.title()} | {today} | [Feature doc](./features/{slug}.md) |"
+            lines.insert(last_row_idx + 1, new_list_row)
+
+    registry_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def scaffold_single_feature(target: Path, slug: str, status: str, priority: str, today: str, force: bool = False, dry_run: bool = False) -> int:
+    docs_dir = target / "docs"
+    if not docs_dir.exists():
+        print("Error: docs/ directory does not exist. Initialize Repo Memory first using scaffold-docs.py", file=sys.stderr)
+        return 1
+
+    if dry_run:
+        print(f"Would create feature doc: docs/features/{slug}.md")
+        print(f"Would register feature '{slug}' in docs/feature-registry.md")
+        return 0
+
+    features_dir = docs_dir / "features"
+    features_dir.mkdir(parents=True, exist_ok=True)
+    feature_path = features_dir / f"{slug}.md"
+    
+    if feature_path.exists() and not force:
+        print(f"Error: feature file already exists: {feature_path}. Use --force to overwrite.", file=sys.stderr)
+        return 1
+
+    template_path = features_dir / "_template.md"
+    if template_path.exists():
+        content = template_path.read_text(encoding="utf-8")
+    else:
+        content = feature_template(today)
+
+    title = slug.replace("-", " ").title()
+    content = content.replace("Feature: feature-slug", f"Feature: {title}")
+    content = content.replace("feature-slug", slug)
+    content = content.replace("Priority: medium", f"Priority: {priority}")
+    content = content.replace("Status: planned", f"Status: {status}")
+    content = re.sub(r"Last updated:\s*\d{4}-\d{2}-\d{2}", f"Last updated: {today}", content)
+
+    feature_path.write_text(content, encoding="utf-8")
+    print(f"Created feature doc: {feature_path.relative_to(target)}")
+
+    registry_path = docs_dir / "feature-registry.md"
+    if registry_path.exists():
+        register_feature_in_file(registry_path, slug, status, priority, today)
+        print(f"Updated feature registry: {registry_path.relative_to(target)}")
+    else:
+        print("Warning: feature-registry.md not found, feature was not registered.", file=sys.stderr)
+
+    return 0
 
 
 def run(argv: list[str]) -> int:
@@ -768,6 +883,17 @@ def run(argv: list[str]) -> int:
     if target.exists() and not target.is_dir():
         print(f"Error: target path is not a directory: {target}", file=sys.stderr)
         return 1
+
+    if args.new_feature:
+        return scaffold_single_feature(
+            target=target,
+            slug=args.new_feature,
+            status=args.status,
+            priority=args.priority,
+            today=args.date,
+            force=args.force,
+            dry_run=args.dry_run,
+        )
 
     project_name = args.project_name or target.name or "Project"
     files = build_files(

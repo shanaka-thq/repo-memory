@@ -202,7 +202,7 @@ STALE_TERMINAL_HANDOFF_PATTERNS = [
     ]
 ]
 
-KEBAB_PATH = re.compile(r"^[a-z0-9][a-z0-9-]*(\.[a-z0-9]+)?$")
+KEBAB_PATH = re.compile(r"^[a-z0-9][a-z0-9-]*(\.[a-z0-9-]+)*$")
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 FENCE_LINE = re.compile(r"^( {0,3})([`~]{3,})(.*)$")
 VERSION = re.compile(r"^Version:\s*(\d+\.\d+(?:\.\d+)?)", re.MULTILINE)
@@ -210,6 +210,83 @@ HEADING = re.compile(r"^\s{0,3}#{2,6}\s+(.+?)\s*$", re.MULTILINE)
 STATUS = re.compile(r"^\s*Status:\s*([a-z_]+)\b", re.MULTILINE | re.IGNORECASE)
 SECTION = re.compile(r"^\s{0,3}##\s+(.+?)\s*$", re.MULTILINE)
 CANONICAL_OWNER_HEADING = "Canonical Ownership Map"
+
+CAPABILITY_DEFAULTS = {
+    "goal": "docs/project-overview.md",
+    "overview": "docs/project-overview.md",
+    "functional requirements": "docs/requirements/functional-requirements.md",
+    "non-functional requirements": "docs/requirements/non-functional-requirements.md",
+    "architecture": "docs/architecture.md",
+    "interfaces": "docs/interfaces-and-contracts.md",
+    "contract": "docs/interfaces-and-contracts.md",
+    "data model": "docs/data-model.md",
+    "local development": "docs/local-development.md",
+    "tooling": "docs/local-development.md",
+    "testing": "docs/testing-strategy.md",
+    "observability": "docs/observability-and-instrumentation.md",
+    "operations": "docs/operations-runbook.md",
+    "runbook": "docs/operations-runbook.md",
+    "security": "docs/security-and-privacy.md",
+    "privacy": "docs/security-and-privacy.md",
+    "decisions": "docs/decision-log.md",
+    "implementation": "docs/implementation-log.md",
+    "feature state": "docs/feature-registry.md",
+    "feature registry": "docs/feature-registry.md",
+    "doc health": "docs/doc-health.md",
+}
+
+ALLOWED_DOC_TYPES = {
+    "readme", "ownership-map", "project-overview", "architecture",
+    "functional-requirements", "non-functional-requirements",
+    "user-stories-and-use-cases", "interfaces-and-contracts", "data-model",
+    "local-development", "doc-health", "observability-and-instrumentation",
+    "testing-strategy", "operations-runbook", "security-and-privacy",
+    "decision-log", "implementation-log", "feature-registry", "feature",
+    "feature-logic", "feature-component", "diagram-index", "design",
+    "review-record", "project-detail", "component", "ui-ux"
+}
+
+ALLOWED_GENERAL_STATUSES = {
+    "draft", "active", "needs_review", "stale", "superseded", "deprecated"
+}
+
+REQUIRED_HEADINGS_BY_TYPE = {
+    "project-overview": [
+        "Project Goal",
+        "Problem Statement",
+        "Target Users or Actors",
+        "Success Criteria",
+        "Current Scope",
+        "Non-Goals",
+        "Evidence",
+    ],
+    "observability-and-instrumentation": [
+        "Logs",
+        "Metrics",
+        "Traces",
+        "Product Analytics Events",
+        "Audit Events",
+        "Dashboards and Alerts",
+        "Privacy and Retention",
+        "Known Blind Spots",
+    ],
+    "feature-registry": [
+        "Next Work Queue",
+        "Feature List",
+    ],
+    "user-stories-and-use-cases": [
+        "Actors",
+        "Personas or User Segments",
+        "User Stories",
+        "Journey Map",
+        "Primary Use Cases",
+        "Accessibility and Inclusion Notes",
+        "Open Questions",
+    ]
+}
+
+METADATA_LINE = re.compile(r"^\s*([A-Za-z ]+):\s*(.+?)\s*$", re.MULTILINE)
+_links_cache = None
 
 
 def iter_paths(base: Path):
@@ -253,7 +330,7 @@ def strip_fenced_code(text: str) -> str:
 
 
 def is_external_link(target: str) -> bool:
-    return target.startswith(("http://", "https://", "mailto:", "#"))
+    return target.startswith(("http://", "https://", "mailto:", "#", "file://"))
 
 
 def is_raw_intake_path(root: Path, path: Path) -> bool:
@@ -264,8 +341,51 @@ def is_raw_intake_path(root: Path, path: Path) -> bool:
     return any(rel == intake or intake in rel.parents for intake in RAW_INTAKE_DIRS)
 
 
-def check_relative_links(root: Path) -> list[str]:
+def slugify(text: str) -> str:
+    text = re.sub(r"<[^>]*>", "", text)
+    text = text.lower().strip()
+    text = re.sub(r"\s+", "-", text)
+    text = "".join(c for c in text if c.isalnum() or c in "-_")
+    return text
+
+
+def extract_anchors(path: Path) -> set[str]:
+    anchors = set()
+    if not path.exists():
+        return anchors
+    try:
+        text = path.read_text(encoding="utf-8")
+        text_without_code = strip_fenced_code(text)
+        for line in text_without_code.splitlines():
+            m = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*$", line)
+            if m:
+                heading_text = m.group(1).strip()
+                heading_text = heading_text.rstrip("#").strip()
+                anchors.add(slugify(heading_text))
+            for m_anchor in re.finditer(r'<(?:a\s+name|[^>]+id)\s*=\s*["\']([^"\']+)["\']', line):
+                anchors.add(m_anchor.group(1).strip())
+    except Exception:
+        pass
+    return anchors
+
+
+def check_links_and_orphans(root: Path) -> tuple[list[str], list[str]]:
+    global _links_cache
+    if _links_cache is not None:
+        return _links_cache
+
     errors: list[str] = []
+    warnings: list[str] = []
+    all_md_files = set()
+    linked_files = set()
+    docs_dir = root / "docs"
+
+    if docs_dir.exists():
+        for path in iter_paths(docs_dir):
+            if path.is_file() and path.suffix == ".md":
+                if not is_raw_intake_path(root, path):
+                    all_md_files.add(path.resolve())
+
     for path in iter_paths(root):
         if not path.is_file() or path.suffix != ".md":
             continue
@@ -273,14 +393,283 @@ def check_relative_links(root: Path) -> list[str]:
             continue
         text = strip_fenced_code(path.read_text(encoding="utf-8"))
         for target in LINK.findall(text):
-            if is_external_link(target):
+            if is_external_link(target) and not target.startswith("#"):
                 continue
-            rel = target.split("#", 1)[0]
-            if not rel:
-                continue
-            if not (path.parent / rel).resolve().exists():
+            
+            if target.startswith("#"):
+                anchor = target[1:]
+                target_path = path.resolve()
+            else:
+                parts = target.split("#", 1)
+                rel = parts[0]
+                anchor = parts[1] if len(parts) > 1 else None
+                target_path = (path.parent / rel).resolve()
+
+            if not target.startswith("#") and not target_path.exists():
                 errors.append(f"{path.relative_to(root)}: broken link -> {target}")
+            else:
+                if target_path.is_file():
+                    linked_files.add(target_path)
+                    if anchor:
+                        valid_anchors = extract_anchors(target_path)
+                        if anchor.lower() not in {a.lower() for a in valid_anchors}:
+                            errors.append(f"{path.relative_to(root)}: broken anchor link -> {target} (anchor '{anchor}' not found in target file)")
+                elif target_path.is_dir():
+                    for index_name in ["README.md", "index.md"]:
+                        index_path = target_path / index_name
+                        if index_path.exists():
+                            linked_files.add(index_path.resolve())
+
+    for filepath in all_md_files:
+        if filepath.name == "README.md" or filepath.name.startswith("_"):
+            continue
+        if filepath == (docs_dir / "README.md").resolve():
+            continue
+        if filepath not in linked_files:
+            warnings.append(
+                f"docs/{filepath.relative_to(docs_dir)}: orphaned document "
+                "(no other Markdown document links to it)"
+            )
+
+    _links_cache = (errors, warnings)
+    return _links_cache
+
+
+def check_relative_links(root: Path) -> list[str]:
+    errors, warnings = check_links_and_orphans(root)
     return errors
+
+
+def resolve_ownership_paths(root: Path) -> dict[str, str]:
+    docs_readme = root / "docs" / "README.md"
+    resolved = {}
+    if not docs_readme.exists():
+        return resolved
+
+    try:
+        text = strip_fenced_code(docs_readme.read_text(encoding="utf-8"))
+        section = find_section(text, CANONICAL_OWNER_HEADING)
+        if not section:
+            return resolved
+
+        rows = [
+            split_table_row(line)
+            for line in section.splitlines()
+            if line.strip().startswith("|") and line.strip().endswith("|")
+        ]
+        data_rows = [
+            row for row in rows
+            if row and not all(set(cell) <= {"-", ":", " "} for cell in row)
+            and row[0].lower() != "capability"
+        ]
+
+        for row in data_rows:
+            if len(row) < 2:
+                continue
+            capability = row[0].strip().lower()
+            owner = row[1].strip().strip("`").strip()
+            if not owner or owner.lower() in {"todo", "unknown", "tbd"}:
+                continue
+
+            matched_default = None
+            for key, default_path in CAPABILITY_DEFAULTS.items():
+                if key in capability:
+                    matched_default = default_path
+                    break
+
+            if matched_default:
+                owner_path = Path(owner)
+                if owner_path.is_absolute():
+                    resolved[matched_default] = str(owner_path.relative_to(root))
+                else:
+                    docs_owner = Path("docs") / owner_path
+                    if (root / docs_owner).exists() or owner.startswith("docs/"):
+                        resolved[matched_default] = str(docs_owner.as_posix())
+                    else:
+                        resolved[matched_default] = str(owner_path.as_posix())
+    except Exception:
+        pass
+    return resolved
+
+
+def validate_metadata_for_docs(root: Path) -> list[str]:
+    docs_dir = root / "docs"
+    if not docs_dir.exists():
+        return []
+
+    errors: list[str] = []
+    for path in iter_paths(docs_dir):
+        if not path.is_file() or path.suffix != ".md":
+            continue
+        if is_raw_intake_path(root, path):
+            continue
+        if path.name == "README.md" or path.name.startswith("_"):
+            continue
+        try:
+            rel_to_docs = path.relative_to(docs_dir)
+            if rel_to_docs.parts and rel_to_docs.parts[0] == "diagrams":
+                continue
+        except Exception:
+            pass
+
+        rel = path.relative_to(root)
+        try:
+            text = path.read_text(encoding="utf-8")
+        except Exception as e:
+            errors.append(f"{rel}: failed to read file: {e}")
+            continue
+
+        lines = text.splitlines()[:30]
+        meta = {}
+        for line in lines:
+            if line.strip().startswith("##"):
+                break
+            m = METADATA_LINE.match(line)
+            if m:
+                key = m.group(1).strip().lower()
+                val = m.group(2).strip().strip("`").strip()
+                meta[key] = val
+
+        required_fields = ["doc type", "owner", "status", "last updated"]
+        missing = [f for f in required_fields if f not in meta]
+        if missing:
+            errors.append(f"{rel}: missing required metadata: {', '.join(missing)}")
+            continue
+
+        doc_type = meta["doc type"].lower()
+        if doc_type not in ALLOWED_DOC_TYPES:
+            errors.append(f"{rel}: invalid Doc type '{doc_type}'")
+
+        status = meta["status"].lower()
+        if doc_type in {"feature", "feature-logic", "feature-component"}:
+            if status not in ALLOWED_FEATURE_STATUSES:
+                errors.append(f"{rel}: invalid feature status '{status}'")
+        else:
+            if status not in ALLOWED_GENERAL_STATUSES:
+                errors.append(f"{rel}: invalid status '{status}'")
+
+        date_fields = ["last updated", "last verified"]
+        for df in date_fields:
+            if df in meta:
+                val = meta[df]
+                if val.lower() != "unknown" and not re.match(r"^\d{4}-\d{2}-\d{2}$", val):
+                    errors.append(f"{rel}: invalid date format for '{df}': '{val}' (expected YYYY-MM-DD or 'unknown')")
+
+        if doc_type in REQUIRED_HEADINGS_BY_TYPE:
+            required_headings = REQUIRED_HEADINGS_BY_TYPE[doc_type]
+            found_headings = set(HEADING.findall(text))
+            for heading in required_headings:
+                if heading not in found_headings:
+                    errors.append(f"{rel}: missing required heading '{heading}'")
+
+    return errors
+
+
+def check_feature_cross_reference(root: Path) -> list[str]:
+    registry_path = root / "docs" / "feature-registry.md"
+    features_dir = root / "docs" / "features"
+    if not registry_path.exists() or not features_dir.exists():
+        return []
+
+    warnings: list[str] = []
+    registered_slugs = set()
+    registered_statuses = {}
+    
+    try:
+        text = strip_fenced_code(registry_path.read_text(encoding="utf-8"))
+        headings = list(SECTION.finditer(text))
+        list_start = None
+        list_end = len(text)
+        for index, heading in enumerate(headings):
+            if heading.group(1).strip() == "Feature List":
+                list_start = heading.end()
+                if index + 1 < len(headings):
+                    list_end = headings[index + 1].start()
+                break
+
+        if list_start is not None:
+            rows = [
+                split_table_row(line)
+                for line in text[list_start:list_end].splitlines()
+                if line.strip().startswith("|") and line.strip().endswith("|")
+            ]
+            data_rows = [
+                row for row in rows
+                if row and not all(set(cell) <= {"-", ":", " "} for cell in row)
+                and row[0].lower() != "feature"
+            ]
+            
+            header_row = None
+            for line in text[list_start:list_end].splitlines():
+                if line.strip().startswith("|") and line.strip().endswith("|"):
+                    header_row = split_table_row(line)
+                    if header_row and header_row[0].lower() == "feature":
+                        break
+            
+            slug_idx = 1
+            status_idx = 2
+            if header_row:
+                for i, h in enumerate(header_row):
+                    if h.lower() == "slug":
+                        slug_idx = i
+                    elif h.lower() == "canonical doc":
+                        slug_idx = i
+                    elif h.lower() == "status":
+                        status_idx = i
+            
+            for row in data_rows:
+                if len(row) > max(slug_idx, status_idx):
+                    cell_val = row[slug_idx].strip().strip("`").strip()
+                    m_slug = re.search(r"features/([^.]+?)(?:\.md)?$", cell_val)
+                    slug = None
+                    if m_slug:
+                        slug = m_slug.group(1)
+                    elif cell_val and "/" not in cell_val and "." not in cell_val:
+                        slug = cell_val
+                    
+                    if slug:
+                        registered_slugs.add(slug)
+                        registered_statuses[slug] = row[status_idx].strip().lower().strip("`").strip()
+    except Exception:
+        pass
+
+    actual_slugs = set()
+    for f in features_dir.glob("*.md"):
+        if f.name != "_template.md":
+            actual_slugs.add(f.stem)
+
+    for slug in actual_slugs:
+        if slug not in registered_slugs:
+            warnings.append(
+                f"docs/features/{slug}.md: feature file exists but is not "
+                "registered in docs/feature-registry.md Feature List"
+            )
+        else:
+            feature_doc = features_dir / f"{slug}.md"
+            try:
+                doc_text = feature_doc.read_text(encoding="utf-8")
+                status_match = STATUS.search(doc_text)
+                if status_match:
+                    doc_status = status_match.group(1).lower()
+                    reg_status = registered_statuses.get(slug)
+                    if reg_status and doc_status != reg_status:
+                        warnings.append(
+                            f"docs/features/{slug}.md: status '{doc_status}' does "
+                            f"not match status '{reg_status}' in feature registry"
+                        )
+            except Exception:
+                pass
+            
+    for slug in registered_slugs:
+        if slug == "feature-slug":
+            continue
+        if slug not in actual_slugs:
+            warnings.append(
+                f"docs/feature-registry.md: registered feature '{slug}' "
+                f"has no corresponding file docs/features/{slug}.md"
+            )
+
+    return warnings
 
 
 def check_required(root: Path, paths: list[str]) -> list[str]:
@@ -616,15 +1005,26 @@ def check_project_docs(root: Path, adoption_level: str = "baseline") -> list[str
     if not (root / "docs").exists():
         errors.append("missing docs/ directory")
         return errors
+
+    resolved_paths = resolve_ownership_paths(root)
     required = (
         CONTINUITY_PROJECT_DOCS
         if adoption_level == "continuity"
         else BASELINE_PROJECT_DOCS
     )
-    errors.extend(check_required(root, required))
+
+    modified_required = []
+    for req in required:
+        if req in resolved_paths:
+            modified_required.append(resolved_paths[req])
+        else:
+            modified_required.append(req)
+
+    errors.extend(check_required(root, modified_required))
     errors.extend(check_docs_kebab_case(root))
     if adoption_level == "baseline":
         errors.extend(check_required_headings(root))
+        errors.extend(validate_metadata_for_docs(root))
     return errors
 
 
@@ -678,6 +1078,12 @@ def check_project_warnings(root: Path) -> list[str]:
     warnings.extend(check_next_work_queue(root))
     warnings.extend(check_canonical_ownership_map(root))
     warnings.extend(check_plan_placement_drift(root))
+    
+    # Add link warnings (orphans) and feature registry cross-references
+    errors, link_warnings = check_links_and_orphans(root)
+    warnings.extend(link_warnings)
+    warnings.extend(check_feature_cross_reference(root))
+    
     return warnings
 
 

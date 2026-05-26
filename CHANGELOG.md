@@ -6,6 +6,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
+## [3.2.0](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v3.1.0...repo-memory-v3.2.0) (2026-05-26)
+
+
+### Features
+
+* implement Phases 4-7 — plan/review schemas, install-adapter, migrate, audit ([1df4c4d](https://github.com/akanahs-dev/repo-memory/commit/1df4c4de9b4613b5601927508286027fd57e9e9a))
+
 ## [3.1.0](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v3.0.0...repo-memory-v3.1.0) (2026-05-26)
 
 

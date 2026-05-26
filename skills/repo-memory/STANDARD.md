@@ -1,6 +1,6 @@
 # Repo Memory Portable Standard
 
-Version: 3.0.0 <!-- x-release-please-version -->
+Version: 3.1.0 <!-- x-release-please-version -->
 
 > This version marker is managed by release-please. Do not edit it manually.
 

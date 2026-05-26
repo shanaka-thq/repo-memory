@@ -6,6 +6,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
+## [3.1.0](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v3.0.0...repo-memory-v3.1.0) (2026-05-26)
+
+
+### Features
+
+* implement Phase 3 — feature frontmatter, validate, and generate commands ([f7b7e4b](https://github.com/akanahs-dev/repo-memory/commit/f7b7e4b5b95b6fa0b2d1d890f3ecd31af75fc8ae))
+
+
+### Bug Fixes
+
+* address PR review feedback for feature parsing and generate output ([4a0780d](https://github.com/akanahs-dev/repo-memory/commit/4a0780dd0215a789574ccbcac9ddd1a152d11c6e))
+
 ## [3.0.0](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v2.3.0...repo-memory-v3.0.0) (2026-05-26)
 
 

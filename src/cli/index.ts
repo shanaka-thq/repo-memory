@@ -6,6 +6,9 @@ import { Command } from 'commander';
 import { runDoctorCommand } from '../commands/doctor';
 import { runValidateCommand } from '../commands/validate';
 import { runGenerateCommand } from '../commands/generate';
+import { runInstallAdapterCommand } from '../commands/install-adapter';
+import { runMigrateCommand } from '../commands/migrate';
+import { runAuditCommand } from '../commands/audit';
 
 const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf8'));
 
@@ -52,19 +55,17 @@ program
 program
   .command('migrate <type>')
   .description('Migrate an older Repo Memory installation (e.g. v2-to-v3)')
-  .option('--dry-run', 'Show migration actions without writing')
-  .option('--backup', 'Create backup of legacy files before migrating')
-  .option('--write', 'Perform write operations')
-  .option('--force', 'Force migration execution')
-  .action((type) => {
-    console.log(`Command "migrate" for type "${type}" is not implemented in Milestone 1.`);
+  .option('--no-dry-run', 'Attempt to apply migration actions when write mode is supported')
+  .option('--json', 'Output results in JSON format')
+  .action((type, options) => {
+    runMigrateCommand(type, options);
   });
 
 program
   .command('map <capability> <path>')
   .description('Map an existing path for a capability in the configuration')
-  .action((capability, path) => {
-    console.log(`Command "map" for capability "${capability}" to path "${path}" is not implemented in Milestone 1.`);
+  .action((capability, capPath) => {
+    console.log(`Command "map" for capability "${capability}" to path "${capPath}" is not yet implemented.`);
   });
 
 program
@@ -87,21 +88,21 @@ program
 program
   .command('audit')
   .description('Deep audit of Repo Memory structure and drift detection')
-  .option('--write', 'Write results to doc-health file')
+  .option('--write', 'Write audit results to the configured doc-health file')
   .option('--json', 'Output results in JSON format')
-  .action(() => {
-    console.log('Command "audit" is not implemented in Milestone 1.');
+  .action((options) => {
+    runAuditCommand(options);
   });
 
 program
   .command('install-adapter <agent>')
   .description('Install or update thin adapter files for coding agents')
   .option('--dry-run', 'Show install actions without writing')
-  .option('--append', 'Append instructions to existing file')
-  .option('--force', 'Force overwrite existing files')
-  .option('--print', 'Print instruction block to stdout')
-  .action((agent) => {
-    console.log(`Command "install-adapter" for agent "${agent}" is not implemented in Milestone 1.`);
+  .option('--append', 'Insert or update a managed block in an existing file')
+  .option('--force', 'Overwrite an existing adapter file')
+  .option('--print', 'Print adapter content to stdout without writing any file')
+  .action((agent, options) => {
+    runInstallAdapterCommand(agent, options);
   });
 
 program.parse(process.argv);

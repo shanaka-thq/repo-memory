@@ -85,6 +85,35 @@ values, missing required fields, and duplicate IDs all fail with a clear error.
 
 ## Install the Skill in Your Repo
 
+### Via `npx skills` (recommended)
+
+```bash
+npx skills add akanahs-dev/repo-memory --skill repo-memory -g -a claude-code -y
+```
+
+Change `-a claude-code` to your agent: `generic`, `github-copilot`, `cursor`,
+`windsurf`, `kiro`, `opencode`, or `codex`. Omit `-g` to install into the
+current project instead of your global skills directory.
+
+### Via the CLI
+
+Once you have the repo available locally, use the CLI to install the adapter
+for your agent:
+
+```bash
+npx repo-memory install-adapter claude-code   # writes CLAUDE.md
+npx repo-memory install-adapter generic       # writes AGENTS.md
+npx repo-memory install-adapter github-copilot
+npx repo-memory install-adapter cursor
+npx repo-memory install-adapter windsurf
+npx repo-memory install-adapter kiro
+```
+
+Use `--append` to add a managed block to an existing file instead of replacing
+it, or `--print` to preview the adapter content before writing anything.
+
+### Manually
+
 Copy the adapter file for your agent from `templates/` into your repo root:
 
 | Agent | File to copy |
@@ -97,11 +126,8 @@ Copy the adapter file for your agent from `templates/` into your repo root:
 | Kiro | `templates/.kiro/steering/repo-memory.md` |
 | OpenCode | `templates/AGENTS.md` |
 
-Each adapter is 10–15 lines. It tells the agent to load the skill and follow
-the ownership map. No project facts live in the adapter.
-
 Then add `repo-memory.config.yml` (copy from `templates/repo-memory.config.yml`)
-and the `docs/features/_template.md` (copy from `templates/docs/features/_template.md`)
+and `docs/features/_template.md` (copy from `templates/docs/features/_template.md`)
 to your repo.
 
 ## Modes

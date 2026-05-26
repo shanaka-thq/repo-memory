@@ -6,6 +6,29 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
+## [3.0.0](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v2.3.0...repo-memory-v3.0.0) (2026-05-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* the single-file SKILL.md workflow is replaced by a router + modes layout, and Repo Memory now ships a CLI package and config schema. Existing v2 installs require migration.
+
+### Features
+
+* enforce plan and specification directory placement via new validator check and updated documentation rules ([5571f1d](https://github.com/akanahs-dev/repo-memory/commit/5571f1d9fd2901563375616e81f4fb211de5c962))
+* enhance documentation with quick start guide and repository purpose clarification ([6aee226](https://github.com/akanahs-dev/repo-memory/commit/6aee226e36374c197c596e6a2086553cf262950f))
+* migrate release management to release-please and update documentation versioning strategy ([514e3e8](https://github.com/akanahs-dev/repo-memory/commit/514e3e8a331f6d9634840cc9e6cc8ccd1ab33a95))
+* upgrade to Repo Memory v3 agent-first architecture ([951a350](https://github.com/akanahs-dev/repo-memory/commit/951a350e23239454b100c11b59ea6bf251a09ca7))
+
+
+### Bug Fixes
+
+* address all review comments from PR [#4](https://github.com/akanahs-dev/repo-memory/issues/4) ([2bb5600](https://github.com/akanahs-dev/repo-memory/commit/2bb5600064636c86eae8a51fd8feb936024b81e8))
+* clean up workflows — remove duplicate link check, explicit release config ([69ceb92](https://github.com/akanahs-dev/repo-memory/commit/69ceb92cde991ce7ee255a9de9b2d10b96a2c554))
+* ignore infra and dependency dirs in all validation traversals ([7ec8652](https://github.com/akanahs-dev/repo-memory/commit/7ec865253f6a853eb2c84d4fa16641a459303f61))
+* make markdownlint pass — exclude infra dirs, fix lint errors in docs ([bb98c87](https://github.com/akanahs-dev/repo-memory/commit/bb98c87128c7e95464a337b6556aa8e64a153f36))
+* resolve version drift and changelog header regex in validator ([e69c123](https://github.com/akanahs-dev/repo-memory/commit/e69c123dff7d62fd490478f7f933f6d57b96ec6f))
+
 ## [Unreleased]
 
 ### Added

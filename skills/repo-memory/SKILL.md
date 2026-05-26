@@ -5,7 +5,7 @@ description: Apply the Repo Memory standard to create and maintain repo-native p
 
 # Repo Memory Skill
 
-Version: 2.3.0 <!-- x-release-please-version -->
+Version: 3.0.0 <!-- x-release-please-version -->
 
 > This version marker is managed by release-please. Do not edit it manually.
 

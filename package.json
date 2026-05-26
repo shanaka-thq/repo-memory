@@ -1,6 +1,6 @@
 {
   "name": "repo-memory",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "description": "An agent-first, CLI-assisted, repo-native memory protocol for AI-assisted software teams.",
   "main": "dist/cli/index.js",
   "bin": {

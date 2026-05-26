@@ -471,6 +471,11 @@ def resolve_ownership_paths(root: Path) -> dict[str, str]:
             if not owner or owner.lower() in {"todo", "unknown", "tbd"}:
                 continue
 
+            # Extract the actual path from a Markdown link if present: [text](path)
+            link_match = re.search(r'\]\(([^)]+)\)', owner)
+            if link_match:
+                owner = link_match.group(1).strip()
+
             matched_default = None
             for key, default_path in CAPABILITY_DEFAULTS.items():
                 if key in capability:
@@ -480,10 +485,15 @@ def resolve_ownership_paths(root: Path) -> dict[str, str]:
             if matched_default:
                 owner_path = Path(owner)
                 if owner_path.is_absolute():
-                    resolved[matched_default] = str(owner_path.relative_to(root))
+                    try:
+                        resolved[matched_default] = str(owner_path.relative_to(root))
+                    except ValueError:
+                        resolved[matched_default] = str(owner_path)
+                elif owner.startswith("docs/"):
+                    resolved[matched_default] = str(owner_path.as_posix())
                 else:
                     docs_owner = Path("docs") / owner_path
-                    if (root / docs_owner).exists() or owner.startswith("docs/"):
+                    if (root / docs_owner).exists():
                         resolved[matched_default] = str(docs_owner.as_posix())
                     else:
                         resolved[matched_default] = str(owner_path.as_posix())

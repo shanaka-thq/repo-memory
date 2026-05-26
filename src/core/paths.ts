@@ -7,19 +7,29 @@ import * as fs from 'fs';
  */
 export function findProjectRoot(startDir: string = process.cwd()): string {
   let currentDir = startDir;
+  let packageJsonDir: string | null = null;
+
   while (true) {
     const gitDir = path.join(currentDir, '.git');
     const configYml = path.join(currentDir, 'repo-memory.config.yml');
+    const configYaml = path.join(currentDir, 'repo-memory.config.yaml');
     const packageJson = path.join(currentDir, 'package.json');
 
-    if (fs.existsSync(gitDir) || fs.existsSync(configYml) || fs.existsSync(packageJson)) {
+    // .git or repo-memory config are definitive root indicators — stop immediately
+    if (fs.existsSync(gitDir) || fs.existsSync(configYml) || fs.existsSync(configYaml)) {
       return currentDir;
+    }
+
+    // package.json is a fallback; record the first (innermost) match and keep walking
+    // upward so that in a monorepo we don't stop at a package directory
+    if (fs.existsSync(packageJson) && packageJsonDir === null) {
+      packageJsonDir = currentDir;
     }
 
     const parentDir = path.dirname(currentDir);
     if (parentDir === currentDir) {
-      // Reached the filesystem root without finding project indicators, default to startDir
-      return startDir;
+      // Reached the filesystem root without finding a definitive indicator
+      return packageJsonDir ?? startDir;
     }
     currentDir = parentDir;
   }

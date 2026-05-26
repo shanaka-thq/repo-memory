@@ -826,13 +826,41 @@ def register_feature_in_file(registry_path: Path, slug: str, status: str, priori
         
         if last_row_idx != -1:
             title = slug.replace("-", " ").title()
-            new_list_row = f"| {title} | `{slug}` | `{status}` | {priority.title()} | {today} | [Feature doc](./features/{slug}.md) |"
+            new_list_row = f"| {title} | `{slug}` | `{status}` | `{priority}` | {today} | [Feature doc](./features/{slug}.md) |"
             lines.insert(last_row_idx + 1, new_list_row)
 
     registry_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+_VALID_SLUG_RE = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
+_VALID_STATUSES = {
+    "research", "planned", "in_progress", "blocked", "implemented",
+    "verified", "shipped", "abandoned", "superseded", "deprecated",
+    "rolled_back", "draft", "active",
+}
+_VALID_PRIORITIES = {"low", "medium", "high", "critical"}
+
+
 def scaffold_single_feature(target: Path, slug: str, status: str, priority: str, today: str, force: bool = False, dry_run: bool = False) -> int:
+    if not _VALID_SLUG_RE.match(slug):
+        print(
+            f"Error: invalid slug '{slug}'. Slugs must be lowercase kebab-case (letters, digits, hyphens; no path separators).",
+            file=sys.stderr,
+        )
+        return 1
+    if status not in _VALID_STATUSES:
+        print(
+            f"Error: invalid status '{status}'. Allowed values: {', '.join(sorted(_VALID_STATUSES))}.",
+            file=sys.stderr,
+        )
+        return 1
+    if priority not in _VALID_PRIORITIES:
+        print(
+            f"Error: invalid priority '{priority}'. Allowed values: {', '.join(sorted(_VALID_PRIORITIES))}.",
+            file=sys.stderr,
+        )
+        return 1
+
     docs_dir = target / "docs"
     if not docs_dir.exists():
         print("Error: docs/ directory does not exist. Initialize Repo Memory first using scaffold-docs.py", file=sys.stderr)

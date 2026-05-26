@@ -41,6 +41,7 @@ export function discoverRepoState(projectRoot: string): RepoState {
   const configPathYml = path.join(projectRoot, 'repo-memory.config.yml');
   const configPathYaml = path.join(projectRoot, 'repo-memory.config.yaml');
   let configPath: string | null = null;
+  let docsRootRelative = 'docs';
   if (fs.existsSync(configPathYml)) {
     configPath = configPathYml;
   } else if (fs.existsSync(configPathYaml)) {
@@ -55,13 +56,16 @@ export function discoverRepoState(projectRoot: string): RepoState {
       if (doc && typeof doc.version === 'number') {
         state.configVersion = doc.version;
       }
+      if (doc && typeof doc.docs_root === 'string') {
+        docsRootRelative = doc.docs_root.replace(/\/+$/, '');
+      }
     } catch {
       // Ignore reading errors for classification, version remains null
     }
   }
 
   // 2. Check docs root
-  const docsRoot = path.join(projectRoot, 'docs');
+  const docsRoot = path.join(projectRoot, docsRootRelative);
   if (fs.existsSync(docsRoot)) {
     state.docsRootExists = true;
   }
@@ -69,9 +73,9 @@ export function discoverRepoState(projectRoot: string): RepoState {
   // 3. Scan common directories
   const docsSubdirs = ['features', 'plans', 'reviews', 'adr', 'runbooks', 'intake', 'generated', 'history', 'superpowers'];
   for (const subdir of docsSubdirs) {
-    const dirPath = path.join(projectRoot, 'docs', subdir);
+    const dirPath = path.join(docsRoot, subdir);
     if (fs.existsSync(dirPath)) {
-      state.existingDocsDirs.push(`docs/${subdir}`);
+      state.existingDocsDirs.push(`${docsRootRelative}/${subdir}`);
     }
   }
 

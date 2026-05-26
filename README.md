@@ -88,11 +88,11 @@ values, missing required fields, and duplicate IDs all fail with a clear error.
 ### Via `npx skills` (recommended)
 
 ```bash
-npx skills add akanahs-dev/repo-memory --skill repo-memory -g -a codex -y
+npx skills add akanahs-dev/repo-memory --skill repo-memory -g -a claude-code -y
 ```
 
-Change `-a codex` to your agent (`claude-code`, `github-copilot`, `cursor`,
-`windsurf`, `kiro`, `opencode`, or `generic`). Omit `-g` to install into the
+Change `-a claude-code` to your agent: `generic`, `github-copilot`, `cursor`,
+`windsurf`, `kiro`, `opencode`, or `codex`. Omit `-g` to install into the
 current project instead of your global skills directory.
 
 ### Via the CLI

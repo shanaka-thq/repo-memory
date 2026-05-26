@@ -215,7 +215,7 @@ After tests or validation, remove disposable generated artifacts you created, su
 
 Before stopping after documentation work:
 
-- `SKILL.md` version matches a `CHANGELOG.md` entry
+- release-please-managed `Version:` markers were not edited by hand
 - newly referenced files are linked from `README.md`, `AGENTS.md`, or another discoverable entrypoint
 - `docs/README.md` has a current `Canonical Ownership Map`
 - no capability has two current canonical owners

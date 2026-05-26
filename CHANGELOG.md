@@ -6,7 +6,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
-## [2.4.0] - 2026-05-22
+## [Unreleased]
 
 ### Added
 

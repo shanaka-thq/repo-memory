@@ -495,15 +495,20 @@ All file and folder names in `docs/` must follow strict kebab-case conventions. 
 
 ## Versioning
 
-The standard and skill use the same two-number version (`MAJOR.MINOR`) recorded
-as `Version:` in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
+The standard and skill use the same release version recorded in the
+release-please-managed `Version:` markers in
+[`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and
+[`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
 | Change type                                              | Action          |
 | -------------------------------------------------------- | --------------- |
 | New content or non-breaking additions                    | Increment minor |
 | Required baseline changes or structural workflow changes | Increment major |
 
-Each version is tagged `vMAJOR.MINOR` and published as a GitHub Release. The release body is pulled from [`CHANGELOG.md`](./CHANGELOG.md). Update `CHANGELOG.md` in the same PR that bumps the version.
+Each version is tagged and published as a GitHub Release. Release Please owns
+the version markers in the standard and skill files, so contributors should not
+edit those markers manually. Keep [`CHANGELOG.md`](./CHANGELOG.md) aligned with
+the intended release content in the same PR.
 
 ## Related Docs
 

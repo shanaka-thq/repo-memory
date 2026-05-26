@@ -70,15 +70,14 @@ When making changes to this repository itself:
 
 - All docs in `skills/repo-memory/references/` must follow the rules in [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md).
 - Changes to the portable standard belong in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and must preserve its relationship to `skills/repo-memory/SKILL.md`.
-- All changes to `skills/repo-memory/SKILL.md` must preserve the version number at the top; increment the minor version for non-breaking additions and the major version for required baseline or structural changes.
-- **Update [`CHANGELOG.md`](./CHANGELOG.md)** in the same PR that bumps `skills/repo-memory/SKILL.md`. Add an entry under the new version number.
+- The `Version:` markers in `skills/repo-memory/SKILL.md` and `skills/repo-memory/STANDARD.md` are managed by release-please. Do not edit them manually.
+- **Update [`CHANGELOG.md`](./CHANGELOG.md)** in the same PR when the change should appear in the next release.
 - New templates added to `skills/repo-memory/references/templates.md` must include a brief usage note at the top of the template block.
 - New scripts added to `skills/repo-memory/scripts/` must be documented in `README.md`, `SKILL.md`, or the relevant reference doc.
 - New agent configuration files belong in `skills/repo-memory/agents/` and must include a comment describing the target platform and usage.
 - New reference documents belong in `skills/repo-memory/references/` and must be linked from both `README.md` and this file.
 - New examples belong in `skills/repo-memory/examples/` and must be linked from [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md).
-- If `skills/repo-memory/SKILL.md` changes, the new version must have a matching `CHANGELOG.md` section.
-- If `skills/repo-memory/STANDARD.md` changes, keep its `Version:` aligned with `skills/repo-memory/SKILL.md`.
+- If `skills/repo-memory/SKILL.md` or `skills/repo-memory/STANDARD.md` changes in a release-worthy way, keep `CHANGELOG.md` aligned with that release content.
 - Run `python3 skills/repo-memory/scripts/validate-docs.py --skill-repo .` before stopping when validation-relevant files changed.
 
 ## Agent-Specific Guides
@@ -98,10 +97,8 @@ Before ending any session on this repo, confirm:
 - [ ] Any changed templates still have a matching usage note.
 - [ ] Any new reference doc is linked from `README.md` and this file.
 - [ ] Any new example is linked from `skills/repo-memory/examples/README.md`.
-- [ ] `skills/repo-memory/SKILL.md` version number is updated if the workflow changed.
-- [ ] `skills/repo-memory/STANDARD.md` and `skills/repo-memory/SKILL.md` versions match.
-- [ ] `CHANGELOG.md` has an entry for the new version.
-- [ ] `skills/repo-memory/SKILL.md` version matches the top relevant entry in `CHANGELOG.md`.
+- [ ] I did not manually edit release-please-managed `Version:` markers.
+- [ ] `CHANGELOG.md` reflects the intended next release content when applicable.
 - [ ] `docs/README.md` examples include a `Canonical Ownership Map` when they claim adoption.
 - [ ] No doc creates a duplicate canonical owner for ADRs, contracts, setup, security, operations, feature state, or handoff state.
 - [ ] No orphaned docs were left without a link from the repo root or another reference doc.

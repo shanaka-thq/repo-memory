@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RepoMemoryConfig",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "integer",
+      "enum": [3]
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["standard", "lite", "full"]
+    },
+    "docs_root": {
+      "type": "string"
+    },
+    "paths": {
+      "type": "object",
+      "properties": {
+        "ownership_map": { "type": "string" },
+        "project_overview": { "type": "string" },
+        "architecture": { "type": "string" },
+        "features": { "type": "string" },
+        "plans": { "type": "string" },
+        "reviews": { "type": "string" },
+        "generated": { "type": "string" },
+        "intake": { "type": "string" },
+        "adr": { "type": "string" },
+        "history": { "type": "string" },
+        "runbooks": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ownership_map",
+        "project_overview",
+        "architecture",
+        "features",
+        "plans",
+        "reviews",
+        "generated",
+        "intake",
+        "adr",
+        "history",
+        "runbooks"
+      ]
+    },
+    "generated": {
+      "type": "object",
+      "properties": {
+        "header": { "type": "string" },
+        "feature_registry": { "type": "string" },
+        "next_work_queue": { "type": "string" },
+        "doc_health": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": ["header", "feature_registry", "next_work_queue", "doc_health"]
+    },
+    "priority": {
+      "type": "object",
+      "properties": {
+        "lower_number_is_higher": { "type": "boolean" }
+      },
+      "additionalProperties": false,
+      "required": ["lower_number_is_higher"]
+    },
+    "compatibility": {
+      "type": "object",
+      "properties": {
+        "preserve_existing_agent_files": { "type": "boolean" },
+        "use_managed_blocks": { "type": "boolean" },
+        "allow_external_paths": { "type": "boolean" },
+        "map_existing_plan_dirs": { "type": "boolean" },
+        "map_existing_review_dirs": { "type": "boolean" }
+      },
+      "additionalProperties": false,
+      "required": [
+        "preserve_existing_agent_files",
+        "use_managed_blocks",
+        "allow_external_paths",
+        "map_existing_plan_dirs",
+        "map_existing_review_dirs"
+      ]
+    },
+    "external_sources": {
+      "type": "object",
+      "properties": {
+        "docs": { "type": "array", "items": { "type": "string" } },
+        "plans": { "type": "array", "items": { "type": "string" } },
+        "reviews": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false,
+      "required": ["docs", "plans", "reviews"]
+    },
+    "ownership": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "owner": { "type": "string" },
+              "type": { "type": "string", "enum": ["local", "generated", "external"] }
+            },
+            "required": ["owner", "type"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": ["capabilities"]
+    },
+    "adapters": {
+      "type": "object",
+      "properties": {
+        "installed": { "type": "array", "items": { "type": "string" } },
+        "available": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false,
+      "required": ["installed", "available"]
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "allow_manual_central_registry": { "type": "boolean" },
+        "require_feature_frontmatter": { "type": "boolean" },
+        "require_plan_frontmatter": { "type": "boolean" },
+        "require_review_frontmatter": { "type": "boolean" },
+        "require_evidence_for_inferred_claims": { "type": "boolean" },
+        "warn_on_unmapped_plan_dirs": { "type": "boolean" },
+        "warn_on_unmapped_review_dirs": { "type": "boolean" },
+        "fail_on_generated_file_manual_edit": { "type": "boolean" }
+      },
+      "additionalProperties": false,
+      "required": [
+        "allow_manual_central_registry",
+        "require_feature_frontmatter",
+        "require_plan_frontmatter",
+        "require_review_frontmatter",
+        "require_evidence_for_inferred_claims",
+        "warn_on_unmapped_plan_dirs",
+        "warn_on_unmapped_review_dirs",
+        "fail_on_generated_file_manual_edit"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "mode",
+    "docs_root",
+    "paths",
+    "generated",
+    "priority",
+    "compatibility",
+    "external_sources",
+    "ownership",
+    "adapters",
+    "validation"
+  ]
+}

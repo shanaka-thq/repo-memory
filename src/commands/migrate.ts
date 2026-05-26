@@ -166,7 +166,7 @@ export function runMigrateCommand(type: string, options: MigrateOptions): void {
   console.log(
     dryRun
       ? 'Migration plan (dry run — no files written):'
-      : 'Migration actions (--write is not yet implemented; run with --dry-run):'
+      : 'Migration actions (write mode is not yet implemented; showing planned actions):'
   );
   console.log('');
 

@@ -55,7 +55,7 @@ program
 program
   .command('migrate <type>')
   .description('Migrate an older Repo Memory installation (e.g. v2-to-v3)')
-  .option('--dry-run', 'Show migration actions without writing (default: true)', true)
+  .option('--no-dry-run', 'Attempt to apply migration actions when write mode is supported')
   .option('--json', 'Output results in JSON format')
   .action((type, options) => {
     runMigrateCommand(type, options);

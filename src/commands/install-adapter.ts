@@ -27,7 +27,7 @@ export interface InstallAdapterResult {
 
 /**
  * Core install logic. Returns a result describing what happened (or would happen).
- * Does not write to disk; callers handle writing based on dryRun.
+ * Writes to disk unless dryRun/print is enabled.
  */
 export function installAdapter(
   agent: string,
@@ -138,6 +138,10 @@ export function runInstallAdapterCommand(
   const result = installAdapter(agent, projectRoot, options);
 
   if (options.print) {
+    if (result.action === 'skipped') {
+      console.error(`[ERROR] ${result.message}`);
+      process.exit(1);
+    }
     // Print the raw adapter content with no decoration
     process.stdout.write(result.message);
     return;

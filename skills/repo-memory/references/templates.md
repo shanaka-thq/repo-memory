@@ -2,6 +2,8 @@
 
 Use these templates when the repository does not already define a stronger format.
 
+> **Canonical definitions:** Field names, allowed status values, and metadata schemas are defined in [STANDARD.md](../STANDARD.md) and [documentation-metadata-schema.md](./documentation-metadata-schema.md). These templates show example usage — defer to those files when definitions differ.
+
 ## Default Docs Structure
 
 ```text
@@ -301,7 +303,7 @@ If the Markdown environment supports a shared theme, align Mermaid to that theme
 | Answer search improvements | `answer-search-improvements` | `in_progress` | High     | 2026-04-22   | [Feature doc](./features/answer-search-improvements.md), [Logic](./features/answer-search-improvements/logic.md) |
 ```
 
-Allowed statuses: `research`, `planned`, `in_progress`, `blocked`, `implemented`, `verified`, `shipped`, `abandoned`, `superseded`, `deprecated`, `rolled_back`.
+Allowed statuses are defined in [STANDARD.md](../STANDARD.md#status-model). Do not invent new values.
 
 Use `Next Work Queue` as the cloud-agent pickup surface. The lowest-rank row
 with `Ready` set to `ready` is the default next task when a user asks an agent
@@ -1219,19 +1221,19 @@ flowchart TD
 One row, one owner. Supporting docs can help, but the owner is where current
 truth changes.
 
-| Capability | Canonical owner | Supporting docs | Notes |
-| --- | --- | --- | --- |
-| Goal, users, scope | `project-overview.md` | root `README.md` | Product intent goes here. |
-| Functional requirements | `requirements/functional-requirements.md` | `project-overview.md` | Accepted behavior. |
-| Non-functional requirements | `requirements/non-functional-requirements.md` | `project-overview.md` | Quality attributes and constraints. |
-| Architecture | `architecture.md` | `data-model.md`, `interfaces-and-contracts.md` | Replace with a stronger existing architecture owner if one exists. |
-| Interfaces and contracts | `interfaces-and-contracts.md` | API specs, schemas, MCP docs | External contracts beat prose summaries. |
-| Local development | `local-development.md` | `CONTRIBUTING.md` | Commands live in one place. Everyone breathes easier. |
-| Testing strategy | `testing-strategy.md` | CI docs | Test layers, gaps, and verification habits. |
-| Feature state and next work | `feature-registry.md` | `features/` | Queue, statuses, and default next task. |
-| Active handoff | `features/<feature-slug>.md` | `feature-registry.md` | Resume context, validation, and next safe step. |
-| Doc health | `doc-health.md` | this file | Stale docs, conflicts, verification gaps. |
-| Raw ideas and evidence | `intake/README.md` | intake files | Brain dumps live here until accepted facts graduate. 🎓 |
+| Capability                  | Canonical owner                               | Supporting docs                                | Notes                                                              |
+| --------------------------- | --------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------ |
+| Goal, users, scope          | `project-overview.md`                         | root `README.md`                               | Product intent goes here.                                          |
+| Functional requirements     | `requirements/functional-requirements.md`     | `project-overview.md`                          | Accepted behavior.                                                 |
+| Non-functional requirements | `requirements/non-functional-requirements.md` | `project-overview.md`                          | Quality attributes and constraints.                                |
+| Architecture                | `architecture.md`                             | `data-model.md`, `interfaces-and-contracts.md` | Replace with a stronger existing architecture owner if one exists. |
+| Interfaces and contracts    | `interfaces-and-contracts.md`                 | API specs, schemas, MCP docs                   | External contracts beat prose summaries.                           |
+| Local development           | `local-development.md`                        | `CONTRIBUTING.md`                              | Commands live in one place. Everyone breathes easier.              |
+| Testing strategy            | `testing-strategy.md`                         | CI docs                                        | Test layers, gaps, and verification habits.                        |
+| Feature state and next work | `feature-registry.md`                         | `features/`                                    | Queue, statuses, and default next task.                            |
+| Active handoff              | `features/<feature-slug>.md`                  | `feature-registry.md`                          | Resume context, validation, and next safe step.                    |
+| Doc health                  | `doc-health.md`                               | this file                                      | Stale docs, conflicts, verification gaps.                          |
+| Raw ideas and evidence      | `intake/README.md`                            | intake files                                   | Brain dumps live here until accepted facts graduate. 🎓            |
 
 ## Handy Links
 

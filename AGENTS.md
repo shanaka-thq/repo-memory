@@ -38,8 +38,9 @@ Read these files in order when starting a session:
 9. [`skills/repo-memory/references/decision-log-reconstruction.md`](./skills/repo-memory/references/decision-log-reconstruction.md) — comprehensive decision log reconstruction
 10. [`skills/repo-memory/references/continuity-governance.md`](./skills/repo-memory/references/continuity-governance.md) — freshness, conflict, rename, feature closure, and multi-agent protocols
 11. [`skills/repo-memory/references/agent-integration-and-enforcement.md`](./skills/repo-memory/references/agent-integration-and-enforcement.md) — Codex, Copilot, VS Code, Claude Code, OpenCode, cloud-agent, hook, and CI setup guidance
-12. [`skills/repo-memory/references/superpowers-compatibility.md`](./skills/repo-memory/references/superpowers-compatibility.md) — bridge guidance for Obra Superpowers specs/plans and similar companion workflows
-13. [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md) — concrete reference outputs for adopted docs and handoff state
+12. [`skills/repo-memory/references/agent-workflow-common.md`](./skills/repo-memory/references/agent-workflow-common.md) — shared agent workflow (start, resume, finish) used by all platform adapters
+13. [`skills/repo-memory/references/superpowers-compatibility.md`](./skills/repo-memory/references/superpowers-compatibility.md) — bridge guidance for Obra Superpowers specs/plans and similar companion workflows
+14. [`skills/repo-memory/examples/README.md`](./skills/repo-memory/examples/README.md) — concrete reference outputs for adopted docs and handoff state
 
 ## How to Apply This Skill
 

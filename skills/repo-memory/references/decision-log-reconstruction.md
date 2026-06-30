@@ -8,15 +8,7 @@ Reconstruct every durable decision that shaped the project from the beginning th
 
 ## Evidence Order
 
-Prefer evidence in this order:
-
-1. explicit user statements, ADRs, design docs, PR notes, issue notes, and code comments that explain intent
-2. source code, tests, schemas, runtime configuration, package manifests, and folder structure
-3. existing repository docs and feature docs
-4. git history, changelog, release notes, or deployment artifacts
-5. inferred rationale from repeated architecture patterns
-
-Explicit user statements are valid high-confidence rationale evidence when they explain why a decision was made.
+Use the evidence order defined in [STANDARD.md](../STANDARD.md#evidence-order). For decision reconstruction specifically, explicit user statements, ADRs, design docs, PR notes, issue notes, and code comments that explain intent are the strongest rationale evidence.
 
 ## Decision Entry Template
 

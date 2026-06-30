@@ -4,229 +4,197 @@
   <img src="./assets/project-logo.png" alt="Repo Memory project logo" width="640">
 </p>
 
-An agent-first, CLI-assisted memory protocol for software repositories.
+## The Problem
 
-Repo Memory keeps the context that code alone cannot explain — project goals,
-architecture decisions, feature status, handoff notes — in maintained Markdown
-docs close to the code. Any agent or human can read and update them without a
-special tool or service.
+You use multiple AI coding agents. Maybe Claude today, Codex tomorrow, Copilot
+for a PR review. Each one has its own memory — but that memory **doesn't
+transfer between tools.**
 
-## Why It Exists
+- Claude's Projects memory is invisible to Codex
+- Cursor's context doesn't exist in Kiro
+- When an agent crashes mid-feature, the next session starts from zero
+- Nobody wrote down "here's where I stopped, here's what to do next"
 
-In multi-agent workflows, shared state breaks in predictable ways: every new
-session re-derives the same context, agents clobber each other's work, and
-interrupted features get dropped because nobody wrote down the next safe step.
+Agent-local memory solves recall within one tool. It doesn't solve **continuity
+across tools and sessions.**
 
-Repo Memory solves this by giving every agent one shared surface:
+## What Repo Memory Does
 
-- one ownership map that names where each kind of truth lives
-- one feature registry that tells the next agent what to pick up
-- one handoff note per feature with enough context to resume safely
-- generated indexes built from machine-readable frontmatter — no manual sync
+It gives every agent (and you) a **shared memory layer** that lives in your
+repo as plain Markdown files:
 
-Because it is just Markdown in your repo, it works across Claude, Codex,
-Copilot, Cursor, Windsurf, Kiro, OpenCode, and any tool that can read a file.
-
-## How It Works
-
-**Three pieces:**
-
-| Piece | What it is | Where |
-| ----- | ---------- | ----- |
-| Skill | A lean `SKILL.md` router that points agents to 6 mode files | `skills/repo-memory/` |
-| Adapters | Thin agent-specific files (`CLAUDE.md`, `AGENTS.md`, etc.) | `adapters/` + `templates/` |
-| CLI | `npx repo-memory` — doctor, validate, generate | `src/` (TypeScript) |
-
-**The agent workflow:**
-
-1. Agent reads the adapter file for its tool (e.g. `CLAUDE.md`) — 10–15 lines
-2. Adapter points to `skills/repo-memory/SKILL.md` — another 35 lines
-3. SKILL.md routes the agent to the right mode file (`maintainer`, `bootstrapper`, etc.)
-4. Agent loads only the mode it needs, plus the relevant feature doc
-5. After work, agent updates feature frontmatter — `status`, `ready`, `next_safe_step`
-6. Next agent runs `npx repo-memory generate` to rebuild the indexes
-
-Context loaded per session stays small because the skill is a router, not a monolith.
-
-## CLI
-
-```bash
-npx repo-memory doctor    # detect repo state, suggest next actions
-npx repo-memory validate  # validate feature frontmatter, catch duplicate IDs
-npx repo-memory generate  # write feature-registry.md, next-work-queue.md, doc-health.md
-npx repo-memory generate --dry-run  # preview without writing
+```text
+docs/
+├── README.md                  ← "where does each kind of truth live?" (ownership map)
+├── features/
+│   ├── auth-refresh.md        ← "what's the status? what's next? who's blocked?"
+│   └── search-v2.md
+└── generated/
+    ├── feature-registry.md    ← auto-built summary of all features
+    └── next-work-queue.md     ← "what should the next agent pick up?"
 ```
 
-The `generate` command reads YAML frontmatter from `docs/features/*.md` and
-produces deterministic indexes. Agents update frontmatter; the CLI rebuilds the
-indexes. No manual sync.
+That's it. An ownership map, feature docs with machine-readable frontmatter, and
+auto-generated indexes. Any agent that can read a file can use it.
 
-## Feature Frontmatter
+## What It Does NOT Do
 
-Each feature doc carries machine-readable YAML at the top:
+Repo Memory is a **continuity layer.** It fills the gap that no other tool
+covers. It does not compete with:
 
-```yaml
----
-id: auth-refresh
-title: Token Refresh Flow
-status: in_progress
-doc_type: feature
-ready: ready
-next_safe_step: "Wire refresh endpoint to the session store, then run auth tests"
-priority: 2
-owner: backend-team
-confidence: medium
-last_updated: 2026-05-26
----
-```
+| Tool                    | What it does                  | What RM does instead                                           |
+| ----------------------- | ----------------------------- | -------------------------------------------------------------- |
+| **Kiro specs**          | Define requirements and tasks | Link to the spec, track implementation status                  |
+| **Superpowers planner** | Create implementation plans   | Link to the plan, record what was accepted                     |
+| **Code review skills**  | Review code quality/security  | Record that a review happened, link the output                 |
+| **Agent-local memory**  | Recall within one tool        | Capture the cross-tool bits that don't transfer                |
+| **MCP memory servers**  | Shared memory via protocol    | Works without extra infra, versioned in git, reviewable in PRs |
 
-`npx repo-memory validate` checks every file against the schema. Invalid status
-values, missing required fields, and duplicate IDs all fail with a clear error.
+RM doesn't plan, review, or spec. It records where those outputs live and keeps
+feature state resumable across agents.
 
-## Install the Skill in Your Repo
+## Why Not Just an MCP Memory Server?
 
-### Via `npx skills` (recommended)
+MCP memory servers exist, but:
+
+- They require every agent to have the same MCP server configured
+- The memory isn't versioned or reviewable in PRs
+- They're still maturing — most don't handle structured feature state well
+- They add infrastructure (a running server) vs. just files in your repo
+
+Repo Memory works today, with zero infrastructure, across any tool that reads
+files. When MCP memory servers mature, they could read from these same docs.
+
+## The Three Things RM Owns
+
+1. **Ownership map** (`docs/README.md`) — "where does each kind of truth live?"
+   Points to existing docs (ADRs, specs, OpenAPI, etc.) instead of duplicating them.
+
+2. **Feature state** (`docs/features/*.md`) — status, handoff notes, next safe
+   step, blockers. Machine-readable frontmatter:
+
+   ```yaml
+   ---
+   id: auth-refresh
+   title: Token Refresh Flow
+   status: in_progress
+   ready: ready
+   next_safe_step: "Wire refresh endpoint to session store, run auth tests"
+   priority: 2
+   ---
+   ```
+
+3. **Work queue** (`docs/generated/next-work-queue.md`) — auto-generated from
+   frontmatter. "What should the next agent pick up?" No manual sync needed.
+
+## Quick Start
+
+Install the skill for your agent:
 
 ```bash
 npx skills add akanahs-dev/repo-memory --skill repo-memory -g -a claude-code -y
 ```
 
-Change `-a claude-code` to your agent: `generic`, `github-copilot`, `cursor`,
-`windsurf`, `kiro`, `opencode`, or `codex`. Omit `-g` to install into the
-current project instead of your global skills directory.
+Change `-a claude-code` to: `generic`, `github-copilot`, `cursor`, `windsurf`,
+`kiro`, `opencode`, or `codex`. Drop `-g` to install into the current project only.
 
-### Via the CLI
+Or copy the adapter file manually from [`templates/`](./templates/).
 
-Once you have the repo available locally, use the CLI to install the adapter
-for your agent:
+### Scripts (zero dependencies, just Python 3)
 
 ```bash
-npx repo-memory install-adapter claude-code   # writes CLAUDE.md
-npx repo-memory install-adapter generic       # writes AGENTS.md
-npx repo-memory install-adapter github-copilot
-npx repo-memory install-adapter cursor
-npx repo-memory install-adapter windsurf
-npx repo-memory install-adapter kiro
+# Validate feature docs and structure
+python3 <skill-dir>/scripts/validate-docs.py --project-docs .
+
+# Generate indexes from feature frontmatter
+python3 <skill-dir>/scripts/generate-indexes.py .
+
+# Scaffold initial docs (empty repos)
+python3 <skill-dir>/scripts/scaffold-docs.py .
 ```
 
-Use `--append` to add a managed block to an existing file instead of replacing
-it, or `--print` to preview the adapter content before writing anything.
+## How It Works (30 seconds)
 
-### Manually
+1. Agent reads a 10-line adapter file → gets pointed to `docs/README.md`
+2. Ownership map tells it where everything lives (existing docs, not RM copies)
+3. Agent reads the feature doc for its current task
+4. Agent does its work, updates feature frontmatter (`status`, `next_safe_step`)
+5. Next agent — any agent, any tool — picks up from where the last one stopped
 
-Copy the adapter file for your agent from `templates/` into your repo root:
-
-| Agent | File to copy |
-| ----- | ------------ |
-| Claude Code | `templates/CLAUDE.md` |
-| Codex / generic | `templates/AGENTS.md` |
-| GitHub Copilot | `templates/.github/copilot-instructions.md` |
-| Cursor | `templates/.cursor/rules/repo-memory.mdc` |
-| Windsurf | `templates/.windsurf/rules/repo-memory.md` |
-| Kiro | `templates/.kiro/steering/repo-memory.md` |
-| OpenCode | `templates/AGENTS.md` |
-
-Then add `repo-memory.config.yml` (copy from `templates/repo-memory.config.yml`)
-and `docs/features/_template.md` (copy from `templates/docs/features/_template.md`)
-to your repo.
+No chat history needed. No shared MCP server. Just files in git.
 
 ## Modes
 
-Agents load the mode that fits the task:
+| Mode             | When                                                    |
+| ---------------- | ------------------------------------------------------- |
+| **Maintainer**   | Normal work — keep feature state current                |
+| **Bootstrapper** | First-time setup — create ownership map + feature stubs |
+| **Auditor**      | Health check — find drift, stale docs, broken links     |
+| **Generator**    | Rebuild auto-generated indexes                          |
 
-| Mode | When to use |
-| ---- | ----------- |
-| **Maintainer** | Normal feature work — update docs as code changes |
-| **Bootstrapper** | Adopt an existing repo — extract context into `docs/intake/` |
-| **Planner** | Write an implementation plan in the configured plans path |
-| **Reviewer** | Codebase, architecture, security, or AI review |
-| **Auditor** | Check for drift, stale docs, missing ownership |
-| **Generator** | Rebuild generated indexes |
+No planner mode. No reviewer mode. Use your planning and review tools — RM just
+links their outputs.
 
-## Multi-Agent Handoff
+## Works With Everything
 
-When handing off between agents or sessions:
+Because it's just Markdown in your repo:
 
-1. Update the feature doc frontmatter: set `status`, `ready`, and `next_safe_step`
-2. Run `npx repo-memory generate` to rebuild the indexes
-3. The next agent runs `npx repo-memory doctor` to orient itself, then reads
-   `docs/generated/next-work-queue.md` to pick the first `ready` row
+- Claude, Codex, Copilot, Cursor, Windsurf, Kiro, OpenCode
+- Superpowers plans and specs (link them from feature docs)
+- Kiro spec directories (link them from the ownership map)
+- Any MCP tool, any IDE, any CI pipeline
+- Humans reading docs on GitHub
 
-No chat history needed. The feature doc carries the resume state.
+## Token Cost
 
-## Repository Structure
+The skill router is 35 lines. During normal work, an agent loads:
+
+- The ownership map (~20 lines)
+- The active feature doc (~30-50 lines)
+- That's it.
+
+Full references are loaded only when doing doc maintenance, not during regular
+coding. RM is designed to stay out of the way.
+
+## Manual Install
+
+Copy from [`templates/`](./templates/):
+
+| Agent           | File                                        |
+| --------------- | ------------------------------------------- |
+| Claude Code     | `templates/CLAUDE.md`                       |
+| Codex / generic | `templates/AGENTS.md`                       |
+| GitHub Copilot  | `templates/.github/copilot-instructions.md` |
+| Cursor          | `templates/.cursor/rules/repo-memory.mdc`   |
+| Windsurf        | `templates/.windsurf/rules/repo-memory.md`  |
+| Kiro            | `templates/.kiro/steering/repo-memory.md`   |
+
+Also copy `templates/repo-memory.config.yml` and `templates/docs/features/_template.md`.
+
+## Repository Layout
 
 ```text
 repo-memory/
-├── skills/repo-memory/        # installable skill payload
-│   ├── SKILL.md               # lean router (35 lines) — entry point for agents
-│   ├── STANDARD.md            # portable Repo Memory standard
-│   ├── modes/                 # 6 mode files (maintainer, bootstrapper, etc.)
-│   ├── references/            # rules, templates, metadata schema, audit workflow
-│   ├── examples/              # adopted docs and handoff examples
-│   └── scripts/               # scaffold-docs.py, validate-docs.py
-├── adapters/                  # thin adapter files by agent tool
-│   ├── claude-code/CLAUDE.md
-│   ├── generic/AGENTS.md
-│   ├── codex/instructions.md
-│   ├── cursor/repo-memory.mdc
-│   ├── github-copilot/copilot-instructions.md
-│   ├── kiro/repo-memory.md
-│   ├── opencode/AGENTS.md
-│   └── windsurf/repo-memory.md
-├── templates/                 # copy these into your repo
-│   ├── CLAUDE.md
-│   ├── AGENTS.md
-│   ├── repo-memory.config.yml
-│   └── docs/features/_template.md
-├── src/                       # TypeScript CLI source
-│   ├── cli/index.ts
-│   ├── commands/              # doctor, validate, generate
-│   ├── core/                  # config, discovery, frontmatter, feature-index
-│   └── schemas/               # Zod schemas for config and feature frontmatter
-└── tests/unit/                # 68 unit tests
+├── skills/repo-memory/        # the skill (what agents read)
+│   ├── SKILL.md               # 35-line router
+│   ├── STANDARD.md            # the portable standard
+│   ├── modes/                 # maintainer, bootstrapper, auditor, generator
+│   ├── references/            # naming rules, templates, metadata schema
+│   └── scripts/               # validate, generate, scaffold (Python, zero deps)
+├── adapters/                  # pre-built adapter files
+└── templates/                 # files you copy into your repo
 ```
 
-## Validate Locally or in CI
+## Key Principles
 
-Validate your skill repo itself:
+- **Link, don't duplicate.** If a fact already has an owner (ADR, OpenAPI, spec file), point to it.
+- **Features drive the queue.** Frontmatter is the source of truth. Scripts generate indexes.
+- **Don't compete.** Planning, reviewing, and spec-writing belong to dedicated tools.
+- **Stay cheap.** Load minimal context during normal work. Full refs only for doc maintenance.
 
-```bash
-python3 skills/repo-memory/scripts/validate-docs.py --skill-repo .
-```
+## Learn More
 
-Validate a target repo that adopted the standard:
-
-```bash
-python3 skills/repo-memory/scripts/validate-docs.py \
-  --project-docs /path/to/repo --adoption-level baseline
-```
-
-Or use the CLI for feature-level validation:
-
-```bash
-npx repo-memory validate
-```
-
-## Key Rules
-
-- **One owner per capability.** `docs/README.md` names one canonical owner for each doc capability. Agents link to it; they do not duplicate it.
-- **Features drive the queue.** `docs/features/*.md` frontmatter is the source of truth. The CLI generates the registry and queue from it.
-- **Generated files are not edited manually.** `docs/generated/` is owned by `npx repo-memory generate`.
-- **Intake is not truth yet.** `docs/intake/` is a raw inbox. Accepted facts get promoted into mapped owners.
-
-## Versioning
-
-release-please manages version markers in `SKILL.md` and `STANDARD.md`
-automatically. Do not edit them manually. See [`CHANGELOG.md`](./CHANGELOG.md)
-for version history.
-
-## Related
-
-- [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) — skill entry point
-- [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) — portable standard
-- [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) — naming and placement rules
-- [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) — copy-paste doc templates
-- [`AGENTS.md`](./AGENTS.md) — instructions for agents working on this repo
-- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — contribution guide
+- [`SKILL.md`](./skills/repo-memory/SKILL.md) — what agents load
+- [`STANDARD.md`](./skills/repo-memory/STANDARD.md) — the full standard
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to contribute
 - [`CHANGELOG.md`](./CHANGELOG.md) — version history

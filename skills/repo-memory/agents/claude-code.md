@@ -2,8 +2,7 @@
 
 # Claude Code Integration Guide
 
-This guide explains how to use the Repo Memory standard and skill with Claude Code
-while keeping project facts in the single mapped owner that all agents share.
+This guide extends the [common agent workflow](../references/agent-workflow-common.md) with Claude Code specifics.
 
 ## Core Rule
 
@@ -11,11 +10,6 @@ Keep `CLAUDE.md` concise. It should point Claude Code to `docs/README.md` and
 the `Canonical Ownership Map` instead of duplicating mutable architecture,
 feature status, blockers, setup commands, decision rationale, contracts, or
 handoff notes.
-
-If the repo already has multiple agent entrypoints, keep them aligned and thin.
-Preserve useful platform-specific instructions, but move mutable project facts
-into the mapped owner so Claude is not resuming from a different truth than
-other agents.
 
 ## Recommended `CLAUDE.md` Shape
 
@@ -50,43 +44,15 @@ When changing behavior:
   analytics, audit events, dashboards, or alerts change.
 ```
 
-## When Starting on a Repo
+## Platform-Specific Notes
 
-1. Read `CLAUDE.md` or other repo-level instructions.
-2. If the repo has a `docs/` folder, read `docs/README.md` first and follow the
-   `Canonical Ownership Map`.
-3. Check `docs/doc-health.md` for stale or conflicting docs.
-4. Review `docs/intake/` when it contains raw brainstorms, project notes, or
-   plans relevant to the work, then promote accepted facts into the mapped
-   owner before implementation depends on them.
-5. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`, resolving `<skill-dir>` to the installed `repo-memory` skill directory.
-6. If the docs are missing, stale, or inconsistent, apply the workflow from
-   [`SKILL.md`](../SKILL.md).
-
-## When Resuming Work
-
-1. Read the active `docs/features/<feature-slug>.md`.
-2. If no task was assigned, choose the lowest-rank `ready` row in `docs/feature-registry.md`.
-3. Check `Resume Context`, `Validation`, `Next Agent Handoff`, and
-   `Exact Next Prompt`.
-4. Prefer the docs over chat memory when they conflict, then update stale docs.
-5. Check `docs/doc-health.md` before changing shared architecture or contracts.
-
-## When Finishing Work
-
-1. Update the active feature doc.
-2. Update `docs/feature-registry.md` `Next Work Queue`.
-3. Update the mapped implementation and decision owners when warranted.
-4. Record verification status, stale areas, and duplicate-owner migrations in
-   `docs/doc-health.md`.
-5. Keep `CLAUDE.md`, `AGENTS.md`, and other agent entrypoints aligned to the
-   same docs workflow.
+- Claude Code uses `CLAUDE.md` as its primary instruction file. Keep it under 50 lines.
+- When the repo also has `AGENTS.md`, align both to the same docs entrypoints.
+- Claude Code supports `@file` references — use them to point at specific docs rather than copying content into `CLAUDE.md`.
 
 ## Related Docs
 
+- Common agent workflow: [`references/agent-workflow-common.md`](../references/agent-workflow-common.md)
 - Skill definition: [`SKILL.md`](../SKILL.md)
-- OpenAI Codex guide: [`agents/openai-codex.md`](./openai-codex.md)
-- GitHub Copilot guide: [`agents/github-copilot.md`](./github-copilot.md)
-- OpenCode guide: [`agents/opencode.md`](./opencode.md)
 - Agent integration and enforcement: [`references/agent-integration-and-enforcement.md`](../references/agent-integration-and-enforcement.md)
 - File templates: [`references/templates.md`](../references/templates.md)

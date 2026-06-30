@@ -6,10 +6,9 @@ Use lazy context loading:
 
 - feature work → relevant feature doc
 - architecture work → canonical architecture owner
-- planning → configured plans path
-- reviews → configured reviews path
 - decisions → configured ADR path
-- legacy extraction → Bootstrapper mode into intake
+- first-time setup → Bootstrapper mode
+
 Do not manually edit generated files.
-Do not promote intake, plans, or reviews into canonical docs without review.
+Do not duplicate canonical facts.
 Use Repo Memory CLI commands when available.

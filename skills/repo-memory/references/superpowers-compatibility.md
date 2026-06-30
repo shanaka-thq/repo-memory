@@ -70,13 +70,7 @@ Use the smallest durable summary that keeps another agent safe:
 ## Conflict Handling
 
 When Superpowers artifacts conflict with Repo Memory docs, use the standard
-evidence order:
-
-1. source code, tests, schemas, runtime config, and deployment config
-2. explicit user statements, ADRs, design docs, and code comments
-3. existing docs, after checking whether they are stale
-4. git history, changelogs, issues, and pull requests
-5. clearly marked inference
+evidence order from [STANDARD.md](../STANDARD.md#evidence-order).
 
 Record the resolved disposition in the owning feature or design doc. If the
 conflict affects documentation trust, also update `docs/doc-health.md`.

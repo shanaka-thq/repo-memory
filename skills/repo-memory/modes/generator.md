@@ -14,4 +14,4 @@ Use this mode to generate derived indexes, registries, and work queues from cano
    - `docs/generated/feature-registry.md`: Feature list summary table.
    - `docs/generated/next-work-queue.md`: Ranked work queue sorted by blocked state, readiness, priority, and date.
    - `docs/generated/doc-health.md`: Report containing verification dates, warnings, duplicates, and unmapped directories.
-7. **Run CLI generation:** Run `npx repo-memory generate` to execute.
+7. **Run generation:** Run `python3 <skill-dir>/scripts/generate-indexes.py .` to execute.

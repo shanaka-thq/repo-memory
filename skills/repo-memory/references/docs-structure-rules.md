@@ -260,7 +260,7 @@ docs/diagrams/
 
 ## Status Values
 
-Feature docs and feature registry entries must use one of these status values exactly:
+Feature docs and feature registry entries must use one of these status values exactly. The canonical list is defined in [STANDARD.md](../STANDARD.md#status-model); this table adds operational meaning for enforcement:
 
 | Status        | Meaning                                                   |
 | ------------- | --------------------------------------------------------- |
@@ -298,7 +298,7 @@ Do not invent new status values. If a feature has a state not covered here, docu
 | Slugs with uppercase letters, spaces, or underscores                         | Breaks consistency across registry, file names, and folder names                                            |
 | Optional subfolders without a `README.md` index                              | Leaves the folder undiscoverable                                                                            |
 | Plan or review findings left only in chat history                            | Future agents cannot verify who produced the advice, what evidence it used, or which outcomes were accepted |
-| Companion plans/specs outside `docs/superpowers/plans/` or `.../specs/`    | Breaks placement consistency and makes them hard for agents and validators to track                         |
+| Companion plans/specs outside `docs/superpowers/plans/` or `.../specs/`      | Breaks placement consistency and makes them hard for agents and validators to track                         |
 | Accepted companion spec or plan outcomes left only under `docs/superpowers/` | Future agents may miss changed requirements, decisions, validation, or handoff state in mapped owners       |
 | Accepted brainstorm or planning outcomes left only under `docs/intake/`      | Raw intake is easy to miss and may contain unaccepted assumptions                                           |
 | Baseline docs placed in subfolders                                           | Baseline docs must live directly in `docs/`                                                                 |

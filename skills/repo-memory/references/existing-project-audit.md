@@ -32,13 +32,7 @@ The audit should reduce ambiguity, not create churn.
 
 ## Evidence Order
 
-Prefer evidence in this order:
-
-1. source code, tests, schemas, and config
-2. setup, build, CI, deployment, and runtime files
-3. current documentation in the repo
-4. git history, changelog, release notes, issues, or PR references when available
-5. user statements or prior chat summaries
+Use the evidence order defined in [STANDARD.md](../STANDARD.md#evidence-order). In summary: source code and tests → setup/build/CI/deploy → current docs → git history → user statements.
 
 ## Audit Workflow
 

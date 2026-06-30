@@ -7,12 +7,14 @@ Start with:
 - the configured ownership map, usually `docs/README.md`
 
 Choose the smallest relevant mode:
+
 - Maintainer for normal feature/doc updates.
 - Bootstrapper for first-time setup (ownership map + feature stubs).
 - Auditor for drift and health checks.
 - Generator for generated indexes.
 
 Rules:
+
 - Load only task-relevant docs.
 - Do not edit generated files directly.
 - Do not promote intake, plans, or reviews into canonical docs without review.

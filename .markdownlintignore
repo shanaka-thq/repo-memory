@@ -1,3 +1,5 @@
 # AI tooling and infrastructure — not project documentation
 .github/
 .claude/
+# Managed by release-please; uses dashes which differ from project list style
+CHANGELOG.md

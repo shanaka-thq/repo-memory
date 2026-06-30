@@ -59,6 +59,8 @@ def load_features(features_dir: Path) -> list[dict]:
     for md_file in sorted(features_dir.glob("*.md")):
         if md_file.name.startswith("_"):
             continue
+        if md_file.name.lower() == "readme.md":
+            continue
         text = md_file.read_text(encoding="utf-8")
         fm = parse_frontmatter(text)
         if fm is None:
@@ -188,7 +190,6 @@ def main() -> int:
 
     if not features:
         print("No valid feature docs found (need YAML frontmatter with id, title, status, ready, next_safe_step).")
-        return 0
 
     generated_at = date.today().isoformat()
     registry = build_feature_registry(features, generated_at)

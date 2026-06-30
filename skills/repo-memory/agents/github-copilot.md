@@ -31,13 +31,13 @@ When starting a session:
    contracts, setup, operations, security, and feature state.
 3. Review `docs/intake/` if raw brainstorms or plans are relevant, then
    promote accepted facts into the mapped owner.
-4. Check `docs/feature-registry.md` for active work.
-5. When no task is assigned, pick the first `ready` row in `Next Work Queue`.
+4. Check `docs/generated/next-work-queue.md` for the ranked `Next Work Queue`.
+5. When no task is assigned, pick the first `ready` row in `docs/generated/next-work-queue.md`.
 
 When making changes:
 
 - Keep `docs/features/<feature-slug>.md` current for the feature you are working on.
-- Keep `docs/feature-registry.md` current as the ranked next-work queue.
+- Update `docs/features/<feature-slug>.md` when feature status, priority, or readiness changes, then run `python3 <skill-dir>/scripts/generate-indexes.py <repo>` to regenerate the indexes.
 - Update the mapped implementation-history and decision owners when warranted.
 - Update `docs/doc-health.md` when docs change materially.
 - Do not duplicate mutable project facts in Copilot instruction files.
@@ -48,7 +48,7 @@ When making changes:
 The default prompt from [`agents/openai.yaml`](./openai.yaml) works well as a starting point:
 
 ```text
-Use $repo-memory to audit this repo, create or update docs/README.md with a Canonical Ownership Map, preserve strong existing ADRs/specs/runbooks/setup docs as owners, add only missing handoff surfaces, keep docs/feature-registry.md ranked with the next ready task, update the mapped owners for changed capabilities, avoid duplicate project facts in agent instructions, and leave resumable handoff notes.
+Use $repo-memory to audit this repo, create or update docs/README.md with a Canonical Ownership Map, preserve strong existing ADRs/specs/runbooks/setup docs as owners, add only missing handoff surfaces, keep feature docs current and regenerate docs/generated/next-work-queue.md with the next ready task, update the mapped owners for changed capabilities, avoid duplicate project facts in agent instructions, and leave resumable handoff notes.
 ```
 
 ### Handling repos with multiple instruction files

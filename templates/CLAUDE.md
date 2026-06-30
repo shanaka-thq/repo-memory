@@ -11,4 +11,4 @@ Use lazy context loading:
 
 Do not manually edit generated files.
 Do not duplicate canonical facts.
-Use Repo Memory CLI commands when available.
+Use `python3 skills/repo-memory/scripts/validate-docs.py` for validation and `python3 skills/repo-memory/scripts/generate-indexes.py` for generating indexes.

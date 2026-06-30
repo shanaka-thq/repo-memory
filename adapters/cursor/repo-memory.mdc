@@ -9,4 +9,4 @@ Start with:
 - the ownership map in `docs/README.md`
 Use the modes defined under `skills/repo-memory/modes/` for maintaining feature state and docs.
 Do not modify generated files under `docs/generated/` directly.
-Use Repo Memory CLI commands when available.
+Use `python3 skills/repo-memory/scripts/validate-docs.py` for validation and `python3 skills/repo-memory/scripts/generate-indexes.py` for generating indexes.

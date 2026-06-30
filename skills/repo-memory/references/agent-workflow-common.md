@@ -7,7 +7,7 @@ Shared workflow steps for all agents using Repo Memory. Platform-specific adapte
 1. Check for agent instruction files (`AGENTS.md`, `.github/copilot-instructions.md`, `CLAUDE.md`, etc.).
 2. If the repo has `docs/`, read `docs/README.md` first and follow the `Canonical Ownership Map`.
 3. Read the mapped owners for project overview, architecture, and feature registry.
-4. If no task was assigned, pick the lowest-rank `ready` row in `docs/feature-registry.md` `Next Work Queue`.
+4. If no task was assigned, check the mapped work-queue owner (typically `docs/generated/next-work-queue.md`) and pick the lowest-rank `ready` row.
 5. If `docs/intake/` exists and contains raw brainstorms, project notes, or plans relevant to the work, review them and promote accepted facts into the mapped owner before building from them.
 6. If the repo is empty or nearly empty, run `python3 <skill-dir>/scripts/scaffold-docs.py <repo> --with-agents`.
 7. If docs are missing, stale, or inconsistent, apply the workflow from [`SKILL.md`](../SKILL.md).
@@ -25,7 +25,7 @@ Shared workflow steps for all agents using Repo Memory. Platform-specific adapte
 
 ## When Finishing a Session
 
-1. Update `docs/feature-registry.md`, especially `Next Work Queue`, when priority, readiness, or pickup instructions change.
+1. Update `docs/features/<feature-slug>.md` when status, priority, readiness, or pickup instructions change, then run `python3 <skill-dir>/scripts/generate-indexes.py <repo>` to regenerate `docs/generated/feature-registry.md` and `docs/generated/next-work-queue.md`.
 2. Update the active feature doc: status, `Implementation Status`, `Validation`, `Resume Context`, and `Next Agent Handoff`.
 3. Update the mapped implementation-history owner if meaningful work landed.
 4. Update the mapped decision owner if a lasting technical choice changed.

@@ -45,6 +45,8 @@ Fill only what the repo actually uses. Leave unused slots empty.
 
 For active or recent work, create `docs/features/<slug>.md` with frontmatter (id, title, status, ready, next_safe_step, priority). Link to relevant specs/plans/reviews if they exist.
 
+Active or recent = any of: open branches with commits in the last 2 weeks, open PRs, in-progress tickets, or work mentioned in recent commits that isn't shipped yet.
+
 ### 4. Link, don't duplicate
 
 If architecture is in `ARCHITECTURE.md`, map it. If requirements are in `.kiro/specs/`, map them. If plans are in `docs/superpowers/plans/`, link them from the feature doc.

@@ -47,10 +47,10 @@ external location) in the target repo:
 |-------|-----------|---------|
 | `/writing-plans` | `docs/superpowers/plans/` | `plans` |
 | `/to-tickets` | `.scratch/<feature>/issues/` or GitHub Issues | `tickets` |
-| `/to-spec` | GitHub Issues or local file | `specs` |
+| `/to-spec` | Issue tracker (as a spec issue) | `specs` |
 | `/wayfinder` | Issue tracker (map + child tickets) | `tickets` |
-| `/grill-with-docs` | `CONTEXT.md`, `docs/adr/` | `adrs` |
-| `/domain-modeling` | `CONTEXT.md` | `adrs` |
+| `/grill-with-docs` | `CONTEXT.md` + `docs/adr/` | `adrs` |
+| `/domain-modeling` | `CONTEXT.md` (glossary) + `docs/adr/` (decisions) | `adrs` |
 | `/code-review` | PR comments or stdout | `reviews` |
 | `/research` | `research/<name>` branch | `research` |
 | `/improve` | `plans/` or `advisor-plans/` | `plans` |

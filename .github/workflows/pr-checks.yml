@@ -22,6 +22,7 @@ jobs:
             **/*.md
             !.github/**
             !.claude/**
+            !CHANGELOG.md
 
   validate-docs:
     name: Validate Docs Standard

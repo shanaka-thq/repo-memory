@@ -1,6 +1,10 @@
 # Generator Mode
 
-Use this mode to generate derived indexes, registries, and work queues from canonical docs.
+> **This mode runs automatically** after Maintainer writes. You don't need to
+> invoke it manually unless you're debugging generation or running it standalone.
+
+Use this mode to regenerate derived indexes, registries, and work queues from
+canonical docs.
 
 ## Instructions
 

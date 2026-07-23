@@ -3,6 +3,7 @@
 Thumbs.db
 
 # IDE
+.agents/
 .claude/
 .vscode/
 .idea/
@@ -14,6 +15,7 @@ Thumbs.db
 
 # Dependencies
 node_modules/
+skills-lock.json
 *.lock
 yarn.lock
 pnpm-lock.yaml

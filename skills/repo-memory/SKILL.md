@@ -1,6 +1,14 @@
 ---
 name: repo-memory
-description: Use when AI coding agents need cross-tool continuity, resumable feature state, or a shared work queue. Use when switching between agents (Claude, Codex, Copilot, Cursor, Kiro, etc.) and the next agent needs to know what happened, what's in progress, and what to pick up next — without re-reading the entire codebase or relying on tool-specific memory that doesn't transfer.
+description: >-
+  Persist feature state, ownership maps, and work queues as repo-native Markdown
+  so any agent resumes where the last one stopped. Use when switching between
+  agents or sessions and the next agent needs to know what's in progress, what's
+  blocked, and what to pick up next. Also use when the user says "where did I
+  leave off," "what's the status," "set up project memory," "what should I work
+  on next," "handoff notes," "resume from last session," "shared work queue,"
+  or "what's in flight." For planning, see /writing-plans or /wayfinder. For
+  implementation, see /implement. For code review, see /code-review.
 ---
 
 # Repo Memory Skill
@@ -9,10 +17,11 @@ Version: 3.2.1 <!-- x-release-please-version -->
 
 > This version marker is managed by release-please. Do not edit it manually.
 
-Repo Memory gives agents a shared, portable project memory that lives in your
-repo as Markdown. It does NOT replace your planning skill, review skill, or spec
-workflow. It fills the gap those tools leave: **what happened, what's next, and
-where does everything live.**
+Repo Memory is the **state persistence layer** for AI-assisted repos. It tracks
+where things live, what state they're in, and what's next — so any agent resumes
+where the last one stopped.
+
+It does NOT plan, review, spec, or implement. It connects the skills that do.
 
 Use the smallest mode that fits the task.
 
@@ -20,10 +29,10 @@ Use the smallest mode that fits the task.
 
 Load one mode file from `modes/` based on your task:
 
-- **[Maintainer](modes/maintainer.md)**: update feature state and ownership map during normal work.
-- **[Bootstrapper](modes/bootstrapper.md)**: adopt an existing repo — create the ownership map and feature stubs.
-- **[Auditor](modes/auditor.md)**: check for drift, stale docs, broken links, and duplicate ownership.
-- **[Generator](modes/generator.md)**: rebuild generated indexes (feature registry, next-work-queue).
+- **[Bootstrapper](modes/bootstrapper.md)**: first-time setup — create the ownership map, discover installed skills, configure typed slots.
+- **[Maintainer](modes/maintainer.md)**: every session close — update feature frontmatter, link new artifacts.
+- **[Auditor](modes/auditor.md)**: session start or on-demand — check for drift, stale docs, broken links.
+- **[Generator](modes/generator.md)**: runs automatically after Maintainer writes — rebuild generated indexes.
 
 ## References (load only when needed)
 
@@ -31,6 +40,7 @@ Detailed rules and templates in `references/` — load only during doc maintenan
 
 - [docs-structure-rules.md](references/docs-structure-rules.md) — naming, placement, enforcement
 - [templates.md](references/templates.md) — copy-paste doc templates
+- [compatible-skills.md](references/compatible-skills.md) — typed slots, known integrations, future-proofing
 - [agent-workflow-common.md](references/agent-workflow-common.md) — shared start/resume/finish steps
 - [STANDARD.md](STANDARD.md) — full portable standard (conformance levels, evidence order, status values)
 
@@ -38,20 +48,43 @@ Detailed rules and templates in `references/` — load only during doc maintenan
 
 | Repo Memory does                          | Repo Memory does NOT do                                          |
 | ----------------------------------------- | ---------------------------------------------------------------- |
-| Track feature status and handoff state    | Write implementation plans (use your planning skill)             |
-| Maintain a "what should I do next?" queue | Do code reviews (use your review skill)                          |
-| Map where each kind of truth lives        | Create specs or requirements (use Kiro specs, Superpowers, etc.) |
+| Track feature status and handoff state    | Write implementation plans (use /writing-plans, /wayfinder)      |
+| Maintain a "what should I do next?" queue | Do code reviews (use /code-review)                               |
+| Map where each kind of truth lives        | Create specs or requirements (use /to-spec, Kiro specs)          |
 | Enable resumption across different agents | Replace agent-local memory or context                            |
 | Link to outputs from other skills         | Duplicate what other skills already produce                      |
+| Register artifact locations (typed slots) | Orchestrate or invoke other skills                               |
 
-## Works Alongside Other Skills
+## How It Connects With Other Skills
 
-Repo Memory is a **continuity layer**, not a competing workflow:
+Repo Memory is a **state persistence layer**, not a competing workflow:
 
-- **Superpowers plans/specs** → RM links them from the feature doc, records what was accepted
-- **Kiro specs** → RM links the spec directory, tracks implementation status
-- **Dedicated review skills** → RM records that a review happened and links the output
-- **Agent-local memory** → RM captures the cross-agent bits that local memory can't share
+```
+┌───────────────────────────────────────────┐
+│         Repo Memory (state layer)         │
+│  ownership map · feature docs · work queue│
+└─────────────────────┬─────────────────────┘
+                      │ agents read on start
+      ┌───────────────┼───────────────────┐
+      ▼               ▼                   ▼
+┌───────────┐  ┌────────────┐  ┌───────────────┐
+│ Planning  │  │ Building   │  │ Reviewing     │
+│           │  │            │  │               │
+│/wayfinder │  │/implement  │  │/code-review   │
+│/to-tickets│  │/tdd        │  │/triage        │
+│/to-spec   │  │/exec-plans │  │/improve       │
+└─────┬─────┘  └─────┬──────┘  └───────┬───────┘
+      │               │                 │
+      └───────────────┼─────────────────┘
+                      ▼ agents write on close
+┌───────────────────────────────────────────┐
+│         Repo Memory (state layer)         │
+│  update status · link artifacts · next step│
+└───────────────────────────────────────────┘
+```
+
+Each skill writes to its own location. RM doesn't interfere with the middle —
+it owns the **start** (orient) and **end** (persist state) of each session.
 
 ## Always-Loaded Rules
 
@@ -65,3 +98,13 @@ Repo Memory is a **continuity layer**, not a competing workflow:
 8. Run validation and generation scripts when available.
 
 Choose the mode, then load only that mode file.
+
+## Related Skills
+
+- **/writing-plans**, **/wayfinder**: Planning and decomposition — RM links their outputs, tracks status
+- **/implement**, **/executing-plans**: Implementation — RM records progress before/after
+- **/code-review**: Review — RM records that a review happened, links the output
+- **/to-tickets**, **/triage**: Work tracking — RM's ownership map points to the tracker
+- **/handoff**: Ephemeral session handoff — RM persists the durable parts in-repo
+- **/domain-modeling**, **/grill-with-docs**: ADRs and context — RM maps where they live
+- **/research**, **/improve**: Investigation outputs — RM registers their artifact locations

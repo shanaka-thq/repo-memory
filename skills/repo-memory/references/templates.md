@@ -103,6 +103,36 @@ healthy existing documentation.
 | Documentation health and conflicts  | `docs/doc-health.md`              | None                               | Tracks stale docs, duplicate-owner migrations, and verification. |
 ```
 
+### Artifact Locations (Typed Slots)
+
+Add this section below the Canonical Ownership Map when the repo uses workflow
+skills that produce durable artifacts. It tells agents where each category of
+artifact lands — skill-agnostic, path-based.
+
+```md
+## Artifact Locations
+
+<!-- Where durable artifacts from workflow skills land.
+     Update when you install new skills or change conventions. -->
+
+| Category   | Location                  | Example producers                 |
+| ---------- | ------------------------- | --------------------------------- |
+| Plans      | `plans/`                  | /writing-plans, /improve          |
+| Specs      | `.kiro/specs/`            | Kiro specs, /to-spec              |
+| Tickets    | GitHub Issues             | /to-tickets, /triage, /wayfinder  |
+| ADRs       | `docs/adr/`              | /grill-with-docs, /domain-modeling |
+| Reviews    | PR comments               | /code-review                      |
+| Handoff    | `docs/features/`          | Repo Memory (native)              |
+| Research   | `research/` branches      | /research, /improve               |
+| Additional | —                         | —                                 |
+```
+
+Not every slot needs a value. Fill only what the repo actually uses. The
+Bootstrapper mode asks about each category during first-time setup.
+
+See [compatible-skills.md](./compatible-skills.md) for the full list of known
+integrations and future-proofing guidance.
+
 Each capability should appear once. Put alternatives, legacy docs, and detail
 sources in `Supporting docs`, not in `Canonical owner`.
 

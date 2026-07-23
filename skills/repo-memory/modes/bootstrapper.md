@@ -21,6 +21,7 @@ Use this mode when adopting a repository that has no Repo Memory setup yet. The 
 ### 1. Inventory existing docs and skills
 
 Look for:
+
 - **Existing docs:** README, ADRs, architecture notes, specs, runbooks, OpenAPI, CONTRIBUTING, SECURITY
 - **Installed skills:** Check `.agents/skills/`, `.kiro/skills/`, `.claude/skills/`, `node_modules/.skills/` for workflow skills that produce artifacts
 - **Skill outputs already present:** `.kiro/specs/`, `docs/superpowers/plans/`, `plans/`, `advisor-plans/`, `.scratch/`, `docs/adr/`, `CONTEXT.md`, `research/` branches
@@ -28,10 +29,12 @@ Look for:
 ### 2. Create the ownership map
 
 Write `docs/README.md` with:
+
 - **Canonical Ownership Map** — mapping each capability to its existing owner
 - **Artifact Locations** — typed slots showing where each category of artifact lives
 
 For the Artifact Locations table, ask (or detect) for each category:
+
 - **Plans:** Where do implementation plans land? (`plans/`, `docs/superpowers/plans/`, etc.)
 - **Specs:** Where do requirements/specs live? (`.kiro/specs/`, `docs/specs/`, etc.)
 - **Tickets:** Where is work tracked? (GitHub Issues, `.scratch/`, Linear, etc.)

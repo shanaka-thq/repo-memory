@@ -42,7 +42,7 @@ That's it. Any agent that can read a file can use it.
 
 RM doesn't plan, review, spec, or implement. It **connects** the skills that do:
 
-```
+```text
 ┌───────────────────────────────────────────┐
 │         Repo Memory (state layer)         │
 │  ownership map · feature docs · work queue│

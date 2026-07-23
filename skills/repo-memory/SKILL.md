@@ -59,7 +59,7 @@ Detailed rules and templates in `references/` — load only during doc maintenan
 
 Repo Memory is a **state persistence layer**, not a competing workflow:
 
-```
+```text
 ┌───────────────────────────────────────────┐
 │         Repo Memory (state layer)         │
 │  ownership map · feature docs · work queue│

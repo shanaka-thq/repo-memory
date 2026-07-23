@@ -73,7 +73,7 @@ See [`references/docs-structure-rules.md`](../references/docs-structure-rules.md
 
 - Common agent workflow: [`references/agent-workflow-common.md`](../references/agent-workflow-common.md)
 - Skill definition: [`SKILL.md`](../SKILL.md)
-- File templates: [`references/templates.md`](../references/templates.md)
+- File templates: [`references/templates/`](../references/templates/) (per-template files)
 - Naming and placement rules: [`references/docs-structure-rules.md`](../references/docs-structure-rules.md)
 - Agent integration and enforcement: [`references/agent-integration-and-enforcement.md`](../references/agent-integration-and-enforcement.md)
 - OpenAI Agents SDK config: [`agents/openai.yaml`](./openai.yaml)

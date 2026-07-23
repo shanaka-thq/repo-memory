@@ -55,4 +55,4 @@ When changing behavior:
 - Common agent workflow: [`references/agent-workflow-common.md`](../references/agent-workflow-common.md)
 - Skill definition: [`SKILL.md`](../SKILL.md)
 - Agent integration and enforcement: [`references/agent-integration-and-enforcement.md`](../references/agent-integration-and-enforcement.md)
-- File templates: [`references/templates.md`](../references/templates.md)
+- File templates: [`references/templates/`](../references/templates/) (per-template files)

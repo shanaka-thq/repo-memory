@@ -31,7 +31,7 @@ Read these files in order when starting a session:
 2. [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) — portable Repo Memory standard and conformance model
 3. [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md) — full skill definition, workflow, and quality bar
 4. [`skills/repo-memory/references/docs-structure-rules.md`](./skills/repo-memory/references/docs-structure-rules.md) — strict naming and placement rules that all docs must follow
-5. [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) — copy-paste templates for every standard doc type
+5. [`skills/repo-memory/references/templates.md`](./skills/repo-memory/references/templates.md) — template index (per-template files in `references/templates/`)
 6. [`skills/repo-memory/references/existing-project-audit.md`](./skills/repo-memory/references/existing-project-audit.md) — audit workflow for backfilling docs in existing projects
 7. [`skills/repo-memory/references/evidence-extraction-workflow.md`](./skills/repo-memory/references/evidence-extraction-workflow.md) — workflow for extracting candidate behavior and requirements before promotion
 8. [`skills/repo-memory/references/documentation-metadata-schema.md`](./skills/repo-memory/references/documentation-metadata-schema.md) — standard metadata fields by doc type
@@ -52,7 +52,7 @@ When a user asks you to apply this skill to a target repo:
 3. **Follow the workflow** in `skills/repo-memory/SKILL.md`, section by section.
 4. **Assign canonical owners** — create or update `docs/README.md` with a `Canonical Ownership Map`; every durable documentation capability must have one owner.
 5. **Avoid duplicates strictly** — do not create Repo Memory versions of facts already owned by healthy ADRs, OpenAPI specs, runbooks, `CONTRIBUTING.md`, `SECURITY.md`, product docs, or similar standards.
-6. **Use the templates** in `skills/repo-memory/references/templates.md` as the default format for any doc you create; do not rewrite strong existing docs just to force a template.
+6. **Use the templates** in `skills/repo-memory/references/templates/` as the default format for any doc you create; do not rewrite strong existing docs just to force a template.
 7. **Enforce the rules** in `skills/repo-memory/references/docs-structure-rules.md` for all file names, folder names, ownership decisions, and placement decisions.
 8. **Bootstrap empty repos** with `python3 skills/repo-memory/scripts/scaffold-docs.py <repo> --with-agents` when there is no implementation evidence yet.
 9. **Keep one canonical owner per capability** — preserve useful existing docs, link them from the maintained docs set, and keep agent-specific instruction files pointed into the ownership map instead of duplicating mutable project facts.
@@ -74,7 +74,7 @@ When making changes to this repository itself:
 - Changes to the portable standard belong in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md) and must preserve its relationship to `skills/repo-memory/SKILL.md`.
 - The `Version:` markers in `skills/repo-memory/SKILL.md` and `skills/repo-memory/STANDARD.md` are managed by release-please. Do not edit them manually.
 - **Update [`CHANGELOG.md`](./CHANGELOG.md)** in the same PR when the change should appear in the next release.
-- New templates added to `skills/repo-memory/references/templates.md` must include a brief usage note at the top of the template block.
+- New templates added to `skills/repo-memory/references/templates/` must include a brief usage note at the top of the template block.
 - New scripts added to `skills/repo-memory/scripts/` must be documented in `README.md`, `SKILL.md`, or the relevant reference doc.
 - New agent configuration files belong in `skills/repo-memory/agents/` and must include a comment describing the target platform and usage.
 - New reference documents belong in `skills/repo-memory/references/` and must be linked from both `README.md` and this file.

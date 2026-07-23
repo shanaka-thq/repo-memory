@@ -39,7 +39,7 @@ Load one mode file from `modes/` based on your task:
 Detailed rules and templates in `references/` — load only during doc maintenance:
 
 - [docs-structure-rules.md](references/docs-structure-rules.md) — naming, placement, enforcement
-- [templates.md](references/templates.md) — copy-paste doc templates
+- [templates.md](references/templates.md) — template index (per-template files in `references/templates/`)
 - [compatible-skills.md](references/compatible-skills.md) — typed slots, known integrations, future-proofing
 - [agent-workflow-common.md](references/agent-workflow-common.md) — shared start/resume/finish steps
 - [STANDARD.md](STANDARD.md) — full portable standard (conformance levels, evidence order, status values)

@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Version numbers match the `Version:` fields in [`skills/repo-memory/STANDARD.md`](./skills/repo-memory/STANDARD.md)
 and [`skills/repo-memory/SKILL.md`](./skills/repo-memory/SKILL.md).
 
+## [3.2.1](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v3.2.0...repo-memory-v3.2.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* address all review feedback from PR [#10](https://github.com/akanahs-dev/repo-memory/issues/10) review thread ([1ab8159](https://github.com/akanahs-dev/repo-memory/commit/1ab81595d021207f71d455cd3bb86e9b68cf18c6))
+* exclude CHANGELOG.md from lint and fix MD032 in templates/AGENTS.md ([cfbc479](https://github.com/akanahs-dev/repo-memory/commit/cfbc47915f732ae7c83a04f41491ac8f0575a087))
+
 ## [3.2.0](https://github.com/akanahs-dev/repo-memory/compare/repo-memory-v3.1.0...repo-memory-v3.2.0) (2026-05-26)
 
 

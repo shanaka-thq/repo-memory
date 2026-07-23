@@ -1,6 +1,6 @@
 {
   "name": "repo-memory",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A repo-native project memory standard for AI-assisted software teams. Cross-tool continuity via Markdown docs in your repo.",
   "keywords": [
     "repo-memory",

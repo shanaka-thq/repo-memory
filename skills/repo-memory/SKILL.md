@@ -5,7 +5,7 @@ description: Use when AI coding agents need cross-tool continuity, resumable fea
 
 # Repo Memory Skill
 
-Version: 3.2.0 <!-- x-release-please-version -->
+Version: 3.2.1 <!-- x-release-please-version -->
 
 > This version marker is managed by release-please. Do not edit it manually.
 

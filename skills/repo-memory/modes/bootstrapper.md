@@ -55,6 +55,12 @@ If architecture is in `ARCHITECTURE.md`, map it. If requirements are in `.kiro/s
 
 Don't invent user personas, decisions, or architecture. If it's unknown, say so.
 
-### 6. Run generation
+### 6. Create `.scratch/` for transient working files
+
+Create a `.scratch/` directory and ensure it's in `.gitignore`. This is where
+transient files go — validation output, audit reports, temp state, working
+notes. Not for durable artifacts (those go in their typed slot locations).
+
+### 7. Run generation
 
 `python3 <skill-dir>/scripts/generate-indexes.py .` to build the initial indexes.
